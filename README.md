@@ -286,7 +286,7 @@ Run these from `server/`:
 
 There are two ways to put this online.
 
-**A public demo on GitHub Pages.** This shows the public pages and a demo with three made-up accounts: Thessaly Varnhouse, Corvin Ashdale and the admin Amberson Gabby. The demo reads `client/src/demo/demoData.json`, needs no server, and doesn't save changes. Normal builds leave all of this out. Publish it from `client/` with `npm run deploy`.
+**A public demo on GitHub Pages.** This shows the public pages and a demo with three made-up accounts: Thessaly Varnhouse, Corvin Ashdale and the admin Amberson Gabby. The demo reads `client/src/demo/demoData.json` and needs no server. Visitors can edit the data, and their changes stay in their own browser until they reset the demo. AI features and uploads need the full app. Normal builds leave all of this out. Publish it from `client/` with `npm run deploy`.
 
 **The full app on Render with MongoDB Atlas.** `render.yaml` hosts the server and the app together, so sign-in cookies work in every browser.
 

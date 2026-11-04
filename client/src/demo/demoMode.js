@@ -1,9 +1,12 @@
 import { AxiosError } from "axios";
 
+import { readReply, resetStore, saveStore, storeFor, writeEntry, writeRecord } from "./demoStore";
+
 // The GitHub Pages build has no server. Its demo accounts answer from
-// demoData.json instead: replies recorded from a real server for made-up people.
+// demoData.json instead: replies recorded from a real server for made-up
+// people. Edits are kept in the visitor's browser.
 const KEY = "uuv-demo-account";
-const NOT_SAVED = "This is a demo, so changes aren't saved.";
+const NEEDS_SERVER = "This needs the full app with its server, so it isn't available in the demo.";
 
 let openAccount = null;
 
@@ -33,43 +36,65 @@ export const endDemo = () => {
   }
 };
 
-const withoutTrailingSlash = (path) => path.replace(/\/+$/, "");
+export const resetDemo = () => resetStore(demoAccount());
 
-async function recordedReply(url) {
-  // Written out so normal builds leave the sample data out altogether
-  const { default: data } = import.meta.env.VITE_STATIC_SITE === "true" ? await import("./demoData.json") : { default: {} };
-  const replies = data[demoAccount()] || {};
-  const { pathname, search } = new URL(url);
-  const path = withoutTrailingSlash(pathname);
-  return replies[`${path}${search}`] ?? replies[path];
-}
+const parseBody = (data) => {
+  if (typeof data !== "string") return data ?? {};
+  try {
+    return JSON.parse(data);
+  } catch {
+    return {};
+  }
+};
 
 // Stands in for the network on every API client
 export async function demoAdapter(config) {
   const url = config.baseURL ? `${config.baseURL.replace(/\/$/, "")}/${String(config.url || "").replace(/^\//, "")}` : config.url;
   const address = new URL(url);
   new URLSearchParams(config.params || {}).forEach((value, key) => address.searchParams.set(key, value));
+  const path = address.pathname.replace(/\/+$/, "");
   const method = (config.method || "get").toLowerCase();
   const reply = (status, data) => ({ data, status, statusText: "", headers: {}, config });
   const refuse = (status, message) => {
     throw new AxiosError(message, "ERR_BAD_REQUEST", config, null, reply(status, { success: false, message }));
   };
 
-  if (!demoAccount()) refuse(401, "Choose a demo account first.");
-  if (method === "post" && address.pathname === "/api/auth/logout") {
+  const account = demoAccount();
+  if (!account) refuse(401, "Choose a demo account first.");
+  if (method === "post" && path === "/api/auth/logout") {
     endDemo();
     return reply(200, { success: true });
   }
-  if (method !== "get") refuse(403, NOT_SAVED);
 
-  const recorded = await recordedReply(address.href);
-  if (recorded === undefined) refuse(404, "This isn't included in the demo.");
-  return reply(200, recorded);
+  const store = await storeFor(account);
+
+  if (method === "get") {
+    const found = readReply(store, path, address.search);
+    if (found === undefined && path.startsWith("/api/skill-associations/")) return reply(200, { success: true, associations: [] });
+    if (found === undefined) refuse(404, "This isn't included in the demo.");
+    return reply(200, found);
+  }
+
+  // The checks a server would run on the side: nothing to report here
+  if (method === "post" && path === "/api/summary/review") return reply(200, { success: true, review: [] });
+  if (method === "post" && path === "/api/skills/check") {
+    const name = String(parseBody(config.data).name || "").trim().toLowerCase();
+    const existing = store["/api/skills"]?.skills.find((skill) => skill.normalizedName === name) || null;
+    return reply(200, { success: true, existing, similar: [], suggestion: null, skillType: "technical" });
+  }
+
+  if (typeof FormData !== "undefined" && config.data instanceof FormData) refuse(403, "File uploads need the full app, so they aren't available in the demo.");
+
+  const body = parseBody(config.data);
+  const written = writeRecord(store, method, path, body) ?? writeEntry(store, method, path, body);
+  if (!written) refuse(403, NEEDS_SERVER);
+  saveStore(account);
+  return reply(200, written);
 }
 
-// The streaming calls use fetch rather than an API client
+// The streaming calls (AI writing) use fetch rather than an API client
 export const demoFetch = async () =>
-  new Response(JSON.stringify({ success: false, message: NOT_SAVED }), {
+  new Response(JSON.stringify({ success: false, message: NEEDS_SERVER }), {
     status: 403,
     headers: { "Content-Type": "application/json" }
   });

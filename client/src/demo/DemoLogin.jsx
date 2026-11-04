@@ -19,7 +19,7 @@ export default function DemoLogin() {
         <img src={publicUrl("logo-icon.png")} alt="UltraUnityVerse logo" width="64" height="64" className="d-block mx-auto mb-3" />
         <h1>Try the demo</h1>
         <p className="auth-subtitle">
-          Choose an account to look around. These are made-up people with sample data, and changes aren't saved.
+          Choose an account to look around. These are made-up people with sample data. You can edit anything, and your changes stay in this browser only.
         </p>
         <div className="d-grid gap-2">
           {accounts.map((account) => (
