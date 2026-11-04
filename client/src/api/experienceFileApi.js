@@ -1,9 +1,10 @@
 import axios from "axios";
+import { API_URL } from "../staticSite";
 
 // One attached picture/PDF per item in these sections:
 // "media", "achievements", "volunteering", "records"
 const api = axios.create({
-  baseURL: "http://localhost:5050/api/experiences",
+  baseURL: `${API_URL}/api/experiences`,
   withCredentials: true
 });
 

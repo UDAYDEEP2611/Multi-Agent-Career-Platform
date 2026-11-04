@@ -27,6 +27,7 @@ UltraUnityVerse keeps your whole career in one record, then turns it into portfo
 - [Run it locally](#run-it-locally)
 - [Optional settings](#optional-settings)
 - [Useful commands](#useful-commands)
+- [Host it online](#host-it-online)
 - [Project structure](#project-structure)
 - [Security and privacy](#security-and-privacy)
 - [Project status](#project-status)
@@ -281,6 +282,26 @@ Run these from `server/`:
 | `npm run agent:reviewer` | Runs the ATS Reviewer agent by itself |
 | `npm run train:models` | Rebuilds the datasets and retrains the chat models (needs Python with scikit-learn, SciPy, and NLTK) |
 
+## Host it online
+
+There are two ways to put this online.
+
+**Public pages on GitHub Pages.** This shows Home, About, Services and Contact, with a notice in place of anything that needs the server. Publish it from `client/` with `npm run deploy`.
+
+**The full app on Render with MongoDB Atlas.** `render.yaml` hosts the server and the app together, so sign-in cookies work in every browser.
+
+1. In [MongoDB Atlas](https://www.mongodb.com/cloud/atlas), create a free cluster and a database user. Under Network Access, allow `0.0.0.0/0`, because Render's free plan has no fixed IP address. Copy the connection string and add a database name to it, such as `/uuv`.
+2. In [Render](https://render.com), choose **New > Blueprint** and connect this repository.
+3. Paste the connection string as `MONGODB_URI` when asked, then deploy.
+
+Limits on the free plans:
+
+- The service sleeps when idle, so the first visit afterwards takes about a minute.
+- Uploaded files are stored on the server's disk and are lost on every restart. Keeping them needs a paid Render disk, with `UPLOAD_DIR` pointing at it.
+- There's no Ollama on the host, so the agents use their rules unless you set `ANTHROPIC_API_KEY`.
+- Atlas's free cluster allows 500 collections, and each account has its own database. Keep `MAX_USERS` at its default of 10.
+- Password reset and contact emails need the `SMTP_*` settings.
+
 ## Project structure
 
 ```text
@@ -311,7 +332,7 @@ docs/images/   README screenshots
 
 ## Project status
 
-This project runs locally and has no public demo yet. Hosting it will require a configurable API address and a host for the server and database.
+The public pages are live at [udaydeep2611.github.io/Multi-Agent-Career-Platform](https://udaydeep2611.github.io/Multi-Agent-Career-Platform/). The full app runs locally and is ready to host; see [Host it online](#host-it-online).
 
 ## Author
 

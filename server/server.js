@@ -5,6 +5,9 @@ const createApp = require("./app");
 const { startAtsReviewer } = require("./a2a/atsReviewerAgent");
 const { startDesigner } = require("./a2a/designerAgent");
 
+// Render gives the service its own address
+process.env.CLIENT_URL ||= process.env.RENDER_EXTERNAL_URL;
+
 // Validate required environment variables
 const requiredEnv = [
   "MONGODB_URI",

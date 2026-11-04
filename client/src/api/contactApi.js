@@ -1,7 +1,8 @@
 import axios from "axios";
+import { API_URL } from "../staticSite";
 
 const contactApi = axios.create({
-  baseURL: "http://localhost:5050/api/contact",
+  baseURL: `${API_URL}/api/contact`,
   withCredentials: true
 });
 

@@ -1,6 +1,7 @@
 import axios from "axios";
+import { API_URL } from "../staticSite";
 
-const BASE_URL = "http://localhost:5050/api/resume";
+const BASE_URL = `${API_URL}/api/resume`;
 
 const api = axios.create({
   baseURL: BASE_URL,

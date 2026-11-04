@@ -1,9 +1,9 @@
 
 import axios from "axios";
-import { STATIC_SITE } from "../staticSite";
+import { API_URL, STATIC_SITE } from "../staticSite";
 
 const authApi = axios.create({
-  baseURL: "http://localhost:5050/api/auth",
+  baseURL: `${API_URL}/api/auth`,
   withCredentials: true
 });
 

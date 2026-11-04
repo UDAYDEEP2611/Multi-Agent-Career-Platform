@@ -1,7 +1,8 @@
 import axios from "axios";
+import { API_URL } from "../staticSite";
 
 const api = axios.create({
-  baseURL: "http://localhost:5050/api/skill-associations",
+  baseURL: `${API_URL}/api/skill-associations`,
   withCredentials: true
 });
 

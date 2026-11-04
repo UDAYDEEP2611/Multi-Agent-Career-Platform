@@ -1,8 +1,9 @@
 
 import axios from "axios";
+import { API_URL } from "../staticSite";
 
 const profileApi = axios.create({
-  baseURL: "http://localhost:5050/api/profile",
+  baseURL: `${API_URL}/api/profile`,
   withCredentials: true
 });
 

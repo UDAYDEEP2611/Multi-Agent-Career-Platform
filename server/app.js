@@ -1,3 +1,5 @@
+const fs = require("fs");
+const path = require("path");
 const express = require("express");
 const cors = require("cors");
 const session = require("express-session");
@@ -217,6 +219,14 @@ function createApp(options = {}) {
   app.use("/api/account", accountRoutes);
   app.use("/api/resume", resumeRoutes);
   app.use("/api/contact", contactRoutes);
+
+  // In production the server also hosts the built app, so sign-in cookies stay
+  // first-party in every browser. Anything that isn't /api is an app page.
+  const clientBuild = path.join(__dirname, "..", "client", "dist");
+  if (isProduction && fs.existsSync(path.join(clientBuild, "index.html"))) {
+    app.use(express.static(clientBuild));
+    app.get(/^\/(?!api(\/|$)).*/, (req, res) => res.sendFile(path.join(clientBuild, "index.html")));
+  }
 
   // Handle unknown routes
   app.use((req, res) => {

@@ -1,7 +1,8 @@
 import axios from "axios";
+import { API_URL } from "../staticSite";
 
 const api = axios.create({
-  baseURL: "http://localhost:5050/api/portfolio",
+  baseURL: `${API_URL}/api/portfolio`,
   withCredentials: true
 });
 
@@ -19,7 +20,7 @@ export const getPortfolioShowcase = (audience = "portfolio") =>
 // onEvent("progress", { message }), then "result" or "error".
 // Rejects with { message } when the request itself is refused.
 export async function generateHeroSummaries(designIds, onEvent, signal) {
-  const response = await fetch("http://localhost:5050/api/portfolio/hero-summaries/generate", {
+  const response = await fetch(`${API_URL}/api/portfolio/hero-summaries/generate`, {
     method: "POST",
     credentials: "include",
     headers: { "Content-Type": "application/json" },
