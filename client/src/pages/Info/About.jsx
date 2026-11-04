@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { publicUrl } from "../../staticSite";
 
 const VALUES = [
   {
@@ -40,7 +41,7 @@ export default function About() {
     <main className="uuv-info-page">
       <section className="uuv-info-hero text-center">
         <div className="container">
-          <img src="/logo-icon.png" alt="" width="88" height="88" className="mb-3" />
+          <img src={publicUrl("logo-icon.png")} alt="" width="88" height="88" className="mb-3" />
           <p className="uuv-slogan mb-2">About</p>
           <h1 className="display-5 fw-bold mb-3">
             Your career, <span className="uuv-gradient-text">unified</span>

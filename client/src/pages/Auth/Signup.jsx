@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { registerUser } from "../../api/authApi";
 import GoogleSignIn from "./GoogleSignIn";
+import { publicUrl } from "../../staticSite";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -57,7 +58,7 @@ export default function Signup() {
   return (
     <main className="auth-page">
       <div className="auth-container">
-        <img src="/logo-icon.png" alt="UltraUnityVerse logo" width="64" height="64" className="d-block mx-auto mb-3" />
+        <img src={publicUrl("logo-icon.png")} alt="UltraUnityVerse logo" width="64" height="64" className="d-block mx-auto mb-3" />
         <h1>Create your account</h1>
 
         <p className="auth-subtitle">

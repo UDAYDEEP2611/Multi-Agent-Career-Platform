@@ -5,6 +5,7 @@ import { CONTACT } from "../Contact/contactInfo";
 import { SERVICES } from "../Info/servicesData";
 import { CvMakerIcon, JobPilotIcon } from "./FeatureIcons";
 import "./footer.css";
+import { publicUrl, STATIC_SITE } from "../../staticSite";
 
 const TOOL_LINKS = [
   ["My Portfolios", "/dashboard/portfolios", "bi-easel"],
@@ -118,7 +119,7 @@ export default function Footer() {
       <div className="uuv-footer-inner">
         <div className="uuv-footer-top uuv-footer-row">
           <Link to="/" className="uuv-footer-brand">
-            <img src="/logo-icon.png" alt="" width="36" height="36" />
+            <img src={publicUrl("logo-icon.png")} alt="" width="36" height="36" />
             UltraUnityVerse
           </Link>
           <p className="uuv-footer-slogan">Your Career, Unified</p>
@@ -137,18 +138,6 @@ export default function Footer() {
           </div>
 
           <dl className="uuv-footer-reach">
-            <div>
-              <dt><i className="bi bi-geo-alt-fill" aria-hidden="true"></i>Location</dt>
-              <dd>
-                <a href={CONTACT.mapUrl} target="_blank" rel="noreferrer">
-                  {CONTACT.addressLines[0]}<br />{CONTACT.addressLines[1]}
-                </a>
-              </dd>
-            </div>
-            <div>
-              <dt><i className="bi bi-telephone-fill" aria-hidden="true"></i>Call us</dt>
-              <dd><a href={CONTACT.phoneUrl}>{CONTACT.phone}</a></dd>
-            </div>
             <div>
               <dt><i className="bi bi-envelope-fill" aria-hidden="true"></i>Email us</dt>
               <dd><a href={CONTACT.emailUrl}>{CONTACT.email}</a></dd>
@@ -169,14 +158,12 @@ export default function Footer() {
           <LinkColumn title="Tools" links={TOOL_LINKS} />
           <LinkColumn title="Company" links={COMPANY_LINKS} />
           <LinkColumn title="Account" links={ACCOUNT_LINKS} />
-          <Subscribe />
+          {!STATIC_SITE && <Subscribe />}
         </div>
 
         <div className="uuv-footer-bottom">
           <p>© {year} UltraUnityVerse. All rights reserved.</p>
           <div className="uuv-footer-social">
-            <a href={CONTACT.mapUrl} target="_blank" rel="noreferrer" aria-label="Find us on the map"><i className="bi bi-geo-alt-fill" aria-hidden="true"></i></a>
-            <a href={CONTACT.phoneUrl} aria-label="Call us"><i className="bi bi-telephone-fill" aria-hidden="true"></i></a>
             <a href={CONTACT.emailUrl} aria-label="Email us"><i className="bi bi-envelope-fill" aria-hidden="true"></i></a>
             <a href={CONTACT.githubUrl} target="_blank" rel="noreferrer" aria-label="UltraUnityVerse on GitHub"><i className="bi bi-github" aria-hidden="true"></i></a>
           </div>

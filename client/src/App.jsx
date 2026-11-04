@@ -55,11 +55,14 @@ import AdminStorage from "./pages/Admin/AdminStorage";
 import AdminSystem from "./pages/Admin/AdminSystem";
 import AdminAudit from "./pages/Admin/AdminAudit";
 
+import PreviewOnly from "./pages/Common/PreviewOnly";
+import { STATIC_SITE } from "./staticSite";
+
 import "./App.css";
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <div className="uuv-app">
         <Navbar />
 
@@ -70,10 +73,10 @@ export default function App() {
             <Route path="/about" element={<About />} />
             <Route path="/services" element={<Services />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/login" element={STATIC_SITE ? <PreviewOnly /> : <Login />} />
+            <Route path="/signup" element={STATIC_SITE ? <PreviewOnly /> : <Signup />} />
+            <Route path="/forgot-password" element={STATIC_SITE ? <PreviewOnly /> : <ForgotPassword />} />
+            <Route path="/reset-password" element={STATIC_SITE ? <PreviewOnly /> : <ResetPassword />} />
             <Route
               path="/resume/:designId"
               element={

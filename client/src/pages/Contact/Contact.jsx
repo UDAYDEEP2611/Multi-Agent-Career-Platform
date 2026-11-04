@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { sendContactMessage } from "../../api/contactApi";
+import { STATIC_SITE } from "../../staticSite";
 import { CONTACT } from "./contactInfo";
 import "./contact.css";
 
@@ -41,26 +42,10 @@ export default function Contact() {
           <p className="uuv-contact-eyebrow">Contact Us</p>
           <h1 className="uuv-contact-title">How can we <span className="uuv-gradient-text">help?</span></h1>
           <p className="uuv-contact-lead">
-            Tell us what you need, and we'll get back to you by email or phone.
+            Tell us what you need, and we'll get back to you by email.
           </p>
 
           <ul className="uuv-contact-ways">
-            <li>
-              <span className="uuv-contact-icon"><i className="bi bi-geo-alt" aria-hidden="true" /></span>
-              <div>
-                <span className="uuv-contact-label">Visit us</span>
-                <a href={CONTACT.mapUrl} target="_blank" rel="noreferrer">
-                  {CONTACT.addressLines.join(" ")}
-                </a>
-              </div>
-            </li>
-            <li>
-              <span className="uuv-contact-icon"><i className="bi bi-telephone" aria-hidden="true" /></span>
-              <div>
-                <span className="uuv-contact-label">Call us</span>
-                <a href={CONTACT.phoneUrl}>{CONTACT.phone}</a>
-              </div>
-            </li>
             <li>
               <span className="uuv-contact-icon"><i className="bi bi-envelope" aria-hidden="true" /></span>
               <div>
@@ -80,6 +65,11 @@ export default function Contact() {
               <button type="button" className="btn btn-outline-secondary" onClick={() => setSent(false)}>
                 Send another message
               </button>
+            </div>
+          ) : STATIC_SITE ? (
+            <div>
+              <h2 className="uuv-contact-form-title">Send us a message</h2>
+              <p>This public preview can't send messages. Email us at <a href={CONTACT.emailUrl}>{CONTACT.email}</a>.</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit}>

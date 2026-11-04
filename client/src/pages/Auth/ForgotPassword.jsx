@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { requestPasswordReset } from "../../api/authApi";
+import { publicUrl } from "../../staticSite";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -29,7 +30,7 @@ export default function ForgotPassword() {
   return (
     <main className="auth-page">
       <div className="auth-container">
-        <img src="/logo-icon.png" alt="UltraUnityVerse logo" width="64" height="64" className="d-block mx-auto mb-3" />
+        <img src={publicUrl("logo-icon.png")} alt="UltraUnityVerse logo" width="64" height="64" className="d-block mx-auto mb-3" />
         <h1>Forgot password?</h1>
 
         <p className="auth-subtitle">

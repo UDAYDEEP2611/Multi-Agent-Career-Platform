@@ -5,6 +5,7 @@ import { Dropdown } from "react-bootstrap";
 import { getCurrentUser, logoutUser } from "../../api/authApi";
 import { CvMakerIcon, JobPilotIcon } from "./FeatureIcons";
 import useTheme from "./useTheme";
+import { publicUrl } from "../../staticSite";
 
 export default function Navbar() {
   const [user, setUser] = useState(null);
@@ -75,7 +76,7 @@ export default function Navbar() {
             to={user ? (user.role === "admin" ? "/dashboard/admin" : "/dashboard") : "/"}
             onClick={closeMenu}
           >
-            <img src="/logo-icon.png" alt="" className="uuv-brand-logo" width="36" height="36" />
+            <img src={publicUrl("logo-icon.png")} alt="" className="uuv-brand-logo" width="36" height="36" />
             <span className="uuv-brand-text">
               UltraUnityVerse
             </span>

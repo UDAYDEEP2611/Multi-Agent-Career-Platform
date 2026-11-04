@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { STATUSES, canRetry } from "./errorStatuses";
 import "./errorPage.css";
+import { publicUrl } from "../../staticSite";
 
 // Sits inside the app layout, so the navbar and footer stay on the page
 export default function ErrorPage({ code = 404 }) {
@@ -19,7 +20,7 @@ export default function ErrorPage({ code = 404 }) {
   return (
     <main className="uuv-error">
       <div className="uuv-error-brand">
-        <img src="/logo-icon.png" alt="" className="uuv-error-logo" width="96" height="96" />
+        <img src={publicUrl("logo-icon.png")} alt="" className="uuv-error-logo" width="96" height="96" />
         <span className="uuv-error-company">UltraUnityVerse</span>
       </div>
 

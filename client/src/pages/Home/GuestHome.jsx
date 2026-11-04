@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
+import { publicUrl, STATIC_SITE } from "../../staticSite";
 
 // Welcome page for visitors who aren't signed in
 export default function GuestHome() {
   return (
     <div className="col-lg-8 mx-auto text-center">
       <img
-        src="/logo-icon.png"
+        src={publicUrl("logo-icon.png")}
         alt="UltraUnityVerse logo"
         width="140"
         height="140"
@@ -28,13 +29,22 @@ export default function GuestHome() {
       </p>
 
       <div className="d-flex gap-3 justify-content-center flex-wrap">
-        <Link to="/signup" className="btn btn-primary btn-lg px-4">
-          Get Started
-        </Link>
+        {STATIC_SITE ? (
+          <>
+            <Link to="/services" className="btn btn-primary btn-lg px-4">See what it does</Link>
+            <Link to="/contact" className="btn btn-outline-secondary btn-lg px-4">Contact us</Link>
+          </>
+        ) : (
+          <>
+            <Link to="/signup" className="btn btn-primary btn-lg px-4">
+              Get Started
+            </Link>
 
-        <Link to="/login" className="btn btn-outline-secondary btn-lg px-4">
-          Sign In
-        </Link>
+            <Link to="/login" className="btn btn-outline-secondary btn-lg px-4">
+              Sign In
+            </Link>
+          </>
+        )}
       </div>
     </div>
   );
