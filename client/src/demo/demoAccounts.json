@@ -1,5 +1,6 @@
 [
-  { "id": "thessaly", "name": "Thessaly Varnhouse", "role": "user", "title": "Senior Product Designer", "icon": "bi-person" },
-  { "id": "corvin", "name": "Corvin Ashdale", "role": "user", "title": "Staff Software Engineer", "icon": "bi-person" },
+  { "id": "thessaly", "name": "Thessaly Varnhouse", "role": "user", "title": "AI Engineer", "icon": "bi-person" },
+  { "id": "corvin", "name": "Corvin Ashdale", "role": "user", "title": "Software Engineer", "icon": "bi-person" },
+  { "id": "lila", "name": "Lila Moore", "role": "user", "title": "Fashion Architect", "icon": "bi-person" },
   { "id": "amberson", "name": "Amberson Gabby", "role": "admin", "title": "Admin Console only", "icon": "bi-shield-lock" }
 ]

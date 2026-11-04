@@ -1,7 +1,7 @@
 // The demo's data: the recorded replies, plus this visitor's edits, kept in
 // their browser. Writes change the entries here, and the combined views (the
 // portfolio, the resume sources, the overview) are rebuilt from them.
-const VERSION = 1;
+const VERSION = 2;
 const storageKey = (account) => `uuv-demo-data-${VERSION}-${account}`;
 const stores = new Map();
 
