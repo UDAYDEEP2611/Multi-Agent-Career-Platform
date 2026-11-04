@@ -1,0 +1,272 @@
+.pf-polaroid {
+  --pol-cork: #c49a6c;
+  --pol-paper: #fffdf7;
+  --pol-ink: #2a2520;
+  --pol-muted: #756b60;
+  --pol-pin: #e03b3b;
+  --pol-tape: rgba(255, 244, 196, 0.75);
+  --pol-mark: rgba(255, 214, 10, 0.55);
+  --pfb-line: #e6ddcf;
+  --pfb-muted: var(--pol-muted);
+  --pfb-accent: var(--pol-pin);
+  --pfb-radius: 4px;
+  --pf-empty-btn-bg: var(--pol-ink);
+  padding: 0 20px;
+  background-color: var(--pol-cork);
+  background-image:
+    radial-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 1.6px),
+    radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1.6px);
+  background-size: 7px 7px, 11px 11px;
+  background-position: 0 0, 3px 5px;
+  color: var(--pol-ink);
+  font-family: "Outfit", system-ui, sans-serif;
+}
+
+[data-pf-mode="dark"] .pf-polaroid {
+  --pol-cork: #3a2a1c;
+  --pol-paper: #24201b;
+  --pol-ink: #f0e8dc;
+  --pol-muted: #b3a797;
+  --pol-tape: rgba(255, 244, 196, 0.25);
+  --pol-mark: rgba(255, 214, 10, 0.3);
+  --pfb-line: #3c362e;
+  --pf-empty-btn-bg: #f0e8dc;
+  --pf-empty-btn-text: #24201b;
+}
+
+.pol-hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 5rem 0 3.5rem;
+}
+
+.pol-photo {
+  margin: 0;
+  padding: 14px 14px 0;
+  background: #fff;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.3);
+  transform: rotate(-4deg);
+}
+
+.pol-shot {
+  display: grid;
+  place-items: center;
+  width: 240px;
+  height: 240px;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.5), transparent 40%),
+    linear-gradient(135deg, #f6a04d, #e3536b 55%, #6a4bc4);
+  font-family: "Permanent Marker", cursive;
+  font-size: 4.5rem;
+  color: #fff;
+  text-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+}
+
+.pol-photo figcaption {
+  max-width: 240px;
+  padding: 0.9rem 0 1rem;
+  font-family: "Permanent Marker", cursive;
+  font-size: 1.25rem;
+  text-align: center;
+  color: #2a2520;
+}
+
+.pol-card {
+  position: relative;
+  flex: 1 1 360px;
+  max-width: 560px;
+  padding: 2.25rem 2rem 2rem;
+  background:
+    linear-gradient(var(--pol-paper) 2.4rem, transparent 2.4rem),
+    repeating-linear-gradient(var(--pol-paper) 0 1.75rem, #9fc3e4 1.75rem calc(1.75rem + 1px));
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+  transform: rotate(1.5deg);
+}
+
+.pol-card::before,
+.pol-photo::before {
+  content: "";
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  width: 110px;
+  height: 30px;
+  background: var(--pol-tape);
+  transform: translateX(-50%) rotate(-3deg);
+}
+
+.pol-photo {
+  position: relative;
+}
+
+.pol-name {
+  font-family: "Permanent Marker", cursive;
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+.pol-role {
+  margin: 0.75rem 0 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.pol-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.25rem;
+  margin: 1rem 0 0 !important;
+  padding: 0 !important;
+  list-style: none;
+  color: var(--pol-muted);
+}
+
+.pol-stats strong {
+  font-family: "Permanent Marker", cursive;
+  font-weight: 400;
+  font-size: 1.3rem;
+  color: var(--pol-pin);
+}
+
+.pol-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.pol-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.8rem;
+  border: 2px solid var(--pol-ink);
+  border-radius: 99px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.pol-board {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding-bottom: 2rem;
+}
+
+.pol-section {
+  padding: 1.75rem 0;
+}
+
+.pol-sheet {
+  position: relative;
+  padding: 2.75rem 2.75rem 2.5rem;
+  background: var(--pol-paper);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.22);
+  transform: rotate(-0.35deg);
+}
+
+.pol-section:nth-child(even) .pol-sheet {
+  transform: rotate(0.35deg);
+}
+
+/* A push pin at the top of every sheet */
+.pol-sheet::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #ff9a9a, var(--pol-pin) 55%, #8f1f1f);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.35);
+  transform: translateX(-50%);
+}
+
+.pol-heading {
+  margin-bottom: 1.5rem !important;
+  font-family: "Permanent Marker", cursive;
+  font-size: 2rem;
+  font-weight: 400;
+}
+
+.pol-heading span {
+  background: linear-gradient(transparent 55%, var(--pol-mark) 55% 90%, transparent 90%);
+}
+
+.pf-polaroid .pfb-date {
+  font-family: "Permanent Marker", cursive;
+  font-size: 1rem;
+  color: var(--pol-pin);
+}
+
+.pf-polaroid .pfb-skill-list .pfb-skill {
+  border: 2px solid var(--pol-ink);
+  font-weight: 600;
+}
+
+.pf-polaroid .pfb-meter {
+  display: block;
+}
+
+.pf-polaroid .pfb-card {
+  border: 0;
+  border-radius: 2px;
+  background: #fff6c9;
+  color: #2a2520;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+}
+
+.pf-polaroid .pfb-card:nth-child(3n + 2) { background: #d9f0ff; }
+.pf-polaroid .pfb-card:nth-child(3n + 3) { background: #ffe1ec; }
+.pf-polaroid .pfb-card .pfb-sub,
+.pf-polaroid .pfb-card .pfb-card-no { color: #6b6156; }
+.pf-polaroid .pfb-card .pfb-tags span { border-color: rgba(0, 0, 0, 0.2); }
+
+.pf-polaroid .pfb-quote {
+  border-style: dashed;
+}
+
+.pol-foot {
+  display: flex;
+  justify-content: center;
+  padding: 2rem 0 5rem;
+}
+
+.pol-note {
+  padding: 1.75rem 2rem;
+  background: #fff6c9;
+  color: #2a2520;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+  transform: rotate(-2deg);
+  text-align: center;
+}
+
+.pol-note p {
+  margin: 0;
+  font-family: "Permanent Marker", cursive;
+  font-size: 1.8rem;
+}
+
+.pol-note .pol-links {
+  justify-content: center;
+}
+
+.pol-note .pol-link {
+  border-color: #2a2520;
+}
+
+@media (max-width: 760px) {
+  .pf-polaroid { padding: 0 12px; }
+  .pol-hero { gap: 2rem; padding: 3rem 0 2rem; }
+  .pol-shot { width: 200px; height: 200px; font-size: 3.6rem; }
+  .pol-card { padding: 2rem 1.25rem 1.5rem; transform: rotate(0.8deg); }
+  .pol-sheet { padding: 2.25rem 1.25rem 1.75rem; }
+  .pol-heading { font-size: 1.6rem; }
+}

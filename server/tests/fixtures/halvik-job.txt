@@ -1,0 +1,61 @@
+AI/ML Engineer - Junior
+7901 Jones Branch Dr, McLean, VA 22102, USA100,000-115,000 per yearSalaryFull Time
+Halvik Corp delivers a wide range of services to 13 executive agencies and 15 independent agencies. Halvik is a highly successful WOB business with more than 50 prime contracts and 500+ professionals delivering Digital Services, Advanced Analytics, Artificial Intelligence/Machine Learning, Cyber Security and Cutting-Edge Technology across the US Government. Be a part of something special!
+
+Position Overview
+
+AI/ML Engineer to join team at USPTO. In this role, you will assist in developing and evaluating machine learning models, preparing datasets, implementing AI solutions, and supporting the integration of intelligent systems into applications. You will work closely with other AI/ML engineers and other professionals to solve business problems using modern artificial intelligence and machine learning techniques.
+
+Core Responsibilities
+
+Collaboration: Work with clients, key stakeholders, as well as cross-functional teams.
+Technical Performance:
+Junior skills:
+Feature engineering and model optimization (assisting)
+Analyzing model performance with standard metrics
+Working with Python, ML libraries, AI APIs
+Basic NLP, computer vision, or generative AI tasks
+Prompt engineering and RAG integration
+SQL and data preparation
+Basic Git / version control
+Using AI-enabled dev tools (Claude Code, Copilot)
+Minimum Requirements
+
+Education: Bachelor's degree in Computer Science, Artificial Intelligence, Data Science, Mathematics, Statistics, Engineering, or a related technical field.
+Experience:
+Junior (0 to 4 years)
+Technical Proficiency:
+Experience with Python, Javascript, Java
+Experience with AI coding harnesses or related methods for agentic software development
+Experience with LLM engineering such as prompt design, retrieval-augmented generation (RAG), or agentic frameworks
+Experience with MLOps concepts, including CI/CD pipelines, version control, and model lifecycle management.
+Experience collaborating in Agile development environments and using modern DevOps tools (e.g., Azure DevOps, GitHub).
+Experience with Amazon Bedrock or similar generative AI platforms
+Experience working with large language models and prompt engineering
+Experience with model evaluation and performance optimization
+Experience developing and integrating APIs
+Experience using AI-enabled development tools such as Claude Code, GitHub Copilot, or similar technologies
+Compliance: Obtain Public Trust
+Preferred Expertise
+
+Experience with document-heavy or structured-data AI applications
+Experience with federal government IT systems or federal contracting
+Experience with semantic search or knowledge graph systems
+Familiarity with accessibility and compliance requirements (Section 508)
+Experience with Azure or AWS cloud platforms (beyond just Bedrock)
+Contributions to open-source ML projects
+Publications or presentations in AI/ML
+
+Privacy Policy – Halvik Corp
+
+Halvik offers a competitive full benefits package including:
+Company-supported medical, dental, vision, life, STD, and LTD insurance
+Benefits include 11 federal holidays and PTO
+Eligible employees may receive performance-based incentives in recognition of individual and/or team achievements.
+401(k) with company matching
+Flexible Spending Accounts for commuter, medical, and dependent care expenses
+Tuition Assistance
+Charitable Contribution matching
+
+Halvik Corp is an equal opportunity employer. All qualified applicants will receive consideration for employment without regard to race, color, religion, sex, sexual orientation, gender identity, national origin, disability or veteran status.
+

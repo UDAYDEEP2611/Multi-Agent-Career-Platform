@@ -1,0 +1,208 @@
+.pf-botanical {
+  --bo-paper: #f3efe4;
+  --bo-ink: #2f3b2a;
+  --bo-muted: #6c7763;
+  --bo-sage: #5d7052;
+  --bo-leaf: #7f9a6a;
+  --bo-card: #faf8f1;
+  --pfb-line: #d6d7c3;
+  --pfb-muted: var(--bo-muted);
+  --pfb-accent: var(--bo-sage);
+  --pfb-card: var(--bo-card);
+  --pfb-radius: 4px;
+  --pf-empty-btn-bg: var(--bo-sage);
+  background:
+    radial-gradient(circle at 10% 0%, rgba(127, 154, 106, 0.14), transparent 35%),
+    radial-gradient(circle at 95% 60%, rgba(127, 154, 106, 0.1), transparent 30%),
+    var(--bo-paper);
+  color: var(--bo-ink);
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.12rem;
+}
+
+[data-pf-mode="dark"] .pf-botanical {
+  --bo-paper: #121811;
+  --bo-ink: #e4e9da;
+  --bo-muted: #a3ae96;
+  --bo-sage: #a9c495;
+  --bo-leaf: #7f9a6a;
+  --bo-card: #182016;
+  --pfb-line: #2b3628;
+  --pf-empty-btn-text: #121811;
+}
+
+.bo-hero {
+  padding: 5rem 40px 3rem;
+}
+
+.bo-specimen {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 2.5rem 3rem;
+  border: 1px solid var(--bo-sage);
+  outline: 1px solid var(--bo-sage);
+  outline-offset: 6px;
+  text-align: center;
+}
+
+.bo-sprig {
+  display: block;
+  width: 150px;
+  height: 50px;
+  margin: 0 auto;
+  color: var(--bo-leaf);
+}
+
+.bo-sprig-flip {
+  transform: scaleX(-1);
+}
+
+.bo-kicker {
+  margin: 1rem 0 0;
+  font-family: "Inter", sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--bo-muted);
+}
+
+.bo-name {
+  margin-top: 0.75rem !important;
+  font-size: clamp(2.6rem, 6.5vw, 4.6rem);
+  font-weight: 700;
+  font-style: italic;
+  line-height: 1.02;
+}
+
+.bo-role {
+  margin: 0.75rem 0 0;
+  font-size: 1.45rem;
+  color: var(--bo-sage);
+}
+
+.bo-facts {
+  margin: 0.75rem 0 0;
+  font-style: italic;
+  color: var(--bo-muted);
+}
+
+.bo-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem 1.5rem;
+  margin: 1.5rem 0;
+  font-family: "Inter", sans-serif;
+  font-size: 0.85rem;
+}
+
+.bo-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  text-decoration: none;
+  border-bottom: 1px solid var(--bo-leaf);
+}
+
+.bo-body {
+  max-width: 940px;
+  margin: 0 auto;
+  padding: 0 40px 3rem;
+}
+
+.bo-section {
+  padding: 3rem 0;
+  border-bottom: 1px solid var(--pfb-line);
+}
+
+.bo-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 1.75rem !important;
+  font-size: 2.3rem;
+  font-weight: 700;
+}
+
+.bo-heading span {
+  font-size: 1rem;
+  font-weight: 500;
+  font-style: italic;
+  color: var(--bo-sage);
+}
+
+.pf-botanical .pfb-about p {
+  font-size: 1.25rem;
+}
+
+.pf-botanical .pfb-title {
+  font-size: 1.35rem;
+}
+
+.pf-botanical .pfb-sub,
+.pf-botanical .pfb-date {
+  font-style: italic;
+  font-size: 1rem;
+}
+
+/* Body text on the web scale: 16px */
+.pf-botanical .pfb-bullets,
+.pf-botanical .pfb-text {
+  font-size: 1rem;
+}
+
+.pf-botanical .pfb-bullets {
+  list-style: "❧  ";
+}
+
+.pf-botanical .pfb-bullets li::marker {
+  color: var(--bo-leaf);
+}
+
+.pf-botanical .pfb-tags span,
+.pf-botanical .pfb-skill {
+  font-family: "Inter", sans-serif;
+  border-color: var(--bo-leaf);
+}
+
+.pf-botanical .pfb-skill {
+  font-size: 0.9rem;
+}
+
+.pf-botanical .pfb-meter {
+  display: block;
+}
+
+.pf-botanical .pfb-card {
+  border-color: var(--bo-leaf);
+}
+
+.pf-botanical .pfb-quote blockquote {
+  font-size: 1.25rem;
+  font-style: italic;
+}
+
+.bo-foot {
+  padding: 3rem 40px 5rem;
+  text-align: center;
+}
+
+.bo-foot p {
+  margin: 1rem 0 0;
+  font-size: 1.5rem;
+  font-style: italic;
+}
+
+@media (max-width: 760px) {
+  .bo-hero { padding: 2.5rem 16px 1.5rem; }
+  .bo-specimen { padding: 1.75rem 1.1rem; }
+  .bo-body { padding: 0 20px 2rem; }
+  .bo-section { padding: 2.25rem 0; }
+  .bo-heading { font-size: 1.9rem; }
+}
+
+/* Dates and secondary lines on the web scale: 14px */
+.pf-botanical .pfb-date,
+.pf-botanical .pfb-sub {
+  font-size: 0.875rem;
+}

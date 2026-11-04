@@ -1,0 +1,260 @@
+.pf-metro {
+  --mtr-bg: #ffffff;
+  --mtr-ink: #111418;
+  --mtr-muted: #6b7280;
+  --mtr-soft: #f3f4f6;
+  --mt-c: #e3242b;
+  --pfb-line: #e5e7eb;
+  --pfb-muted: var(--mtr-muted);
+  --pfb-accent: var(--mt-c);
+  --pfb-radius: 10px;
+  --pf-empty-btn-bg: var(--mtr-ink);
+  background: var(--mtr-bg);
+  color: var(--mtr-ink);
+  font-family: "Space Grotesk", system-ui, sans-serif;
+}
+
+[data-pf-mode="dark"] .pf-metro {
+  --mtr-bg: #0f1114;
+  --mtr-ink: #f3f4f6;
+  --mtr-muted: #9ca3af;
+  --mtr-soft: #1a1d22;
+  --pfb-line: #2a2e35;
+  --pf-empty-btn-text: #0f1114;
+}
+
+.mtr-hero {
+  max-width: 1150px;
+  margin: 0 auto;
+  padding: 6rem 40px 3rem;
+}
+
+.mtr-badge {
+  display: grid;
+  place-items: center;
+  width: 78px;
+  height: 78px;
+  border: 10px solid #e3242b;
+  border-radius: 50%;
+  font-size: 1.3rem;
+  font-weight: 700;
+  box-shadow: inset 0 0 0 3px var(--mtr-bg);
+}
+
+.mtr-name {
+  margin-top: 1.75rem !important;
+  font-size: clamp(2.6rem, 7vw, 5.2rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.mtr-role {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.5rem 0 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.mtr-role span {
+  padding: 0.15rem 0.6rem;
+  border-radius: 6px;
+  background: #0075bf;
+  color: #fff;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.mtr-facts {
+  margin: 1rem 0 0;
+  color: var(--mtr-muted);
+}
+
+.mtr-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.75rem;
+}
+
+.mtr-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.95rem;
+  border-radius: 99px;
+  background: var(--mtr-soft);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* The route strip: stations joined by one thick line */
+.mtr-route {
+  max-width: 1150px;
+  margin: 0 auto;
+  padding: 0 40px;
+  overflow-x: auto;
+}
+
+.mtr-route ol {
+  display: flex;
+  min-width: max-content;
+  margin: 0 !important;
+  padding: 2.5rem 0 1.5rem !important;
+  list-style: none;
+}
+
+.mtr-route li {
+  position: relative;
+  flex: 1 0 140px;
+}
+
+.mtr-route li::before {
+  content: "";
+  position: absolute;
+  top: 9px;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: var(--mt-c);
+}
+
+.mtr-route li:first-child::before { left: 50%; }
+.mtr-route li:last-child::before { right: 50%; }
+
+.mtr-route a {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+}
+
+.mtr-route a i {
+  width: 26px;
+  height: 26px;
+  border: 5px solid var(--mtr-ink);
+  border-radius: 50%;
+  background: var(--mtr-bg);
+}
+
+.mtr-body {
+  max-width: 1150px;
+  margin: 0 auto;
+  padding: 1rem 40px 3rem;
+}
+
+.mtr-section {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: 1.5rem 3rem;
+  padding: 3rem 0;
+  border-top: 8px solid var(--mt-c);
+}
+
+.mtr-section-body {
+  min-width: 0;
+}
+
+.mtr-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  align-self: start;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.mtr-line {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: var(--mt-c);
+  color: #fff;
+  font-size: 1.15rem;
+}
+
+.pf-metro .pfb-date {
+  font-weight: 600;
+  color: var(--mtr-ink);
+}
+
+.pf-metro .pfb-now {
+  color: var(--mt-c);
+}
+
+.pf-metro .pfb-bullets {
+  list-style: none;
+  padding-left: 0 !important;
+}
+
+.pf-metro .pfb-bullets li {
+  position: relative;
+  padding-left: 1.4rem;
+}
+
+.pf-metro .pfb-bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.45em;
+  width: 11px;
+  height: 11px;
+  border: 3px solid var(--mt-c);
+  border-radius: 50%;
+}
+
+.pf-metro .pfb-meter {
+  display: block;
+}
+
+.pf-metro .pfb-meter i {
+  background: var(--mt-c);
+}
+
+.pf-metro .pfb-card {
+  border: 0;
+  border-left: 6px solid var(--mt-c);
+  background: var(--mtr-soft);
+}
+
+.pf-metro .pfb-quote {
+  border: 0;
+  background: var(--mtr-soft);
+}
+
+.mtr-foot {
+  padding: 3rem 40px 5rem;
+  border-top: 8px solid var(--mtr-ink);
+  text-align: center;
+}
+
+.mtr-foot p {
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.mtr-foot .mtr-links {
+  justify-content: center;
+}
+
+@media (max-width: 860px) {
+  .mtr-hero { padding: 3.5rem 20px 2rem; }
+  .mtr-route { padding: 0 20px; }
+  .mtr-route li { flex-basis: 110px; }
+  .mtr-body { padding: 0 20px 2rem; }
+  .mtr-section { grid-template-columns: minmax(0, 1fr); padding: 2rem 0; }
+  .mtr-foot { padding: 2.5rem 20px 4rem; }
+}

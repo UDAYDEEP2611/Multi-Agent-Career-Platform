@@ -1,0 +1,266 @@
+/* Light: a parchment survey map. Dark: a night chart with glowing contours. */
+.pf-atlas {
+  --at-paper: #efe6d2;
+  --at-ink: #2e2a1f;
+  --at-muted: #736a54;
+  --at-route: #c0392b;
+  --at-contour: rgba(120, 96, 50, 0.16);
+  --at-card: rgba(255, 252, 243, 0.75);
+  --pfb-line: #d6c9aa;
+  --pfb-muted: var(--at-muted);
+  --pfb-accent: var(--at-route);
+  --pfb-card: var(--at-card);
+  --pfb-radius: 8px;
+  --pf-empty-btn-bg: var(--at-ink);
+  background:
+    repeating-radial-gradient(ellipse 60% 45% at 18% 22%, transparent 0 22px, var(--at-contour) 22px 23.5px),
+    repeating-radial-gradient(ellipse 50% 60% at 85% 75%, transparent 0 26px, var(--at-contour) 26px 27.5px),
+    var(--at-paper);
+  color: var(--at-ink);
+  font-family: "Manrope", system-ui, sans-serif;
+}
+
+[data-pf-mode="dark"] .pf-atlas {
+  --at-paper: #0f1a24;
+  --at-ink: #e4eef5;
+  --at-muted: #8fa6b6;
+  --at-route: #ff8a65;
+  --at-contour: rgba(102, 204, 255, 0.12);
+  --at-card: rgba(15, 26, 36, 0.82);
+  --pfb-line: #22394a;
+  --pf-empty-btn-bg: var(--at-route);
+  --pf-empty-btn-text: #0f1a24;
+}
+
+.at-hero {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 3.5rem;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 6.5rem 40px 4.5rem;
+}
+
+/* Compass rose: two crossed diamonds inside a ring */
+.at-compass {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  border: 2px solid var(--at-ink);
+  border-radius: 50%;
+  background:
+    conic-gradient(from 0deg, var(--at-ink) 0 1deg, transparent 1deg 89deg, var(--at-ink) 89deg 91deg, transparent 91deg 179deg, var(--at-ink) 179deg 181deg, transparent 181deg 269deg, var(--at-ink) 269deg 271deg, transparent 271deg) border-box;
+}
+
+.at-compass::before,
+.at-compass::after {
+  content: "";
+  position: absolute;
+  inset: 12%;
+  background: var(--at-route);
+  clip-path: polygon(50% 0, 60% 50%, 50% 100%, 40% 50%);
+}
+
+.at-compass::after {
+  background: var(--at-ink);
+  transform: rotate(90deg);
+  opacity: 0.75;
+}
+
+.at-compass span {
+  position: absolute;
+  top: -1.9rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: "DM Serif Display", serif;
+  font-size: 1.3rem;
+}
+
+.at-kicker {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--at-route);
+}
+
+.at-name {
+  margin-top: 0.9rem !important;
+  font-family: "DM Serif Display", serif;
+  font-size: clamp(2.6rem, 6.5vw, 4.8rem);
+  font-weight: 400;
+  line-height: 1.02;
+}
+
+.at-role {
+  margin: 0.9rem 0 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.at-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 2rem;
+  margin: 1.75rem 0 0;
+}
+
+.at-legend div {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.at-legend dt {
+  font-family: "DM Serif Display", serif;
+  font-size: 1.6rem;
+  font-weight: 400;
+}
+
+.at-legend dd {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--at-muted);
+}
+
+.at-scale {
+  display: flex;
+  align-items: center;
+  margin-top: 1.5rem;
+}
+
+.at-scale i {
+  width: 36px;
+  height: 8px;
+  border: 1px solid var(--at-ink);
+}
+
+.at-scale i:nth-child(odd) {
+  background: var(--at-ink);
+}
+
+.at-scale span {
+  margin-left: 0.75rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--at-muted);
+}
+
+.at-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.5rem;
+  margin-top: 1.75rem;
+  font-size: 0.88rem;
+}
+
+.at-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 2px dotted var(--at-route);
+}
+
+/* Sections hang off one dashed route line */
+.at-body {
+  position: relative;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 1rem 40px 3rem 96px;
+}
+
+.at-body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 58px;
+  border-left: 3px dashed var(--at-route);
+}
+
+.at-section {
+  position: relative;
+  margin-bottom: 2rem;
+  padding: 2rem 2.25rem;
+  border: 1px solid var(--pfb-line);
+  border-radius: 14px;
+  background: var(--at-card);
+  backdrop-filter: blur(2px);
+}
+
+.at-marker {
+  position: absolute;
+  top: 1.6rem;
+  left: -54px;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--at-route);
+  color: #fff;
+  font-size: 0.95rem;
+  box-shadow: 0 0 0 5px var(--at-paper);
+}
+
+.at-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-bottom: 1.5rem !important;
+  font-family: "DM Serif Display", serif;
+  font-size: clamp(1.7rem, 3.5vw, 2.3rem);
+  font-weight: 400;
+}
+
+.at-heading span {
+  font-family: "Manrope", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--at-route);
+}
+
+.pf-atlas .pfb-date {
+  font-weight: 700;
+}
+
+.pf-atlas .pfb-meter {
+  display: block;
+}
+
+.pf-atlas .pfb-meter i {
+  background: var(--at-route);
+}
+
+.at-foot {
+  padding: 2.5rem 40px 5rem;
+  text-align: center;
+}
+
+.at-foot p {
+  font-family: "DM Serif Display", serif;
+  font-size: 1.6rem;
+}
+
+.at-foot .at-links {
+  justify-content: center;
+}
+
+@media (max-width: 860px) {
+  .at-hero { grid-template-columns: minmax(0, 1fr); gap: 2.5rem; padding: 4.5rem 20px 2.5rem; }
+  .at-compass { width: 110px; height: 110px; }
+  .at-body { padding: 0.5rem 16px 2rem 52px; }
+  .at-body::before { left: 28px; }
+  .at-section { padding: 1.4rem 1.1rem; }
+  .at-marker { left: -38px; width: 28px; height: 28px; font-size: 0.8rem; }
+}

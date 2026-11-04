@@ -1,0 +1,246 @@
+/* Light: a handheld's four greens. Dark: a neon arcade cabinet. */
+.pf-arcade {
+  --arc-bg: #9bbc0f;
+  --arc-panel: #8bac0f;
+  --arc-ink: #0f380f;
+  --arc-dim: #306230;
+  --arc-hot: #0f380f;
+  --arc-alt: #306230;
+  --arc-px: 4px;
+  --pfb-line: var(--arc-dim);
+  --pfb-muted: var(--arc-dim);
+  --pfb-accent: var(--arc-hot);
+  --pfb-radius: 0;
+  --pf-empty-btn-bg: var(--arc-ink);
+  --pf-empty-btn-text: var(--arc-bg);
+  background:
+    repeating-linear-gradient(0deg, rgba(15, 56, 15, 0.05) 0 2px, transparent 2px 4px),
+    var(--arc-bg);
+  color: var(--arc-ink);
+  font-family: "Space Mono", monospace;
+}
+
+[data-pf-mode="dark"] .pf-arcade {
+  --arc-bg: #0b0620;
+  --arc-panel: #160c38;
+  --arc-ink: #f4f1ff;
+  --arc-dim: #6f62a8;
+  --arc-hot: #ff3ea5;
+  --arc-alt: #2de2e6;
+  --pfb-line: #3a2d78;
+  --pf-empty-btn-bg: #ff3ea5;
+  --pf-empty-btn-text: #0b0620;
+  background:
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.025) 0 2px, transparent 2px 4px),
+    radial-gradient(circle at 50% 0%, rgba(255, 62, 165, 0.18), transparent 50%),
+    var(--arc-bg);
+}
+
+/* Stepped "pixel" border used by every box */
+.arc-section,
+.arc-link,
+.pf-arcade .pfb-card,
+.pf-arcade .pfb-quote,
+.pf-arcade .pf-open-to {
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow:
+    0 calc(var(--arc-px) * -1) 0 0 var(--arc-ink),
+    0 var(--arc-px) 0 0 var(--arc-ink),
+    calc(var(--arc-px) * -1) 0 0 0 var(--arc-ink),
+    var(--arc-px) 0 0 0 var(--arc-ink);
+}
+
+.arc-hud {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  padding: 1rem 32px;
+  font-family: "Press Start 2P", monospace;
+  font-size: 0.68rem;
+  line-height: 1.6;
+  text-transform: uppercase;
+}
+
+.arc-hud span:first-child {
+  color: var(--arc-hot);
+}
+
+.arc-title {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 4.5rem 32px 4rem;
+  text-align: center;
+}
+
+.arc-lives {
+  margin-bottom: 1.5rem;
+  font-size: 1.3rem;
+  letter-spacing: 0.3em;
+  color: var(--arc-hot);
+}
+
+.arc-name {
+  font-family: "Press Start 2P", monospace;
+  font-size: clamp(1.6rem, 5vw, 3.2rem);
+  font-weight: 400;
+  line-height: 1.35;
+  text-transform: uppercase;
+  text-shadow: var(--arc-px) var(--arc-px) 0 var(--arc-alt);
+}
+
+.arc-role {
+  margin: 1.75rem auto 0;
+  max-width: 40rem;
+  font-size: 1.1rem;
+}
+
+.arc-start {
+  display: inline-block;
+  margin-top: 2.25rem;
+  font-family: "Press Start 2P", monospace;
+  font-size: 0.85rem;
+  text-decoration: none;
+  text-transform: uppercase;
+  color: var(--arc-hot);
+  animation: arc-blink 1.1s steps(2, start) infinite;
+}
+
+@keyframes arc-blink {
+  to { visibility: hidden; }
+}
+
+.arc-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem 1.5rem;
+  margin-top: 2.25rem;
+}
+
+.arc-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.9rem;
+  background: var(--arc-panel);
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.arc-body {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 36px 3rem;
+}
+
+.arc-section {
+  margin: 2.5rem 0;
+  padding: 2rem 2.25rem;
+  background: var(--arc-panel);
+}
+
+.arc-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 1rem;
+  margin-bottom: 1.75rem !important;
+  font-family: "Press Start 2P", monospace;
+  font-size: 1.05rem;
+  font-weight: 400;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.arc-heading span {
+  font-size: 0.65rem;
+  color: var(--arc-hot);
+}
+
+.pf-arcade .pfb-about p {
+  font-size: 1.02rem;
+}
+
+.pf-arcade .pfb-title {
+  font-size: 1.05rem;
+}
+
+.pf-arcade .pfb-date,
+.pf-arcade .pfb-card-no {
+  font-family: "Press Start 2P", monospace;
+  font-size: 0.6rem;
+  line-height: 1.6;
+  color: var(--arc-hot);
+}
+
+.pf-arcade .pfb-now {
+  border-radius: 0;
+  font-family: "Press Start 2P", monospace;
+  font-size: 0.5rem;
+}
+
+.pf-arcade .pfb-bullets {
+  list-style: none;
+  padding-left: 0 !important;
+}
+
+.pf-arcade .pfb-bullets li::before {
+  content: "▸ ";
+  color: var(--arc-hot);
+}
+
+.pf-arcade .pfb-tags span,
+.pf-arcade .pfb-skill {
+  border-radius: 0;
+  border: 2px solid var(--arc-ink);
+}
+
+/* Skill levels as five-segment health bars */
+.pf-arcade .pfb-meter {
+  display: block;
+  width: 78px;
+  height: 10px;
+  border-radius: 0;
+  background: repeating-linear-gradient(90deg, var(--pfb-line) 0 13.6px, transparent 13.6px 15.6px);
+}
+
+.pf-arcade .pfb-meter i {
+  background: repeating-linear-gradient(90deg, var(--arc-hot) 0 13.6px, transparent 13.6px 15.6px);
+}
+
+.pf-arcade .pfb-card,
+.pf-arcade .pfb-quote {
+  margin: var(--arc-px);
+  background: var(--arc-bg);
+}
+
+.pf-arcade .pf-open-to {
+  margin: var(--arc-px) var(--arc-px) 1.5rem;
+  background: var(--arc-bg);
+}
+
+.arc-foot {
+  padding: 2rem 32px 5rem;
+  text-align: center;
+}
+
+.arc-over {
+  font-family: "Press Start 2P", monospace;
+  font-size: 1.4rem;
+  text-transform: uppercase;
+  color: var(--arc-hot);
+}
+
+@media (max-width: 760px) {
+  .arc-hud { padding: 0.75rem 16px; font-size: 0.55rem; }
+  .arc-title { padding: 3rem 16px 2.5rem; }
+  .arc-body { padding: 0 18px 2rem; }
+  .arc-section { padding: 1.5rem 1.1rem; }
+  .arc-heading { font-size: 0.85rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arc-start { animation: none; }
+}

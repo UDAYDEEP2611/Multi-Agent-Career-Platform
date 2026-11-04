@@ -1,0 +1,324 @@
+.pf-executive {
+  --ex-bg: #f8f6f1;
+  --ex-paper: #fff;
+  --ex-text: #1b2a41;
+  --ex-muted: #5c6b80;
+  --ex-navy: #0b2545;
+  --ex-navy-2: #13315c;
+  --ex-gold: #b8912f;
+  --ex-gold-soft: #f3e9cf;
+  --pfb-line: #e4ded0;
+  --pfb-muted: var(--ex-muted);
+  --pfb-accent: var(--ex-gold);
+  --pfb-card: var(--ex-paper);
+  --pfb-radius: 4px;
+  --pf-empty-btn-bg: var(--ex-navy);
+  background: var(--ex-bg);
+  color: var(--ex-text);
+  font-family: "Inter", system-ui, sans-serif;
+}
+
+[data-pf-mode="dark"] .pf-executive {
+  --ex-bg: #060f1f;
+  --ex-paper: #0c1a30;
+  --ex-text: #e6ebf3;
+  --ex-muted: #9aa8bd;
+  --ex-navy: #020812;
+  --ex-navy-2: #0a1c36;
+  --ex-gold: #d4af37;
+  --ex-gold-soft: rgba(212, 175, 55, 0.12);
+  --pfb-line: #1c2d48;
+  --pf-empty-btn-bg: var(--ex-gold);
+  --pf-empty-btn-text: #060f1f;
+}
+
+.ex-banner {
+  padding-bottom: 7rem;
+  color: #f5f1e6;
+  background:
+    radial-gradient(circle at 85% 20%, rgba(212, 175, 55, 0.18), transparent 40%),
+    linear-gradient(135deg, var(--ex-navy), var(--ex-navy-2));
+  clip-path: polygon(0 0, 100% 0, 100% 82%, 0 100%);
+}
+
+.ex-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 26px 32px;
+}
+
+.ex-mono {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border: 1px solid var(--ex-gold);
+  color: var(--ex-gold);
+  font-family: "Libre Baskerville", Georgia, serif;
+  font-weight: 700;
+}
+
+.ex-nav-links {
+  display: flex;
+  gap: 2rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.ex-nav-links a {
+  text-decoration: none;
+  color: rgba(245, 241, 230, 0.75);
+}
+
+.ex-nav-links a:hover {
+  color: var(--ex-gold);
+}
+
+.ex-hero {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 4rem 32px 0;
+}
+
+.ex-role {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ex-gold);
+}
+
+.ex-name {
+  margin-top: 0.75rem !important;
+  font-family: "Libre Baskerville", Georgia, serif;
+  font-size: clamp(2.6rem, 7vw, 5rem);
+  font-weight: 700;
+  line-height: 1.05;
+}
+
+.ex-rule {
+  display: block;
+  width: 90px;
+  height: 3px;
+  margin: 1.5rem 0 1rem;
+  background: var(--ex-gold);
+}
+
+.ex-current {
+  margin: 0;
+  font-family: "Libre Baskerville", Georgia, serif;
+  font-style: italic;
+  color: rgba(245, 241, 230, 0.8);
+}
+
+.ex-summary {
+  position: relative;
+  max-width: 1036px;
+  margin: -5rem auto 0;
+  padding: 2.25rem 2.5rem;
+  border-top: 4px solid var(--ex-gold);
+  background: var(--ex-paper);
+  box-shadow: 0 25px 60px rgba(11, 37, 69, 0.15);
+}
+
+.ex-summary-title {
+  margin-bottom: 1rem !important;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ex-gold);
+}
+
+.ex-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--pfb-line);
+}
+
+.ex-stats strong {
+  display: block;
+  font-family: "Libre Baskerville", Georgia, serif;
+  font-size: 2.2rem;
+  color: var(--ex-gold);
+}
+
+.ex-stats span {
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ex-muted);
+}
+
+.ex-body {
+  max-width: 1036px;
+  margin: 0 auto;
+  padding: 1rem 0 4rem;
+}
+
+.ex-section {
+  padding-top: 3.5rem;
+}
+
+.ex-heading {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 1.75rem !important;
+  font-family: "Libre Baskerville", Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.ex-heading::before,
+.ex-heading::after {
+  content: "";
+  height: 1px;
+  background: var(--ex-gold);
+}
+
+.ex-heading::before { width: 40px; }
+.ex-heading::after { flex: 1; opacity: 0.4; }
+
+.pf-executive .pfb-about p {
+  font-family: "Libre Baskerville", Georgia, serif;
+  font-size: 1.1rem;
+  line-height: 1.85;
+}
+
+.pf-executive .pfb-list-experience .pfb-item,
+.pf-executive .pfb-list-education .pfb-item {
+  padding: 1.5rem 1.75rem;
+  background: var(--ex-paper);
+  border-left: 3px solid var(--ex-gold);
+  box-shadow: 0 4px 16px rgba(11, 37, 69, 0.05);
+}
+
+.pf-executive .pfb-list {
+  gap: 1rem;
+}
+
+.pf-executive .pfb-title {
+  font-family: "Libre Baskerville", Georgia, serif;
+  font-size: 1.2rem;
+}
+
+.pf-executive .pfb-date {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ex-gold);
+}
+
+.pf-executive .pfb-now {
+  border: 0;
+  background: var(--ex-gold-soft);
+  color: var(--ex-gold);
+}
+
+.pf-executive .pfb-bullets li::marker {
+  color: var(--ex-gold);
+}
+
+.pf-executive .pfb-tags span {
+  border-radius: 2px;
+  background: var(--ex-gold-soft);
+  border-color: transparent;
+}
+
+.pf-executive .pfb-skill-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 0.6rem 2rem;
+}
+
+.pf-executive .pfb-skill {
+  justify-content: space-between;
+  padding: 0.4rem 0;
+  border: 0;
+  border-bottom: 1px solid var(--pfb-line);
+  border-radius: 0;
+  background: none;
+}
+
+.pf-executive .pfb-meter {
+  display: block;
+  width: 70px;
+}
+
+.pf-executive .pfb-card,
+.pf-executive .pfb-quote {
+  border: 0;
+  border-top: 3px solid var(--ex-gold);
+  box-shadow: 0 4px 16px rgba(11, 37, 69, 0.05);
+}
+
+.pf-executive .pfb-quote blockquote {
+  font-family: "Libre Baskerville", Georgia, serif;
+  font-style: italic;
+}
+
+.ex-contact {
+  padding: 4rem 32px;
+  text-align: center;
+  color: #f5f1e6;
+  background: linear-gradient(135deg, var(--ex-navy), var(--ex-navy-2));
+}
+
+.ex-contact h2 {
+  font-family: "Libre Baskerville", Georgia, serif;
+  font-size: 2.2rem;
+}
+
+.ex-contact .pf-empty {
+  color: #f5f1e6;
+}
+
+.ex-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.ex-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  border: 1px solid var(--ex-gold);
+  color: #f5f1e6 !important;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.ex-link:hover {
+  background: var(--ex-gold);
+  color: #0b2545 !important;
+}
+
+@media (max-width: 1100px) {
+  .ex-summary, .ex-body { margin-left: 16px; margin-right: 16px; }
+}
+
+@media (max-width: 760px) {
+  .ex-nav { padding: 18px 16px; }
+  .ex-nav-links { display: none; }
+  .ex-hero { padding: 2rem 16px 0; }
+  .ex-summary { padding: 1.5rem; }
+}
+
+.ex-lede {
+  margin: 0 0 0.85rem !important;
+  color: rgba(245, 241, 230, 0.88);
+}

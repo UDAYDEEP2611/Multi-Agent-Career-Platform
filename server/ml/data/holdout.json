@@ -1,0 +1,561 @@
+{
+ "_about": "Written by hand and never trained on. Real messages from the user of this product, plus sentences written without looking at the templates. This is what the reported accuracy means.",
+ "intent": [
+  [
+   "IN RESUMES ONLY 15 IMP SKILLS ONLY REMAINING IF ONLY SPECIFACLLY ASKEED ADD THEM ELSE NO",
+   "design"
+  ],
+  [
+   "ALL EXOPS INCLUDED BUT POINTS FIRST ONE 3/4 REMAING 2/3 ON MY RESUME",
+   "design"
+  ],
+  [
+   "WHEN U FEEL LIKE THIS LEFT OR RIGHT TOO MUCH SPACE KEEPCERTIFICATIONS AT LEFT AUTOMATICALLY ON RESUME",
+   "design"
+  ],
+  [
+   "this project name and Details and Tasks",
+   "entry"
+  ],
+  [
+   "I want to add A project",
+   "entry"
+  ],
+  [
+   "Add A project",
+   "entry"
+  ],
+  [
+   "my new job started monday at Walmart as lead analyst",
+   "entry"
+  ],
+  [
+   "just finished my masters!!",
+   "entry"
+  ],
+  [
+   "can u save my aws cert",
+   "entry"
+  ],
+  [
+   "i got a promtion to senior engineer",
+   "entry"
+  ],
+  [
+   "add kafka to my skils",
+   "entry"
+  ],
+  [
+   "i wrote a paper about graph neural networks and it got publishd",
+   "entry"
+  ],
+  [
+   "i do charity work at a shelter on weekends",
+   "entry"
+  ],
+  [
+   "put photography in my intrests",
+   "entry"
+  ],
+  [
+   "Title: Staff Engineer\nCompany: Stripe\nStart: 2022",
+   "entry"
+  ],
+  [
+   "i finshed a project about house price prediction",
+   "entry"
+  ],
+  [
+   "my boss gave me a recomendation",
+   "entry"
+  ],
+  [
+   "change my summry to say i love agents",
+   "entry"
+  ],
+  [
+   "the portfolio feels too plain, can it be fancier",
+   "design"
+  ],
+  [
+   "can i get a dark theme",
+   "design"
+  ],
+  [
+   "chnage the colr to blu",
+   "design"
+  ],
+  [
+   "make the headings bigger",
+   "design"
+  ],
+  [
+   "i hate this font",
+   "design"
+  ],
+  [
+   "put my skills above my experince on the portfolio",
+   "design"
+  ],
+  [
+   "SHOW ALL MY PROJCTS ON MY RESUNME",
+   "design"
+  ],
+  [
+   "take the blood bank project off my cv",
+   "design"
+  ],
+  [
+   "2 jobs on resume is enough",
+   "design"
+  ],
+  [
+   "delet my forest design",
+   "design"
+  ],
+  [
+   "make it look like an old terminal",
+   "design"
+  ],
+  [
+   "where did i go to college",
+   "qa"
+  ],
+  [
+   "wat skils do i hav",
+   "qa"
+  ],
+  [
+   "whats my gpa",
+   "qa"
+  ],
+  [
+   "how long did i stay at verizon",
+   "qa"
+  ],
+  [
+   "did i ever use kubernetes",
+   "qa"
+  ],
+  [
+   "which of my projects involve rag",
+   "qa"
+  ],
+  [
+   "am i qualified for a data engineer job",
+   "qa"
+  ],
+  [
+   "who was my last employer",
+   "qa"
+  ],
+  [
+   "how many certifcations do i have",
+   "qa"
+  ],
+  [
+   "tell me what i did at oracle",
+   "qa"
+  ],
+  [
+   "when did i graduate",
+   "qa"
+  ],
+  [
+   "helo",
+   "help"
+  ],
+  [
+   "hlep",
+   "help"
+  ],
+  [
+   "thnks!",
+   "help"
+  ],
+  [
+   "hey there",
+   "help"
+  ],
+  [
+   "what can u do",
+   "help"
+  ],
+  [
+   "good nite",
+   "help"
+  ],
+  [
+   "how do i use this",
+   "help"
+  ],
+  [
+   "ok thank u",
+   "help"
+  ],
+  [
+   "remove grade in Education on my resume",
+   "design"
+  ],
+  [
+   "move Education to the right column on my resume",
+   "design"
+  ],
+  [
+   "put my resume skills in boxes",
+   "design"
+  ]
+ ],
+ "section": [
+  [
+   "i started at walmart as lead analyst",
+   "experience"
+  ],
+  [
+   "ADD THIS TO MY EXPIERENCE",
+   "experience"
+  ],
+  [
+   "Job: staff engineer at stripe",
+   "experience"
+  ],
+  [
+   "my first internship was at infosys",
+   "experience"
+  ],
+  [
+   "i got my btech from sastra",
+   "education"
+  ],
+  [
+   "add my univrsity",
+   "education"
+  ],
+  [
+   "finished college in 2022",
+   "education"
+  ],
+  [
+   "add kafka to my skils",
+   "skills"
+  ],
+  [
+   "im good at terraform",
+   "skills"
+  ],
+  [
+   "i passed the aws exam and got certifed",
+   "certifications"
+  ],
+  [
+   "add my certifcate",
+   "certifications"
+  ],
+  [
+   "i made a house price predictor",
+   "projects"
+  ],
+  [
+   "add a projct",
+   "projects"
+  ],
+  [
+   "Project name: UltraUnityVerse",
+   "projects"
+  ],
+  [
+   "i won the hackthon",
+   "achievements"
+  ],
+  [
+   "add an awrd",
+   "achievements"
+  ],
+  [
+   "i help at an animal shelter as a volunteer",
+   "volunteering"
+  ],
+  [
+   "my boss gave me a recomendation",
+   "recommendations"
+  ],
+  [
+   "my reserch paper was accepted",
+   "publications"
+  ],
+  [
+   "i filed a patnt",
+   "patents"
+  ],
+  [
+   "i like hiking and painting",
+   "interests"
+  ],
+  [
+   "change my summry",
+   "summary"
+  ],
+  [
+   "update my bio",
+   "summary"
+  ],
+  [
+   "my phone number is 214 555 0100",
+   "profile"
+  ],
+  [
+   "change my linkdin",
+   "profile"
+  ]
+ ],
+ "action": [
+  [
+   "hide teh blod bank projct",
+   "hide_entry"
+  ],
+  [
+   "remvoe my certifcations",
+   "hide_entry"
+  ],
+  [
+   "get rid of blood bank",
+   "hide_entry"
+  ],
+  [
+   "dont want ultraunityverse on here",
+   "hide_entry"
+  ],
+  [
+   "please remove all the certificates, I don't want those on here",
+   "hide_entry"
+  ],
+  [
+   "I would like my housing analytics work taken away from this one",
+   "hide_entry"
+  ],
+  [
+   "no need for the verizon job here",
+   "hide_entry"
+  ],
+  [
+   "put blood bank bak",
+   "show_entry"
+  ],
+  [
+   "i changed my mind, bring ultraunityverse back",
+   "show_entry"
+  ],
+  [
+   "restre the oracle job",
+   "show_entry"
+  ],
+  [
+   "only 1 projct",
+   "limit"
+  ],
+  [
+   "SHOW ALL MY PROJCTS",
+   "limit"
+  ],
+  [
+   "ALL EXOPS INCLUDED",
+   "limit"
+  ],
+  [
+   "keep just my most recent position",
+   "limit"
+  ],
+  [
+   "2 jobs is enough",
+   "limit"
+  ],
+  [
+   "all my skils",
+   "limit"
+  ],
+  [
+   "add intrests",
+   "section"
+  ],
+  [
+   "i want my publicatons on it",
+   "section"
+  ],
+  [
+   "remove the volunteering section",
+   "section"
+  ],
+  [
+   "make it nvay",
+   "colour"
+  ],
+  [
+   "chnage colr to blu",
+   "colour"
+  ],
+  [
+   "can it be maroon",
+   "colour"
+  ],
+  [
+   "rest this resume",
+   "reset"
+  ],
+  [
+   "start fresh",
+   "reset"
+  ],
+  [
+   "undo evrything",
+   "reset"
+  ],
+  [
+   "whats on this resume",
+   "status"
+  ],
+  [
+   "what did i hide",
+   "status"
+  ],
+  [
+   "helo",
+   "other"
+  ],
+  [
+   "thanks",
+   "other"
+  ],
+  [
+   "what is my gpa",
+   "other"
+  ],
+  [
+   "remove grade in Education",
+   "hide_detail"
+  ],
+  [
+   "remove only grade in MS remaining keep it",
+   "hide_detail"
+  ],
+  [
+   "In Certifications remove Organization name keep remaimning",
+   "hide_detail"
+  ],
+  [
+   "i dont need the gpa showing for my masters",
+   "hide_detail"
+  ],
+  [
+   "get the issuing company off the aws cert",
+   "hide_detail"
+  ],
+  [
+   "that city under verizon can go",
+   "hide_detail"
+  ],
+  [
+   "i only want the degree name not the marks",
+   "hide_detail"
+  ],
+  [
+   "my grade should come back",
+   "show_detail"
+  ],
+  [
+   "show where my job was again",
+   "show_detail"
+  ],
+  [
+   "Can U move Education to right column",
+   "move_column"
+  ],
+  [
+   "education belongs on the other side",
+   "move_column"
+  ],
+  [
+   "could certifications sit in the big column",
+   "move_column"
+  ],
+  [
+   "flip skills over to the left",
+   "move_column"
+  ],
+  [
+   "in skills u can put everything in box side by side",
+   "skill_style"
+  ],
+  [
+   "In Skills put everytghing Like side by side with a box inside and Padding side by side",
+   "skill_style"
+  ],
+  [
+   "i want my skills as little boxes next to each other",
+   "skill_style"
+  ],
+  [
+   "skills look bad as a list make them tags",
+   "skill_style"
+  ],
+  [
+   "Microsoft AI & ML Engineering Professional Certificate Microsoft change it to Microsoft AI & ML Engineering Professional Certificate",
+   "edit_text"
+  ],
+  [
+   "call my project something different",
+   "edit_text"
+  ],
+  [
+   "fix the wording of my oracle job",
+   "edit_text"
+  ],
+  [
+   "could the whole thing fit on a single sheet",
+   "other"
+  ],
+  [
+   "the letters look too tiny",
+   "other"
+  ],
+  [
+   "this looks awful honestly",
+   "other"
+  ],
+  [
+   "can you convert it to french",
+   "other"
+  ],
+  [
+   "will recruiters like this",
+   "other"
+  ],
+  [
+   "sure go ahead",
+   "other"
+  ],
+  [
+   "make the whole thing fancier",
+   "other"
+  ],
+  [
+   "whats the temperature outside",
+   "other"
+  ],
+  [
+   "get those hobbies off here",
+   "section"
+  ],
+  [
+   "bring in my testimonials",
+   "section"
+  ],
+  [
+   "date on the patents is not useful",
+   "hide_detail"
+  ],
+  [
+   "hide where i studied gpa wise",
+   "hide_detail"
+  ]
+ ]
+}

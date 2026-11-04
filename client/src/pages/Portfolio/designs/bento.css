@@ -1,0 +1,335 @@
+.pf-bento {
+  --ben-bg: #f2f2f7;
+  --ben-tile: #fff;
+  --ben-text: #1d1d1f;
+  --ben-muted: #6e6e73;
+  --ben-accent: #0071e3;
+  --ben-alt: #1d1d1f;
+  --ben-alt-text: #f5f5f7;
+  --pfb-line: #e5e5ea;
+  --pfb-muted: var(--ben-muted);
+  --pfb-accent: var(--ben-accent);
+  --pfb-card: #f5f5f7;
+  --pfb-radius: 20px;
+  --pfb-tag-bg: #f5f5f7;
+  --pf-empty-btn-bg: var(--ben-accent);
+  background: var(--ben-bg);
+  color: var(--ben-text);
+  font-family: "Inter", system-ui, sans-serif;
+}
+
+[data-pf-mode="dark"] .pf-bento {
+  --ben-bg: #000;
+  --ben-tile: #1c1c1e;
+  --ben-text: #f5f5f7;
+  --ben-muted: #a1a1a6;
+  --ben-accent: #2997ff;
+  --ben-alt: #f5f5f7;
+  --ben-alt-text: #1d1d1f;
+  --pfb-line: #2c2c2e;
+  --pfb-card: #2c2c2e;
+  --pfb-tag-bg: #2c2c2e;
+}
+
+.ben-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 28px;
+}
+
+.ben-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.ben-body {
+  margin-top: 14px;
+}
+
+.ben-tile {
+  padding: 1.75rem;
+  border-radius: 28px;
+  background: var(--ben-tile);
+  min-width: 0;
+}
+
+.ben-intro {
+  grid-column: span 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 300px;
+  padding: 2.25rem;
+}
+
+.ben-eyebrow {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ben-accent);
+}
+
+.ben-intro h1 {
+  margin: 0.5rem 0 0.25rem !important;
+  font-size: clamp(2.6rem, 6vw, 5rem);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 1;
+}
+
+.ben-role {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: var(--ben-muted);
+}
+
+.ben-face {
+  display: grid;
+  place-items: center;
+  background: linear-gradient(160deg, #5ac8fa, #0071e3 55%, #5e5ce6);
+}
+
+.ben-face span {
+  font-size: 4rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.04em;
+}
+
+.ben-lede {
+  grid-column: span 2;
+  grid-row: span 2;
+  background: var(--ben-alt);
+  color: var(--ben-alt-text);
+}
+
+.ben-lede i {
+  font-size: 2.4rem;
+  color: var(--ben-accent);
+}
+
+.ben-lede p {
+  margin: 0.5rem 0 0;
+  font-size: 1.25rem;
+  line-height: 1.6;
+}
+
+.ben-stat {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 150px;
+}
+
+.ben-stat strong {
+  font-size: 2.8rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  background: linear-gradient(90deg, var(--ben-accent), #5e5ce6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.ben-stat span {
+  color: var(--ben-muted);
+  font-weight: 500;
+}
+
+.ben-top i {
+  font-size: 2rem;
+  color: #ff9f0a;
+}
+
+.ben-top span {
+  color: var(--ben-text);
+  font-weight: 600;
+}
+
+.ben-pattern {
+  min-height: 150px;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(94, 92, 230, 0.35), transparent 50%),
+    radial-gradient(circle at 70% 70%, rgba(90, 200, 250, 0.35), transparent 50%),
+    var(--ben-tile);
+}
+
+.ben-now {
+  grid-column: span 2;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-weight: 600;
+}
+
+.ben-now small {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--ben-muted);
+}
+
+.ben-pulse {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #34c759;
+  box-shadow: 0 0 0 6px rgba(52, 199, 89, 0.2);
+}
+
+.ben-links {
+  grid-column: span 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  gap: 0.5rem;
+}
+
+.ben-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1rem;
+  border-radius: 99px;
+  background: var(--pfb-card);
+  font-size: 0.88rem;
+  font-weight: 500;
+  text-decoration: none;
+  max-width: 100%;
+}
+
+.ben-link span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ben-link:hover {
+  background: var(--ben-accent);
+  color: #fff;
+}
+
+/* Every section is a full-width tile: heading on the left, content on the right */
+.ben-section {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(150px, 220px) minmax(0, 1fr);
+  gap: 1.25rem 2.5rem;
+  align-items: start;
+  padding: 2.25rem 2.5rem;
+}
+
+.ben-section-body {
+  min-width: 0;
+}
+
+.ben-wide {
+  grid-column: 1 / -1;
+}
+
+.ben-heading {
+  margin: 0 !important;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.pf-bento .pfb-about p {
+  font-size: 1.3rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.pf-bento .pfb-item {
+  padding: 1.25rem;
+  border-radius: 20px;
+  background: var(--pfb-card);
+}
+
+.pf-bento .pfb-list {
+  gap: 0.6rem;
+}
+
+.pf-bento .pfb-now {
+  border: 0;
+  color: #fff;
+  background: #34c759;
+}
+
+.pf-bento .pfb-tags span {
+  border: 0;
+  background: var(--ben-tile);
+}
+
+.pf-bento .pfb-skill {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+  border: 0;
+  border-radius: 16px;
+  background: var(--pfb-card);
+  font-weight: 600;
+}
+
+.pf-bento .pfb-meter {
+  display: block;
+  width: 100%;
+  min-width: 70px;
+}
+
+.pf-bento .pfb-card,
+.pf-bento .pfb-quote {
+  border: 0;
+}
+
+.pf-bento .pfb-card-link {
+  border: 0;
+  background: var(--ben-accent);
+  color: #fff;
+}
+
+.ben-contact {
+  padding: 3rem 2rem;
+  text-align: center;
+  background: linear-gradient(135deg, #0071e3, #5e5ce6);
+  color: #fff;
+}
+
+.ben-contact h2 {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.ben-contact-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.ben-contact .ben-link {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+
+.ben-contact .ben-link:hover {
+  background: #fff;
+  color: #0071e3;
+}
+
+@media (max-width: 900px) {
+  .ben-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ben-intro, .ben-lede, .ben-now, .ben-links, .ben-section { grid-column: 1 / -1; }
+  .ben-section { grid-template-columns: 1fr; }
+  .ben-lede { grid-row: auto; }
+}
+
+@media (max-width: 560px) {
+  .ben-wrap { padding: 12px; }
+  .ben-tile, .ben-section { padding: 1.25rem; border-radius: 22px; }
+  .ben-intro { min-height: 220px; }
+}

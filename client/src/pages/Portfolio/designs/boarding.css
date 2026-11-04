@@ -1,0 +1,281 @@
+.pf-boarding {
+  --bd-sky: #dfe9f7;
+  --bd-ticket: #ffffff;
+  --bd-ink: #13233a;
+  --bd-muted: #6a7a91;
+  --bd-accent: #0b62d6;
+  --bd-band: #0b2a55;
+  --pfb-line: #dbe3ee;
+  --pfb-muted: var(--bd-muted);
+  --pfb-accent: var(--bd-accent);
+  --pfb-radius: 12px;
+  --pf-empty-btn-bg: var(--bd-accent);
+  padding: 56px 24px 0;
+  background: linear-gradient(180deg, #b9d3f3, var(--bd-sky) 420px);
+  color: var(--bd-ink);
+  font-family: "Space Grotesk", system-ui, sans-serif;
+}
+
+[data-pf-mode="dark"] .pf-boarding {
+  --bd-sky: #0b1220;
+  --bd-ticket: #141d2d;
+  --bd-ink: #e6edf8;
+  --bd-muted: #8d9ab0;
+  --bd-accent: #5aa2ff;
+  --bd-band: #0a1a33;
+  --pfb-line: #26324a;
+  --pf-empty-btn-text: #0b1220;
+  background: linear-gradient(180deg, #050a14, var(--bd-sky) 420px);
+}
+
+.bd-pass {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 270px;
+  max-width: 1080px;
+  margin: 0 auto;
+  border-radius: 22px;
+  background: var(--bd-ticket);
+  box-shadow: 0 24px 60px rgba(11, 42, 85, 0.25);
+  overflow: hidden;
+}
+
+.bd-main {
+  min-width: 0;
+  padding: 2rem 2.5rem 2.25rem;
+}
+
+.bd-carrier {
+  margin: -2rem -2.5rem 1.75rem;
+  padding: 0.9rem 2.5rem;
+  background: var(--bd-band);
+  color: #fff;
+  font-family: "Space Mono", monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.bd-label {
+  margin: 0;
+  font-family: "Space Mono", monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--bd-muted);
+}
+
+.bd-name {
+  margin-top: 0.25rem !important;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  font-weight: 700;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.bd-route {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.bd-route div {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.bd-route div:last-child {
+  text-align: right;
+}
+
+.bd-route strong {
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  line-height: 1;
+  color: var(--bd-accent);
+}
+
+.bd-route span {
+  margin-top: 0.35rem;
+  font-size: 0.85rem;
+  color: var(--bd-muted);
+}
+
+.bd-route > i {
+  font-size: 1.8rem;
+  transform: rotate(90deg);
+  color: var(--bd-muted);
+}
+
+.bd-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2.5rem;
+  margin: 2rem 0 0;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--pfb-line);
+}
+
+.bd-fields dt {
+  font-family: "Space Mono", monospace;
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--bd-muted);
+}
+
+.bd-fields dd {
+  margin: 0.15rem 0 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+/* The tear-off stub: a perforated edge with notches top and bottom */
+.bd-stub {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 1.75rem;
+  border-left: 2px dashed var(--pfb-line);
+  background: color-mix(in srgb, var(--bd-accent) 6%, var(--bd-ticket));
+}
+
+.bd-stub::before,
+.bd-stub::after {
+  content: "";
+  position: absolute;
+  left: -15px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--bd-sky);
+}
+
+.bd-stub::before { top: -14px; }
+.bd-stub::after { bottom: -14px; }
+
+.bd-stub-name {
+  margin: 0.25rem 0 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.bd-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+.bd-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  text-decoration: none;
+  color: var(--bd-accent) !important;
+}
+
+.bd-barcode {
+  height: 64px;
+  margin-top: auto;
+  padding-top: 1.5rem;
+  background:
+    repeating-linear-gradient(90deg, var(--bd-ink) 0 2px, transparent 2px 4px, var(--bd-ink) 4px 7px, transparent 7px 9px, var(--bd-ink) 9px 10px, transparent 10px 13px)
+    bottom / 100% 48px no-repeat;
+}
+
+.bd-body {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 2.5rem 0 1rem;
+}
+
+.bd-section {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  margin-bottom: 1.5rem;
+  border-radius: 18px;
+  background: var(--bd-ticket);
+  box-shadow: 0 10px 30px rgba(11, 42, 85, 0.1);
+  overflow: hidden;
+}
+
+.bd-tab {
+  display: grid;
+  place-items: center;
+  border-right: 2px dashed var(--pfb-line);
+  background: var(--bd-band);
+  color: #fff;
+}
+
+.bd-tab span {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: "Space Mono", monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+.bd-section-body {
+  min-width: 0;
+  padding: 2rem 2.25rem 2.25rem;
+}
+
+.bd-heading {
+  margin-bottom: 1.5rem !important;
+  font-size: 1.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.pf-boarding .pfb-date {
+  font-family: "Space Mono", monospace;
+  color: var(--bd-accent);
+}
+
+.pf-boarding .pfb-meter {
+  display: block;
+}
+
+.pf-boarding .pfb-card {
+  border-style: dashed;
+}
+
+.bd-foot {
+  padding: 2rem 0 5rem;
+  text-align: center;
+}
+
+.bd-foot p {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.bd-foot .bd-links {
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1.5rem;
+}
+
+@media (max-width: 860px) {
+  .pf-boarding { padding: 20px 12px 0; }
+  .bd-pass { grid-template-columns: minmax(0, 1fr); }
+  .bd-main { padding: 1.5rem 1.25rem; }
+  .bd-carrier { margin: -1.5rem -1.25rem 1.25rem; padding: 0.75rem 1.25rem; font-size: 0.68rem; }
+  .bd-route { gap: 0.75rem; }
+  .bd-stub { padding: 1.5rem 1.25rem; border-left: 0; border-top: 2px dashed var(--pfb-line); }
+  .bd-stub::before, .bd-stub::after { top: -15px; bottom: auto; }
+  .bd-stub::before { left: -14px; }
+  .bd-stub::after { left: auto; right: -14px; }
+  .bd-section { grid-template-columns: minmax(0, 1fr); }
+  .bd-tab { justify-items: start; padding: 0.5rem 1.25rem; border-right: 0; border-bottom: 2px dashed var(--pfb-line); }
+  .bd-tab span { writing-mode: horizontal-tb; transform: none; }
+  .bd-section-body { padding: 1.5rem 1.25rem; }
+}

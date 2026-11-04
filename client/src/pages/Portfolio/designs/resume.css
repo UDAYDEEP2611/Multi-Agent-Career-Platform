@@ -1,0 +1,279 @@
+.pf-resume {
+  --rs-desk: #d9d4cc;
+  --rs-paper: #fff;
+  --rs-text: #1f2328;
+  --rs-muted: #646b73;
+  --rs-accent: #1e4e8c;
+  --rs-side: #f4f6f9;
+  --pfb-line: #dde2e8;
+  --pfb-muted: var(--rs-muted);
+  --pfb-accent: var(--rs-accent);
+  --pfb-radius: 4px;
+  --pf-empty-btn-bg: var(--rs-accent);
+  padding: 48px 24px;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.5), transparent 50%),
+    var(--rs-desk);
+  color: var(--rs-text);
+  font-family: "Inter", system-ui, sans-serif;
+}
+
+[data-pf-mode="dark"] .pf-resume {
+  --rs-desk: #0c0b0a;
+  --rs-paper: #1a1918;
+  --rs-text: #ebe7e1;
+  --rs-muted: #a29d96;
+  --rs-accent: #8db8f2;
+  --rs-side: #222120;
+  --pfb-line: #34322f;
+  --pf-empty-btn-text: #0c0b0a;
+  background: radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.04), transparent 50%), var(--rs-desk);
+}
+
+.rs-sheet {
+  max-width: 1040px;
+  margin: 0 auto;
+  background: var(--rs-paper);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08), 0 30px 70px rgba(0, 0, 0, 0.22);
+  transform: rotate(-0.3deg);
+}
+
+.rs-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 3rem 3rem 1.5rem;
+  border-top: 8px solid var(--rs-accent);
+}
+
+.rs-name {
+  font-family: "Libre Baskerville", Georgia, serif;
+  font-size: clamp(2rem, 5vw, 2.9rem);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.rs-role {
+  margin: 0.4rem 0 0;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rs-accent);
+}
+
+.rs-monogram {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 76px;
+  height: 76px;
+  border: 2px solid var(--rs-accent);
+  border-radius: 50%;
+  font-family: "Libre Baskerville", Georgia, serif;
+  font-size: 1.6rem;
+  color: var(--rs-accent);
+}
+
+.rs-contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.5rem;
+  margin: 0 3rem;
+  padding: 0.9rem 0;
+  border-block: 1px solid var(--pfb-line);
+  font-size: 0.85rem;
+}
+
+.rs-contact a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  text-decoration: none;
+}
+
+.rs-contact i {
+  color: var(--rs-accent);
+}
+
+/* Key numbers in one strip under the contact line */
+.rs-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 2.5rem;
+  margin: 0 3rem;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--pfb-line);
+}
+
+.rs-facts div {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.rs-facts strong {
+  font-family: "Libre Baskerville", Georgia, serif;
+  font-size: 1.6rem;
+  color: var(--rs-accent);
+}
+
+.rs-facts span {
+  font-size: 0.85rem;
+  color: var(--rs-muted);
+}
+
+.rs-body {
+  padding: 0.5rem 3rem 2.5rem;
+}
+
+/* Every section is a full-width row: heading on the left, entries on the right */
+.rs-section {
+  display: grid;
+  grid-template-columns: 170px minmax(0, 1fr);
+  gap: 1rem 2.5rem;
+  padding: 1.75rem 0;
+  border-bottom: 1px solid var(--pfb-line);
+}
+
+.rs-section:last-child {
+  border-bottom: 0;
+}
+
+.rs-section-body {
+  min-width: 0;
+}
+
+.rs-heading {
+  margin: 0.2rem 0 0 !important;
+  padding-top: 0.6rem;
+  border-top: 3px solid var(--rs-accent);
+  align-self: start;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rs-accent);
+}
+
+.pf-resume .pfb-about p {
+  font-size: 0.98rem;
+  line-height: 1.7;
+}
+
+.pf-resume .pfb-list {
+  gap: 1.25rem;
+}
+
+.pf-resume .pfb-item {
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.1rem 1.5rem;
+}
+
+.pf-resume .pfb-item-side {
+  flex-direction: row;
+  align-items: center;
+}
+
+/* Dates sit to the right of the title, like a printed résumé */
+.pf-resume .pfb-item-side {
+  order: 2;
+  align-self: start;
+  padding-top: 0.15rem;
+}
+
+.pf-resume .pfb-title {
+  font-size: 1rem;
+}
+
+.pf-resume .pfb-sub {
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+.pf-resume .pfb-date {
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.pf-resume .pfb-now {
+  font-size: 0.62rem;
+}
+
+.pf-resume .pfb-bullets {
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+
+.pf-resume .pfb-tags span {
+  border: 0;
+  padding: 0;
+  font-size: 0.78rem;
+  color: var(--rs-muted);
+}
+
+.pf-resume .pfb-tags span + span::before {
+  content: "• ";
+}
+
+/* Key skills in tidy columns, each with its level bar */
+.pf-resume .pfb-skill-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 0.55rem 2.5rem;
+}
+
+.pf-resume .pfb-skill {
+  justify-content: space-between;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  font-size: 0.9rem;
+}
+
+.pf-resume .pfb-meter {
+  display: block;
+  width: 70px;
+}
+
+.pf-resume .pfb-cards {
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.25rem 2.5rem;
+}
+
+.pf-resume .pfb-card {
+  padding: 0;
+  border: 0;
+}
+
+.pf-resume .pfb-card-top {
+  display: none;
+}
+
+.pf-resume .pfb-quote {
+  padding: 0 0 0 1rem;
+  border: 0;
+  border-left: 3px solid var(--rs-accent);
+  font-size: 0.92rem;
+}
+
+.rs-foot {
+  padding: 1rem 3rem 1.5rem;
+  border-top: 1px solid var(--pfb-line);
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--rs-muted);
+  text-align: center;
+}
+
+@media (max-width: 760px) {
+  .pf-resume { padding: 12px; }
+  .rs-sheet { transform: none; }
+  .rs-head { padding: 1.75rem 1.25rem 1rem; }
+  .rs-contact, .rs-facts { margin: 0 1.25rem; }
+  .rs-body { padding: 0.25rem 1.25rem 1.5rem; }
+  .rs-section { grid-template-columns: 1fr; gap: 0.9rem; padding: 1.25rem 0; }
+  .rs-heading { justify-self: start; }
+}

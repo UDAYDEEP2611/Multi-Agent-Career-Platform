@@ -1,0 +1,235 @@
+/* Light: a pale daybreak sky. Dark: deep space. */
+.pf-cosmos {
+  --cos-bg: #eef0ff;
+  --cos-ink: #14163a;
+  --cos-muted: #5a5f8f;
+  --cos-a: #6d4aff;
+  --cos-b: #ff7ab6;
+  --cos-star: rgba(20, 22, 58, 0.25);
+  --cos-glass: rgba(255, 255, 255, 0.6);
+  --pfb-line: rgba(20, 22, 58, 0.14);
+  --pfb-muted: var(--cos-muted);
+  --pfb-accent: var(--cos-a);
+  --pfb-card: var(--cos-glass);
+  --pfb-radius: 18px;
+  --pf-empty-btn-bg: var(--cos-a);
+  background:
+    radial-gradient(1px 1px at 20px 30px, var(--cos-star), transparent),
+    radial-gradient(1.5px 1.5px at 120px 80px, var(--cos-star), transparent),
+    radial-gradient(1px 1px at 180px 160px, var(--cos-star), transparent),
+    radial-gradient(2px 2px at 60px 190px, var(--cos-star), transparent);
+  background-size: 220px 220px;
+  background-color: var(--cos-bg);
+  color: var(--cos-ink);
+  font-family: "Sora", system-ui, sans-serif;
+}
+
+[data-pf-mode="dark"] .pf-cosmos {
+  --cos-bg: #05061a;
+  --cos-ink: #eceeff;
+  --cos-muted: #9da3d6;
+  --cos-a: #9b87ff;
+  --cos-b: #ff8cc6;
+  --cos-star: rgba(255, 255, 255, 0.75);
+  --cos-glass: rgba(255, 255, 255, 0.05);
+  --pfb-line: rgba(255, 255, 255, 0.12);
+  --pf-empty-btn-text: #05061a;
+}
+
+.cos-hero {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 4rem;
+  max-width: 1150px;
+  margin: 0 auto;
+  padding: 7rem 40px 5rem;
+}
+
+.cos-planet {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 230px;
+  height: 230px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.55), transparent 35%),
+    linear-gradient(150deg, var(--cos-b), var(--cos-a) 60%, #2b1a7a);
+  box-shadow: 0 0 80px color-mix(in srgb, var(--cos-a) 55%, transparent);
+  font-family: "Unbounded", sans-serif;
+  font-size: 3.2rem;
+  font-weight: 900;
+  color: #fff;
+}
+
+.cos-planet::after {
+  content: "";
+  position: absolute;
+  inset: 42% -34%;
+  border: 3px solid color-mix(in srgb, var(--cos-ink) 45%, transparent);
+  border-radius: 50%;
+  transform: rotate(-18deg);
+}
+
+.cos-planet span {
+  position: relative;
+  z-index: 1;
+}
+
+.cos-kicker {
+  margin-bottom: 1rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--cos-muted);
+}
+
+.cos-name {
+  font-family: "Unbounded", sans-serif;
+  font-size: clamp(2.4rem, 6vw, 4.6rem);
+  font-weight: 900;
+  line-height: 1.02;
+}
+
+.cos-role {
+  margin: 1.25rem 0 0;
+  font-size: 1.2rem;
+  color: var(--cos-a);
+}
+
+.cos-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.cos-stats div {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--pfb-line);
+  border-radius: 99px;
+  background: var(--cos-glass);
+}
+
+.cos-stats strong {
+  font-family: "Unbounded", sans-serif;
+  font-size: 1.1rem;
+}
+
+.cos-stats span {
+  font-size: 0.8rem;
+  color: var(--cos-muted);
+}
+
+.cos-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1.75rem;
+}
+
+.cos-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 1rem;
+  border-radius: 99px;
+  background: var(--cos-ink);
+  color: var(--cos-bg) !important;
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.cos-body {
+  max-width: 1150px;
+  margin: 0 auto;
+  padding: 0 40px 3rem;
+}
+
+.cos-section {
+  padding: 3.5rem 0;
+}
+
+.cos-heading {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 2rem !important;
+  font-family: "Unbounded", sans-serif;
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  font-weight: 700;
+}
+
+.cos-heading::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--cos-a), transparent);
+}
+
+.cos-orbit {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 52px;
+  height: 52px;
+  border: 1px dashed var(--cos-a);
+  border-radius: 50%;
+  font-size: 0.85rem;
+  color: var(--cos-a);
+}
+
+.pf-cosmos .pfb-item {
+  padding: 1.5rem;
+  border: 1px solid var(--pfb-line);
+  border-radius: 18px;
+  background: var(--cos-glass);
+}
+
+.pf-cosmos .pfb-list-compact .pfb-item {
+  padding: 1rem 1.5rem;
+}
+
+.pf-cosmos .pfb-date {
+  color: var(--cos-a);
+}
+
+.pf-cosmos .pfb-meter {
+  display: block;
+}
+
+.pf-cosmos .pfb-meter i {
+  background: linear-gradient(90deg, var(--cos-a), var(--cos-b));
+}
+
+.pf-cosmos .pfb-card {
+  backdrop-filter: blur(6px);
+}
+
+.cos-foot {
+  padding: 4rem 40px 6rem;
+  text-align: center;
+}
+
+.cos-foot h2 {
+  font-family: "Unbounded", sans-serif;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 900;
+}
+
+.cos-foot .cos-links {
+  justify-content: center;
+}
+
+@media (max-width: 860px) {
+  .cos-hero { grid-template-columns: minmax(0, 1fr); justify-items: start; gap: 2.5rem; padding: 4rem 20px 3rem; }
+  .cos-planet { width: 150px; height: 150px; font-size: 2.2rem; }
+  .cos-body { padding: 0 20px 2rem; }
+  .cos-section { padding: 2.25rem 0; }
+  .cos-orbit { width: 42px; height: 42px; }
+  .pf-cosmos .pfb-item { padding: 1.1rem; }
+}

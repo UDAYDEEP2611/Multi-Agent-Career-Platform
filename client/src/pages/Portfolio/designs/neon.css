@@ -1,0 +1,335 @@
+.pf-neon {
+  --neo-bg: #fdf2ff;
+  --neo-bg2: #e0f7ff;
+  --neo-text: #3b0764;
+  --neo-muted: #7e5a9b;
+  --neo-pink: #e11d74;
+  --neo-cyan: #0891b2;
+  --neo-panel: rgba(255, 255, 255, 0.7);
+  --neo-glow: 0 0 0 transparent;
+  --neo-grid: rgba(225, 29, 116, 0.45);
+  --pfb-line: rgba(225, 29, 116, 0.25);
+  --pfb-muted: var(--neo-muted);
+  --pfb-accent: var(--neo-pink);
+  --pfb-card: rgba(255, 255, 255, 0.6);
+  --pfb-radius: 4px;
+  --pf-empty-btn-bg: var(--neo-pink);
+  background: linear-gradient(180deg, var(--neo-bg) 0%, var(--neo-bg2) 100%);
+  color: var(--neo-text);
+  font-family: "Sora", system-ui, sans-serif;
+}
+
+[data-pf-mode="dark"] .pf-neon {
+  --neo-bg: #0d0221;
+  --neo-bg2: #120338;
+  --neo-text: #f5e9ff;
+  --neo-muted: #b69bd6;
+  --neo-pink: #ff2a6d;
+  --neo-cyan: #05d9e8;
+  --neo-panel: rgba(26, 6, 64, 0.72);
+  --neo-glow: 0 0 18px rgba(255, 42, 109, 0.55);
+  --neo-grid: rgba(255, 42, 109, 0.7);
+  --pfb-line: rgba(5, 217, 232, 0.25);
+  --pfb-card: rgba(255, 255, 255, 0.03);
+  --pf-empty-btn-text: #0d0221;
+}
+
+.pf-neon .pf-empty {
+  color: var(--neo-cyan);
+}
+
+.neo-hero {
+  position: relative;
+  min-height: 640px;
+  overflow: hidden;
+  background: linear-gradient(180deg, transparent 45%, rgba(225, 29, 116, 0.12));
+}
+
+.neo-nav {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 40px;
+  font-family: "Space Mono", monospace;
+}
+
+.neo-logo {
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: var(--neo-cyan);
+  text-shadow: 0 0 10px var(--neo-cyan);
+}
+
+.neo-logo span {
+  animation: neo-blink 1s steps(1) infinite;
+}
+
+@keyframes neo-blink {
+  50% { opacity: 0; }
+}
+
+.neo-nav-links {
+  display: flex;
+  gap: 1.75rem;
+}
+
+.neo-nav-links a {
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.neo-nav-links a:hover {
+  color: var(--neo-pink);
+  text-shadow: var(--neo-glow);
+}
+
+.neo-sun {
+  position: absolute;
+  left: 50%;
+  top: 150px;
+  width: 360px;
+  height: 360px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: linear-gradient(180deg, #ffd319 0%, #ff901f 40%, #ff2975 70%, #f222ff 100%);
+  /* Solid top half, stripes across the bottom half */
+  -webkit-mask-image: linear-gradient(180deg, #000 52%, transparent 52%), repeating-linear-gradient(180deg, #000 0 16px, transparent 16px 24px);
+  -webkit-mask-composite: source-over;
+  mask-image: linear-gradient(180deg, #000 52%, transparent 52%), repeating-linear-gradient(180deg, #000 0 16px, transparent 16px 24px);
+  mask-composite: add;
+  opacity: 0.9;
+  filter: drop-shadow(0 0 40px rgba(255, 41, 117, 0.6));
+}
+
+.neo-floor {
+  position: absolute;
+  left: -50%;
+  right: -50%;
+  bottom: -40px;
+  height: 300px;
+  background-image:
+    linear-gradient(var(--neo-grid) 1.5px, transparent 1.5px),
+    linear-gradient(90deg, var(--neo-grid) 1.5px, transparent 1.5px);
+  background-size: 60px 40px;
+  transform: perspective(300px) rotateX(62deg);
+  transform-origin: center top;
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 40%);
+  mask-image: linear-gradient(180deg, transparent, #000 40%);
+  animation: neo-floor 3s linear infinite;
+}
+
+@keyframes neo-floor {
+  to { background-position: 0 40px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .neo-floor, .neo-logo span { animation: none; }
+}
+
+.neo-hero-text {
+  position: relative;
+  z-index: 2;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 240px 32px 60px;
+  text-align: center;
+}
+
+.neo-kicker {
+  display: inline-block;
+  margin: 0 0 0.75rem;
+  padding: 0.15rem 0.7rem;
+  font-family: "Space Mono", monospace;
+  color: var(--neo-cyan);
+  background: var(--neo-bg);
+}
+
+.neo-name {
+  font-size: clamp(2.8rem, 8vw, 6rem);
+  font-weight: 800;
+  line-height: 1;
+  font-style: italic;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: var(--neo-text);
+  text-shadow: 3px 3px 0 var(--neo-pink), -2px -2px 0 var(--neo-cyan), var(--neo-glow);
+}
+
+.neo-role {
+  display: inline-block;
+  margin: 1.25rem 0 0;
+  padding: 0.4rem 1.1rem;
+  border: 2px solid var(--neo-cyan);
+  font-family: "Space Mono", monospace;
+  color: var(--neo-cyan);
+  background: var(--neo-panel);
+  box-shadow: 0 0 16px rgba(5, 217, 232, 0.35);
+}
+
+.neo-stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  font-family: "Space Mono", monospace;
+  font-size: 0.85rem;
+}
+
+.neo-stats strong {
+  color: var(--neo-pink);
+  font-size: 1.2rem;
+}
+
+.neo-body {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 1rem 32px 5rem;
+}
+
+.neo-section {
+  padding-top: 3.5rem;
+}
+
+.neo-heading {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem !important;
+  font-size: 2rem;
+  font-weight: 800;
+  font-style: italic;
+  text-transform: uppercase;
+}
+
+.neo-heading span {
+  font-family: "Space Mono", monospace;
+  font-size: 0.9rem;
+  font-style: normal;
+  color: var(--neo-cyan);
+}
+
+.neo-heading::after {
+  content: "";
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(90deg, var(--neo-pink), var(--neo-cyan), transparent);
+}
+
+.neo-panel {
+  position: relative;
+  padding: 1.75rem;
+  border: 1px solid var(--pfb-line);
+  background: var(--neo-panel);
+  backdrop-filter: blur(6px);
+  clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px));
+}
+
+.pf-neon .pfb-date {
+  font-family: "Space Mono", monospace;
+  color: var(--neo-cyan);
+}
+
+.pf-neon .pfb-now {
+  color: var(--neo-pink);
+  box-shadow: var(--neo-glow);
+}
+
+.pf-neon .pfb-title {
+  font-weight: 800;
+}
+
+.pf-neon .pfb-bullets li::marker {
+  color: var(--neo-pink);
+}
+
+.pf-neon .pfb-tags span {
+  border-radius: 2px;
+  font-family: "Space Mono", monospace;
+  color: var(--neo-cyan);
+  border-color: rgba(5, 217, 232, 0.4);
+}
+
+.pf-neon .pfb-skill {
+  flex-direction: column;
+  align-items: stretch;
+  min-width: 170px;
+  border-radius: 2px;
+  font-family: "Space Mono", monospace;
+  font-size: 0.85rem;
+}
+
+.pf-neon .pfb-meter {
+  display: block;
+  width: auto;
+  height: 6px;
+}
+
+.pf-neon .pfb-meter i {
+  background: linear-gradient(90deg, var(--neo-pink), var(--neo-cyan));
+  box-shadow: 0 0 10px var(--neo-pink);
+}
+
+.pf-neon .pfb-card:hover {
+  border-color: var(--neo-pink);
+  box-shadow: 0 0 24px rgba(255, 42, 109, 0.3);
+}
+
+.pf-neon .pfb-card-no {
+  font-family: "Space Mono", monospace;
+  color: var(--neo-pink);
+}
+
+.pf-neon .pfb-quote blockquote {
+  font-style: italic;
+}
+
+.neo-contact {
+  margin-top: 5rem;
+  text-align: center;
+}
+
+.neo-contact h2 {
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  font-weight: 800;
+  font-style: italic;
+  text-transform: uppercase;
+  text-shadow: 3px 3px 0 var(--neo-pink), var(--neo-glow);
+}
+
+.neo-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.neo-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.2rem;
+  border: 2px solid var(--neo-pink);
+  font-family: "Space Mono", monospace;
+  font-size: 0.85rem;
+  text-decoration: none;
+  background: var(--neo-panel);
+}
+
+.neo-btn:hover {
+  color: #fff;
+  background: var(--neo-pink);
+  box-shadow: 0 0 20px var(--neo-pink);
+}
+
+@media (max-width: 760px) {
+  .neo-nav { padding: 18px 16px; }
+  .neo-nav-links { display: none; }
+  .neo-sun { width: 240px; height: 240px; top: 110px; }
+  .neo-hero-text { padding: 180px 16px 50px; }
+  .neo-body { padding: 1rem 16px 4rem; }
+  .neo-panel { padding: 1.25rem; }
+}

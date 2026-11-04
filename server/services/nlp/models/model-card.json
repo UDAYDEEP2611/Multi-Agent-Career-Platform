@@ -1,0 +1,408 @@
+{
+ "note": "Accuracy on ml/data/holdout.json, written by hand and never trained on. cv is 5-fold, split by sentence template.",
+ "tasks": {
+  "intent": {
+   "examples": 1345,
+   "holdoutTests": 51,
+   "ensembleHoldout": 0.961,
+   "models": [
+    {
+     "model": "Multinomial Naive Bayes",
+     "cv": 0.849,
+     "holdout": 0.863,
+     "macroF1": 0.828,
+     "shipped": false
+    },
+    {
+     "model": "Complement Naive Bayes",
+     "cv": 0.843,
+     "holdout": 0.902,
+     "macroF1": 0.887,
+     "shipped": true
+    },
+    {
+     "model": "Bernoulli Naive Bayes",
+     "cv": 0.833,
+     "holdout": 0.882,
+     "macroF1": 0.875,
+     "shipped": false
+    },
+    {
+     "model": "Logistic regression",
+     "cv": 0.871,
+     "holdout": 0.941,
+     "macroF1": 0.949,
+     "shipped": true
+    },
+    {
+     "model": "Linear SVM",
+     "cv": 0.865,
+     "holdout": 0.922,
+     "macroF1": 0.922,
+     "shipped": true
+    },
+    {
+     "model": "SGD classifier",
+     "cv": 0.863,
+     "holdout": 0.902,
+     "macroF1": 0.893,
+     "shipped": false
+    },
+    {
+     "model": "Ridge classifier",
+     "cv": 0.858,
+     "holdout": 0.961,
+     "macroF1": 0.965,
+     "shipped": false
+    },
+    {
+     "model": "Passive aggressive",
+     "cv": 0.84,
+     "holdout": 0.922,
+     "macroF1": 0.915,
+     "shipped": false
+    },
+    {
+     "model": "Nearest centroid",
+     "cv": 0.833,
+     "holdout": 0.863,
+     "macroF1": 0.857,
+     "shipped": false
+    },
+    {
+     "model": "K nearest neighbours",
+     "cv": 0.791,
+     "holdout": 0.902,
+     "macroF1": 0.903,
+     "shipped": false
+    },
+    {
+     "model": "Decision tree",
+     "cv": 0.768,
+     "holdout": 0.784,
+     "macroF1": 0.779,
+     "shipped": false
+    },
+    {
+     "model": "Random forest",
+     "cv": 0.822,
+     "holdout": 0.922,
+     "macroF1": 0.934,
+     "shipped": false
+    },
+    {
+     "model": "Extra trees",
+     "cv": 0.848,
+     "holdout": 0.941,
+     "macroF1": 0.95,
+     "shipped": false
+    },
+    {
+     "model": "Gradient boosting",
+     "cv": 0.807,
+     "holdout": 0.843,
+     "macroF1": 0.831,
+     "shipped": false
+    },
+    {
+     "model": "AdaBoost",
+     "cv": 0.61,
+     "holdout": 0.647,
+     "macroF1": 0.632,
+     "shipped": false
+    },
+    {
+     "model": "Neural network (MLP)",
+     "cv": 0.864,
+     "holdout": 0.98,
+     "macroF1": 0.98,
+     "shipped": true
+    }
+   ],
+   "wrong": [
+    {
+     "text": "am i qualified for a data engineer job",
+     "want": "qa",
+     "got": "entry"
+    },
+    {
+     "text": "how do i use this",
+     "want": "help",
+     "got": "qa"
+    }
+   ]
+  },
+  "section": {
+   "examples": 644,
+   "holdoutTests": 25,
+   "ensembleHoldout": 0.96,
+   "models": [
+    {
+     "model": "Multinomial Naive Bayes",
+     "cv": 0.709,
+     "holdout": 0.92,
+     "macroF1": 0.874,
+     "shipped": false
+    },
+    {
+     "model": "Complement Naive Bayes",
+     "cv": 0.713,
+     "holdout": 0.92,
+     "macroF1": 0.874,
+     "shipped": true
+    },
+    {
+     "model": "Bernoulli Naive Bayes",
+     "cv": 0.702,
+     "holdout": 0.88,
+     "macroF1": 0.835,
+     "shipped": false
+    },
+    {
+     "model": "Logistic regression",
+     "cv": 0.7,
+     "holdout": 0.92,
+     "macroF1": 0.925,
+     "shipped": true
+    },
+    {
+     "model": "Linear SVM",
+     "cv": 0.736,
+     "holdout": 0.96,
+     "macroF1": 0.966,
+     "shipped": true
+    },
+    {
+     "model": "SGD classifier",
+     "cv": 0.722,
+     "holdout": 0.92,
+     "macroF1": 0.925,
+     "shipped": false
+    },
+    {
+     "model": "Ridge classifier",
+     "cv": 0.747,
+     "holdout": 0.96,
+     "macroF1": 0.966,
+     "shipped": false
+    },
+    {
+     "model": "Passive aggressive",
+     "cv": 0.725,
+     "holdout": 0.96,
+     "macroF1": 0.966,
+     "shipped": false
+    },
+    {
+     "model": "Nearest centroid",
+     "cv": 0.598,
+     "holdout": 0.92,
+     "macroF1": 0.874,
+     "shipped": false
+    },
+    {
+     "model": "K nearest neighbours",
+     "cv": 0.677,
+     "holdout": 0.8,
+     "macroF1": 0.779,
+     "shipped": false
+    },
+    {
+     "model": "Decision tree",
+     "cv": 0.402,
+     "holdout": 0.76,
+     "macroF1": 0.675,
+     "shipped": false
+    },
+    {
+     "model": "Random forest",
+     "cv": 0.519,
+     "holdout": 0.88,
+     "macroF1": 0.899,
+     "shipped": false
+    },
+    {
+     "model": "Extra trees",
+     "cv": 0.542,
+     "holdout": 0.88,
+     "macroF1": 0.899,
+     "shipped": false
+    },
+    {
+     "model": "Gradient boosting",
+     "cv": 0.45,
+     "holdout": 0.8,
+     "macroF1": 0.722,
+     "shipped": false
+    },
+    {
+     "model": "AdaBoost",
+     "cv": 0.275,
+     "holdout": 0.28,
+     "macroF1": 0.229,
+     "shipped": false
+    },
+    {
+     "model": "Neural network (MLP)",
+     "cv": 0.737,
+     "holdout": 0.96,
+     "macroF1": 0.966,
+     "shipped": true
+    }
+   ],
+   "wrong": [
+    {
+     "text": "im good at terraform",
+     "want": "skills",
+     "got": "experience"
+    }
+   ]
+  },
+  "action": {
+   "examples": 1943,
+   "holdoutTests": 62,
+   "ensembleHoldout": 0.919,
+   "models": [
+    {
+     "model": "Multinomial Naive Bayes",
+     "cv": 0.706,
+     "holdout": 0.855,
+     "macroF1": 0.85,
+     "shipped": false
+    },
+    {
+     "model": "Complement Naive Bayes",
+     "cv": 0.664,
+     "holdout": 0.79,
+     "macroF1": 0.765,
+     "shipped": true
+    },
+    {
+     "model": "Bernoulli Naive Bayes",
+     "cv": 0.702,
+     "holdout": 0.823,
+     "macroF1": 0.807,
+     "shipped": false
+    },
+    {
+     "model": "Logistic regression",
+     "cv": 0.728,
+     "holdout": 0.871,
+     "macroF1": 0.874,
+     "shipped": true
+    },
+    {
+     "model": "Linear SVM",
+     "cv": 0.726,
+     "holdout": 0.887,
+     "macroF1": 0.883,
+     "shipped": true
+    },
+    {
+     "model": "SGD classifier",
+     "cv": 0.725,
+     "holdout": 0.919,
+     "macroF1": 0.908,
+     "shipped": false
+    },
+    {
+     "model": "Ridge classifier",
+     "cv": 0.715,
+     "holdout": 0.887,
+     "macroF1": 0.887,
+     "shipped": false
+    },
+    {
+     "model": "Passive aggressive",
+     "cv": 0.73,
+     "holdout": 0.919,
+     "macroF1": 0.918,
+     "shipped": false
+    },
+    {
+     "model": "Nearest centroid",
+     "cv": 0.661,
+     "holdout": 0.726,
+     "macroF1": 0.685,
+     "shipped": false
+    },
+    {
+     "model": "K nearest neighbours",
+     "cv": 0.645,
+     "holdout": 0.823,
+     "macroF1": 0.814,
+     "shipped": false
+    },
+    {
+     "model": "Decision tree",
+     "cv": 0.549,
+     "holdout": 0.516,
+     "macroF1": 0.484,
+     "shipped": false
+    },
+    {
+     "model": "Random forest",
+     "cv": 0.669,
+     "holdout": 0.774,
+     "macroF1": 0.769,
+     "shipped": false
+    },
+    {
+     "model": "Extra trees",
+     "cv": 0.68,
+     "holdout": 0.79,
+     "macroF1": 0.794,
+     "shipped": false
+    },
+    {
+     "model": "Gradient boosting",
+     "cv": 0.546,
+     "holdout": 0.645,
+     "macroF1": 0.575,
+     "shipped": false
+    },
+    {
+     "model": "AdaBoost",
+     "cv": 0.235,
+     "holdout": 0.274,
+     "macroF1": 0.19,
+     "shipped": false
+    },
+    {
+     "model": "Neural network (MLP)",
+     "cv": 0.706,
+     "holdout": 0.935,
+     "macroF1": 0.915,
+     "shipped": true
+    }
+   ],
+   "wrong": [
+    {
+     "text": "remvoe my certifcations",
+     "want": "hide_entry",
+     "got": "hide_detail"
+    },
+    {
+     "text": "show where my job was again",
+     "want": "show_detail",
+     "got": "show_entry"
+    },
+    {
+     "text": "get those hobbies off here",
+     "want": "section",
+     "got": "hide_entry"
+    },
+    {
+     "text": "bring in my testimonials",
+     "want": "section",
+     "got": "show_entry"
+    },
+    {
+     "text": "date on the patents is not useful",
+     "want": "hide_detail",
+     "got": "section"
+    }
+   ]
+  }
+ }
+}

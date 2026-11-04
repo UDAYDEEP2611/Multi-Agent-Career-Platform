@@ -1,0 +1,222 @@
+@import url("https://fonts.googleapis.com/css2?family=Archivo+Black&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Caveat:wght@500;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,400&family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@400;500;600;700;800&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Manrope:wght@400;500;700;800&family=Outfit:wght@300;400;600;800&family=Sora:wght@300;400;600;800&family=Space+Mono:wght@400;700&family=Syne:wght@500;700;800&family=VT323&display=swap");
+
+/* Defaults for the shared section blocks (PortfolioBlocks.jsx). Each design
+   sets the variables and restyles what it needs under its own .pf-<id> class. */
+.pf {
+  --pfb-line: rgba(127, 127, 127, 0.25);
+  --pfb-card: transparent;
+  --pfb-muted: inherit;
+  --pfb-accent: currentColor;
+  --pfb-radius: 14px;
+  --pfb-tag-bg: transparent;
+}
+
+.pfb-about p {
+  font-size: 1.15rem;
+  line-height: 1.75;
+  margin-bottom: 1rem;
+}
+
+.pfb-about p:last-child {
+  margin-bottom: 0;
+}
+
+.pfb-list {
+  list-style: none;
+  display: grid;
+  gap: 1.75rem;
+}
+
+.pfb-item {
+  display: grid;
+  grid-template-columns: 170px minmax(0, 1fr);
+  gap: 1.5rem;
+}
+
+.pfb-item-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+}
+
+/* Web type scale: body 1rem (16px), dates and secondary lines 0.875rem
+   (14px), job titles about 1.15rem (18–20px) */
+.pfb-date {
+  font-size: 0.875rem;
+  color: var(--pfb-muted);
+}
+
+.pfb-now {
+  padding: 0.05rem 0.55rem;
+  border-radius: 99px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--pfb-accent);
+  border: 1px solid currentColor;
+}
+
+.pfb-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.pfb-sub {
+  margin: 0.2rem 0 0;
+  font-size: 0.875rem;
+  color: var(--pfb-muted);
+}
+
+.pfb-text {
+  margin: 0.6rem 0 0;
+  line-height: 1.6;
+}
+
+.pfb-bullets {
+  margin-top: 0.75rem !important;
+  padding-left: 1.1rem !important;
+  line-height: 1.6;
+}
+
+.pfb-bullets li + li {
+  margin-top: 0.3rem;
+}
+
+.pfb-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.8rem;
+}
+
+.pfb-tags span {
+  padding: 0.15rem 0.6rem;
+  border-radius: 99px;
+  font-size: 0.75rem;
+  border: 1px solid var(--pfb-line);
+  background: var(--pfb-tag-bg);
+}
+
+.pfb-list-compact {
+  gap: 1rem;
+}
+
+.pfb-skills {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.pfb-skill-group-title {
+  margin-bottom: 0.75rem !important;
+  font-size: 0.78rem !important;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pfb-muted);
+}
+
+.pfb-skill-list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.pfb-skill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 99px;
+  border: 1px solid var(--pfb-line);
+  background: var(--pfb-card);
+}
+
+.pfb-meter {
+  display: none;
+  width: 48px;
+  height: 4px;
+  border-radius: 4px;
+  background: var(--pfb-line);
+  overflow: hidden;
+}
+
+.pfb-meter i {
+  display: block;
+  height: 100%;
+  background: var(--pfb-accent);
+}
+
+.pfb-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.pfb-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  border: 1px solid var(--pfb-line);
+  border-radius: var(--pfb-radius);
+  background: var(--pfb-card);
+}
+
+.pfb-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.pfb-card-no {
+  font-size: 0.8rem;
+  color: var(--pfb-muted);
+}
+
+.pfb-card-link {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--pfb-line);
+  text-decoration: none;
+}
+
+.pfb-quotes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.pfb-quote {
+  margin: 0;
+  padding: 1.5rem;
+  border: 1px solid var(--pfb-line);
+  border-radius: var(--pfb-radius);
+  background: var(--pfb-card);
+}
+
+.pfb-quote blockquote {
+  margin: 0 0 1rem;
+  line-height: 1.65;
+}
+
+.pfb-quote figcaption {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.85rem;
+}
+
+.pfb-quote figcaption span {
+  color: var(--pfb-muted);
+}
+
+@media (max-width: 700px) {
+  .pfb-item { grid-template-columns: 1fr; gap: 0.35rem; }
+  .pfb-item-side { flex-direction: row; align-items: center; }
+}

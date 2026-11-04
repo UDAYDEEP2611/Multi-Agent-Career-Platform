@@ -1,0 +1,56 @@
+SAMPLE CANDIDATE
+AI/ML Engineer | Generative AI, RAG & Document Intelligence
+Candidate contact line | LinkedIn: candidate | GitHub: candidate
+SUMMARY
+AI/ML Engineer with 4 years of experience developing, evaluating, and deploying machine learning and generative AI solutions in
+Python. Builds RAG, semantic search, and knowledge graph (GraphRAG) systems over large document collections, integrates LLMs
+through APIs and AWS Bedrock, and measures model performance with standard metrics and automated evaluation. Manages the
+model lifecycle with MLflow, Git, and CI/CD.
+PROFESSIONAL EXPERIENCE
+Oracle Aug 2025 – Present
+AI Engineer | Cloud Agentic AI (MCP, A2A) Fremont, CA
+• Built a Generative AI document assistant on OCI that thousands of users use to search 10TB+ of enterprise documents, using
+RAG, semantic search, a Neo4j knowledge graph (GraphRAG), and prompt engineering to keep answer times under 30 seconds.
+• Cut hallucinated responses by 38% by building model evaluation pipelines with RAGAS, LangSmith, Arize Phoenix, and
+LLM-as-Judge that measure groundedness and catch regressions on every release.
+• Built a Python agentic workflow on LangGraph, MCP, and A2A that generates SQL and reports from 20+ enterprise sources, with
+human-in-the-loop validation so requests close the same day.
+• Deployed LLM services as FastAPI microservices on Kubernetes with CI/CD and OpenTelemetry, added AI security controls
+(prompt-injection defense, PII redaction, RBAC), and cut inference cost 27% via caching and model routing at 99.9% uptime.
+Verizon Feb 2022 – Dec 2023
+AI/ML Engineer | ML, NLP, Deep Learning & Generative AI New York, NY
+• Delivered NLP support applications in 2023 using LangChain, RAG, and transformer-based semantic search over enterprise
+knowledge bases that answer common questions and escalate complex cases, reducing average handling time by 37%.
+• Prepared data with SQL, PySpark, and Airflow pipelines handling 50M+ events a day, with validation and drift monitoring, and
+managed the model lifecycle with MLflow, deploying models behind REST APIs.
+• Engineered features and trained churn and customer-lifetime-value models with XGBoost and scikit-learn on millions of telecom
+records, evaluating them with standard metrics and improving retention campaign targeting by 33%.
+PayPal Jan 2021 – Dec 2021
+Software Engineer | Machine Learning & NLP San Jose, CA
+• Trained and deployed XGBoost and scikit-learn fraud detection models on PySpark and Kafka features for real-time scoring of
+millions of daily payments, raising risk-scoring accuracy by 23% within strict latency SLAs.
+• Trained an NLP dispute classifier with spaCy and Hugging Face Transformers in PyTorch and deployed it behind REST APIs to sort
+customer cases by urgency, fraud risk, and issue type, reducing manual review time by 32%.
+TECHNICAL SKILLS
+• Programming & APIs: Python, SQL, JavaScript, React, FastAPI, Pydantic, REST APIs, API Integration, Git, GitHub
+• Machine Learning & NLP: PyTorch, scikit-learn, XGBoost, Hugging Face Transformers, spaCy, Feature Engineering, Model
+Evaluation & Optimization, NLP
+• Generative AI & LLMs: LLMs (OpenAI, Claude, Azure OpenAI), Amazon Bedrock, Prompt & Context Engineering, RAG, Agentic
+Frameworks (LangGraph, LangChain, MCP, A2A), Tool Calling
+• Semantic Search & Knowledge Graphs: GraphRAG/Neo4j, pgvector, Oracle AI Vector Search, Hybrid & Semantic Search,
+Reranking
+• MLOps & Evaluation: MLflow, CI/CD, Docker, Kubernetes, RAGAS, LangSmith, Arize Phoenix, LLM-as-Judge, Drift Detection
+• Cloud & Data: AWS (Bedrock, SageMaker), Azure (Azure OpenAI), OCI, GCP (Vertex AI), PySpark, Kafka, Airflow, PostgreSQL
+PROJECTS
+Agentic AI Research Assistant | LangGraph, MCP, A2A, FastAPI, React, Airflow, pgvector
+• Built a multi-agent research assistant in Python where LangGraph agents collaborate over A2A and call tools through an MCP
+server, backed by RAG over OpenAlex, Crossref, and arXiv papers in pgvector, with LangSmith tracing.
+EDUCATION
+M.S., Computer Science (Data Science Focus) Jan 2024 – Dec 2025
+University of Missouri–Kansas City (UMKC)
+PROFESSIONAL CERTIFICATES
+• Google Cloud AI Agents: Foundations to Enterprise Scale • AWS Generative AI and AI Agents with Amazon Bedrock
+• Microsoft AI & ML Engineering • IBM AI-Native Data Engineering
+
+-- 1 of 1 --
+

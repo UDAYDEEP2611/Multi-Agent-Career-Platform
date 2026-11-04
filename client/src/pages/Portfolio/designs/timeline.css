@@ -1,0 +1,260 @@
+.pf-timeline {
+  --tl-bg: #f7f8fc;
+  --tl-card: #fff;
+  --tl-text: #111827;
+  --tl-muted: #6b7280;
+  --tl-a: #6366f1;
+  --tl-b: #ec4899;
+  --tl-grad: linear-gradient(180deg, var(--tl-a), var(--tl-b));
+  --pfb-line: #e5e7eb;
+  --pfb-muted: var(--tl-muted);
+  --pfb-accent: var(--tl-a);
+  --pfb-card: #f9fafb;
+  --pfb-radius: 14px;
+  --pf-empty-btn-bg: var(--tl-a);
+  background: var(--tl-bg);
+  color: var(--tl-text);
+  font-family: "Sora", system-ui, sans-serif;
+}
+
+[data-pf-mode="dark"] .pf-timeline {
+  --tl-bg: #090b14;
+  --tl-card: #121625;
+  --tl-text: #eef0ff;
+  --tl-muted: #9aa0b8;
+  --tl-a: #818cf8;
+  --tl-b: #f472b6;
+  --pfb-line: #22283d;
+  --pfb-card: #0d101c;
+  --pf-empty-btn-text: #090b14;
+}
+
+.tl-hero {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 5rem 28px 3rem;
+  text-align: center;
+}
+
+.tl-ring {
+  display: grid;
+  place-items: center;
+  width: 150px;
+  height: 150px;
+  margin: 0 auto 1.75rem;
+  border-radius: 50%;
+  padding: 5px;
+  background: conic-gradient(var(--tl-a), var(--tl-b), var(--tl-a));
+}
+
+.tl-ring span {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--tl-bg);
+  font-size: 2.8rem;
+  font-weight: 800;
+}
+
+.tl-name {
+  font-size: clamp(2.5rem, 6vw, 4.2rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+}
+
+.tl-role {
+  margin: 0.6rem 0 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  background: linear-gradient(90deg, var(--tl-a), var(--tl-b));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.tl-since {
+  display: inline-block;
+  margin: 1rem 0 0;
+  padding: 0.3rem 0.9rem;
+  border-radius: 99px;
+  border: 1px solid var(--pfb-line);
+  font-size: 0.8rem;
+  color: var(--tl-muted);
+}
+
+.tl-lede {
+  margin: 1.5rem auto 0;
+  max-width: 58ch;
+  line-height: 1.75;
+  color: var(--tl-muted);
+}
+
+.tl-track {
+  --tl-line: 52px;
+  --tl-pad: 28px;
+  position: relative;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem var(--tl-pad) 5rem;
+}
+
+.tl-track::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--tl-line);
+  width: 3px;
+  transform: translateX(-50%);
+  border-radius: 3px;
+  background: var(--tl-grad);
+}
+
+.tl-node {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  padding: 1.25rem 0;
+}
+
+.tl-dot {
+  position: absolute;
+  top: 2.4rem;
+  left: calc(var(--tl-line) - var(--tl-pad));
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  color: #fff;
+  background: linear-gradient(135deg, var(--tl-a), var(--tl-b));
+  box-shadow: 0 0 0 6px var(--tl-bg);
+}
+
+.tl-card {
+  position: relative;
+  width: calc(100% - var(--tl-line) - 46px);
+  padding: 2rem 2.25rem;
+  border-radius: 20px;
+  background: var(--tl-card);
+  box-shadow: 0 10px 30px rgba(17, 24, 39, 0.06);
+}
+
+.tl-card::after {
+  content: "";
+  position: absolute;
+  top: 2.75rem;
+  width: 16px;
+  height: 16px;
+  background: var(--tl-card);
+  transform: rotate(45deg);
+}
+
+.tl-card::after { left: -8px; }
+
+.tl-heading {
+  margin-bottom: 1.25rem !important;
+  font-size: 1.45rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.tl-end {
+  padding-top: 3rem;
+}
+
+.tl-end .tl-dot {
+  top: 1rem;
+}
+
+.tl-contact {
+  width: calc(100% - var(--tl-line) - 46px);
+  text-align: center;
+  color: #fff;
+  background: linear-gradient(135deg, var(--tl-a), var(--tl-b));
+}
+
+.tl-contact::after { display: none; }
+
+.tl-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.tl-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 1rem;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff !important;
+  font-size: 0.88rem;
+  text-decoration: none;
+}
+
+.tl-link:hover {
+  background: #fff;
+  color: var(--tl-a) !important;
+}
+
+.pf-timeline .pfb-item {
+  grid-template-columns: 1fr;
+  gap: 0.25rem;
+}
+
+.pf-timeline .pfb-item-side {
+  flex-direction: row;
+  align-items: center;
+}
+
+.pf-timeline .pfb-item + .pfb-item {
+  padding-top: 1.5rem;
+  border-top: 1px dashed var(--pfb-line);
+}
+
+.pf-timeline .pfb-date {
+  font-weight: 600;
+  color: var(--tl-a);
+}
+
+.pf-timeline .pfb-now {
+  border: 0;
+  color: #fff;
+  background: var(--tl-b);
+}
+
+.pf-timeline .pfb-skill {
+  border: 0;
+  background: var(--pfb-card);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.pf-timeline .pfb-skill[data-level="5"],
+.pf-timeline .pfb-skill[data-level="4"] {
+  color: #fff;
+  background: linear-gradient(135deg, var(--tl-a), var(--tl-b));
+}
+
+.pf-timeline .pfb-cards,
+.pf-timeline .pfb-quotes {
+  grid-template-columns: 1fr;
+}
+
+.pf-timeline .pfb-card,
+.pf-timeline .pfb-quote {
+  border: 0;
+}
+
+@media (max-width: 860px) {
+  .tl-track { --tl-line: 34px; --tl-pad: 12px; padding: 1rem var(--tl-pad) 4rem; }
+  .tl-card, .tl-contact { width: calc(100% - 60px); padding: 1.25rem; }
+}

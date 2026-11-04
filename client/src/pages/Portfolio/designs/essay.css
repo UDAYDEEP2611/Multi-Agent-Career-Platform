@@ -1,0 +1,268 @@
+.pf-essay {
+  --es-bg: #fffdf8;
+  --es-ink: #2b2620;
+  --es-muted: #7a7062;
+  --es-accent: #9a3412;
+  --es-rule: #e7dfd1;
+  --pfb-line: var(--es-rule);
+  --pfb-muted: var(--es-muted);
+  --pfb-accent: var(--es-accent);
+  --pfb-radius: 2px;
+  --pf-empty-btn-bg: var(--es-accent);
+  background: var(--es-bg);
+  color: var(--es-ink);
+  font-family: "Fraunces", Georgia, serif;
+}
+
+[data-pf-mode="dark"] .pf-essay {
+  --es-bg: #171411;
+  --es-ink: #e9e1d4;
+  --es-muted: #a39885;
+  --es-accent: #fdba74;
+  --es-rule: #332c24;
+  --pf-empty-btn-text: #171411;
+}
+
+.es-column {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 6rem 28px 5rem;
+}
+
+.es-hero {
+  text-align: center;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid var(--es-rule);
+}
+
+.es-mark {
+  display: inline-grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border: 1px solid var(--es-ink);
+  border-radius: 50%;
+  font-style: italic;
+  font-size: 1.4rem;
+}
+
+.es-name {
+  margin-top: 1.5rem !important;
+  font-size: clamp(2.6rem, 7vw, 4rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+.es-role {
+  margin: 0.75rem 0 0;
+  font-size: 1.3rem;
+  font-style: italic;
+  color: var(--es-muted);
+}
+
+.es-facts {
+  margin: 1rem 0 0;
+  font-size: 0.9rem;
+  font-variant: small-caps;
+  letter-spacing: 0.08em;
+  color: var(--es-muted);
+}
+
+.es-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem 1.4rem;
+  margin-top: 1.5rem;
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 0.9rem;
+}
+
+.es-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--es-accent) !important;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+.es-section {
+  padding: 3rem 0 0;
+}
+
+.es-section + .es-section::before {
+  content: "❧";
+  display: block;
+  margin-bottom: 2.5rem;
+  text-align: center;
+  color: var(--es-muted);
+}
+
+.es-heading {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem !important;
+  font-size: 1.15rem;
+  font-weight: 600;
+  font-variant: small-caps;
+  letter-spacing: 0.12em;
+  text-transform: lowercase;
+}
+
+.es-heading span {
+  font-size: 0.85rem;
+  font-style: italic;
+  font-variant: normal;
+  letter-spacing: 0;
+  color: var(--es-accent);
+}
+
+.pf-essay .pfb-about p {
+  font-size: 1.28rem;
+  line-height: 1.8;
+}
+
+.es-about .pfb-about p:first-child::first-letter {
+  float: left;
+  margin: 0.35rem 0.6rem 0 0;
+  font-size: 4.6rem;
+  line-height: 0.75;
+  font-weight: 800;
+  color: var(--es-accent);
+}
+
+.pf-essay .pfb-item {
+  grid-template-columns: 1fr;
+  gap: 0.15rem;
+}
+
+.pf-essay .pfb-item-side {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.pf-essay .pfb-date {
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pf-essay .pfb-now {
+  border: 0;
+  padding: 0;
+  font-family: "Inter", system-ui, sans-serif;
+}
+
+.pf-essay .pfb-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.pf-essay .pfb-sub {
+  font-style: italic;
+}
+
+.pf-essay .pfb-bullets {
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.pf-essay .pfb-tags {
+  font-family: "Inter", system-ui, sans-serif;
+}
+
+.pf-essay .pfb-tags span {
+  border: 0;
+  padding: 0;
+  font-size: 0.8rem;
+  color: var(--es-muted);
+}
+
+.pf-essay .pfb-tags span + span::before {
+  content: "· ";
+}
+
+.pf-essay .pfb-skill-list {
+  display: block;
+  font-size: 1.2rem;
+  line-height: 1.8;
+}
+
+.pf-essay .pfb-skill {
+  display: inline;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+.pf-essay .pfb-skill + .pfb-skill::before {
+  content: ", ";
+}
+
+.pf-essay .pfb-skill[data-level="5"] .pfb-skill-name {
+  font-style: italic;
+  color: var(--es-accent);
+}
+
+.pf-essay .pfb-cards {
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+.pf-essay .pfb-card {
+  padding: 0;
+  border: 0;
+}
+
+.pf-essay .pfb-card-top {
+  margin-bottom: 0.25rem;
+}
+
+.pf-essay .pfb-card-no {
+  font-style: italic;
+  color: var(--es-accent);
+}
+
+.pf-essay .pfb-card-link {
+  border: 0;
+  color: var(--es-accent);
+}
+
+.pf-essay .pfb-quotes {
+  grid-template-columns: 1fr;
+}
+
+.pf-essay .pfb-quote {
+  border: 0;
+  padding: 0 0 0 1.5rem;
+  border-left: 2px solid var(--es-accent);
+  border-radius: 0;
+}
+
+.pf-essay .pfb-quote blockquote {
+  font-size: 1.25rem;
+  font-style: italic;
+}
+
+.es-footer {
+  margin-top: 4rem;
+  text-align: center;
+  font-style: italic;
+  color: var(--es-muted);
+}
+
+.es-ornament {
+  font-size: 2rem;
+  font-style: normal;
+  color: var(--es-accent);
+}
+
+@media (max-width: 600px) {
+  .es-column { padding: 3rem 18px 3rem; }
+}

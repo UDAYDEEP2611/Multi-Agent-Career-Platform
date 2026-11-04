@@ -1,0 +1,229 @@
+.pf-dossier {
+  --ds-desk: #5b4632;
+  --ds-folder: #e8d7a8;
+  --ds-paper: #f7f1e1;
+  --ds-ink: #2b2418;
+  --ds-muted: #6e6149;
+  --ds-red: #b3261e;
+  --pfb-line: #cdbb8b;
+  --pfb-muted: var(--ds-muted);
+  --pfb-accent: var(--ds-red);
+  --pfb-card: var(--ds-paper);
+  --pfb-radius: 2px;
+  --pf-empty-btn-bg: var(--ds-ink);
+  padding: 70px 24px 48px;
+  background:
+    repeating-linear-gradient(95deg, rgba(0, 0, 0, 0.06) 0 3px, transparent 3px 22px),
+    var(--ds-desk);
+  color: var(--ds-ink);
+  font-family: "Special Elite", "Courier New", monospace;
+}
+
+[data-pf-mode="dark"] .pf-dossier {
+  --ds-desk: #15120d;
+  --ds-folder: #3a3222;
+  --ds-paper: #2b2519;
+  --ds-ink: #f0e6cc;
+  --ds-muted: #b8aa86;
+  --ds-red: #ff6b5e;
+  --pfb-line: #57492f;
+  --pf-empty-btn-bg: #f0e6cc;
+  --pf-empty-btn-text: #2b2519;
+  background:
+    radial-gradient(ellipse 60% 40% at 50% 0%, rgba(255, 220, 150, 0.1), transparent 70%),
+    var(--ds-desk);
+}
+
+.ds-folder {
+  position: relative;
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 3rem 3.5rem 3rem;
+  border-radius: 0 10px 10px 10px;
+  background: var(--ds-folder);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
+}
+
+.ds-tab {
+  position: absolute;
+  top: -38px;
+  left: 0;
+  padding: 0.6rem 1.5rem 0.4rem;
+  border-radius: 10px 10px 0 0;
+  background: var(--ds-folder);
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.ds-clip {
+  position: absolute;
+  top: -22px;
+  right: 70px;
+  width: 26px;
+  height: 80px;
+  border: 4px solid #9aa0a6;
+  border-radius: 14px;
+}
+
+.ds-cover {
+  position: relative;
+  padding: 2rem 2.25rem;
+  background: var(--ds-paper);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.ds-stamp {
+  position: absolute;
+  top: 1.75rem;
+  right: 1.75rem;
+  margin: 0;
+  padding: 0.3rem 0.9rem;
+  border: 4px double var(--ds-red);
+  color: var(--ds-red);
+  font-size: 1.3rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  transform: rotate(-12deg);
+  opacity: 0.85;
+}
+
+.ds-kicker {
+  margin: 0;
+  font-size: 0.85rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--ds-muted);
+}
+
+.ds-name {
+  margin-top: 0.5rem !important;
+  padding-right: 12rem;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 400;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.ds-fields {
+  margin: 1.75rem 0 0;
+}
+
+.ds-fields div {
+  display: grid;
+  grid-template-columns: 11rem minmax(0, 1fr);
+  gap: 1rem;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid var(--pfb-line);
+}
+
+.ds-fields dt {
+  font-weight: 400;
+  text-transform: uppercase;
+  color: var(--ds-muted);
+}
+
+.ds-fields dd {
+  margin: 0;
+}
+
+.ds-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.ds-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  text-decoration: underline;
+}
+
+.ds-section {
+  margin-top: 2rem;
+  padding: 2rem 2.25rem;
+  background: var(--ds-paper);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.ds-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 1rem;
+  margin-bottom: 1.5rem !important;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--ds-ink);
+  font-size: 1.5rem;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+.ds-heading span {
+  padding: 0.05rem 0.5rem;
+  background: var(--ds-ink);
+  color: var(--ds-paper);
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+}
+
+.pf-dossier .pfb-title {
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+.pf-dossier .pfb-date {
+  color: var(--ds-red);
+}
+
+.pf-dossier .pfb-now,
+.pf-dossier .pfb-tags span,
+.pf-dossier .pfb-skill {
+  border-radius: 0;
+}
+
+.pf-dossier .pfb-meter {
+  display: block;
+  border-radius: 0;
+}
+
+.pf-dossier .pfb-meter i {
+  background: var(--ds-ink);
+}
+
+.pf-dossier .pfb-card,
+.pf-dossier .pfb-quote {
+  border-style: dashed;
+  border-color: var(--ds-muted);
+}
+
+.pf-dossier .pf-open-to {
+  font-family: "Inter", sans-serif;
+}
+
+.ds-foot {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.ds-foot .ds-links {
+  justify-content: center;
+}
+
+@media (max-width: 760px) {
+  .pf-dossier { padding: 52px 10px 24px; }
+  .ds-folder { padding: 1.25rem 0.9rem; }
+  .ds-tab { top: -34px; padding: 0.5rem 1rem 0.35rem; font-size: 0.75rem; }
+  .ds-clip { right: 30px; height: 60px; }
+  .ds-cover, .ds-section { padding: 1.4rem 1.1rem; }
+  .ds-stamp { position: static; display: inline-block; margin-bottom: 1rem; font-size: 1rem; transform: rotate(-4deg); }
+  .ds-name { padding-right: 0; }
+  .ds-fields div { grid-template-columns: minmax(0, 1fr); gap: 0.1rem; }
+}
+
+.ds-lede span {
+  text-transform: uppercase;
+  color: var(--ds-muted);
+}

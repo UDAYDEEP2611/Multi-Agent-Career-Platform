@@ -1,0 +1,349 @@
+.pf-retro {
+  --ro-desk: #008080;
+  --ro-face: #c0c0c0;
+  --ro-text: #000;
+  --ro-light: #fff;
+  --ro-shade: #808080;
+  --ro-dark: #000;
+  --ro-title: linear-gradient(90deg, #000080, #1084d0);
+  --ro-title-text: #fff;
+  --ro-paper: #fff;
+  --ro-icon-text: #fff;
+  --ro-select: #000080;
+  --pfb-line: #808080;
+  --pfb-muted: #404040;
+  --pfb-accent: #000080;
+  --pfb-card: var(--ro-face);
+  --pfb-radius: 0;
+  --pf-empty-btn-bg: #000080;
+  background: var(--ro-desk);
+  color: var(--ro-text);
+  font-family: Tahoma, Verdana, "Segoe UI", sans-serif;
+  font-size: 15px;
+}
+
+[data-pf-mode="dark"] .pf-retro {
+  --ro-desk: #10102a;
+  --ro-face: #3a3a46;
+  --ro-text: #e8e8f0;
+  --ro-light: #6a6a7a;
+  --ro-shade: #22222c;
+  --ro-dark: #08080c;
+  --ro-title: linear-gradient(90deg, #4b1d80, #9b3fd0);
+  --ro-paper: #1c1c26;
+  --ro-select: #9b3fd0;
+  --pfb-line: #55556a;
+  --pfb-muted: #b0b0c4;
+  --pfb-accent: #d8b4fe;
+  --pf-empty-btn-bg: #9b3fd0;
+}
+
+[data-pf-mode="dark"] .pf-retro .ro-desktop {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.5) 1px, transparent 1px);
+  background-size: 90px 90px;
+}
+
+/* The classic raised and sunken bevels */
+.ro-window,
+.ro-button,
+.ro-start,
+.pf-retro .pfb-card,
+.pf-retro .pfb-skill {
+  border: 2px solid;
+  border-color: var(--ro-light) var(--ro-dark) var(--ro-dark) var(--ro-light);
+  box-shadow: inset -1px -1px 0 var(--ro-shade), inset 1px 1px 0 var(--ro-face);
+  background: var(--ro-face);
+}
+
+.ro-inset,
+.ro-content,
+.ro-progress {
+  border: 2px solid;
+  border-color: var(--ro-shade) var(--ro-light) var(--ro-light) var(--ro-shade);
+}
+
+.ro-desktop {
+  display: grid;
+  grid-template-columns: 110px minmax(0, 1fr);
+  gap: 24px;
+  padding: 24px;
+}
+
+.ro-icons {
+  position: sticky;
+  top: 16px;
+  align-self: start;
+  display: grid;
+  gap: 14px;
+}
+
+.ro-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 4px;
+  text-align: center;
+  text-decoration: none;
+  color: var(--ro-icon-text) !important;
+  font-size: 0.8rem;
+}
+
+.ro-icon i {
+  font-size: 2rem;
+  filter: drop-shadow(2px 2px 0 rgba(0, 0, 0, 0.4));
+}
+
+.ro-icon:hover span,
+.ro-icon:focus span {
+  background: var(--ro-select);
+  outline: 1px dotted #fff;
+}
+
+/* One window per row, each the full width of the desktop */
+.ro-windows {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+}
+
+.ro-window {
+  padding: 3px;
+  min-width: 0;
+}
+
+.ro-titlebar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3px 4px 3px 6px;
+  background: var(--ro-title);
+  color: var(--ro-title-text);
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.ro-controls {
+  display: flex;
+  gap: 2px;
+}
+
+.ro-controls b {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 16px;
+  font-size: 0.7rem;
+  line-height: 1;
+  color: #000;
+  background: #c0c0c0;
+  border: 1px solid;
+  border-color: #fff #000 #000 #fff;
+}
+
+.ro-menubar {
+  padding: 3px 6px;
+  font-size: 0.85rem;
+}
+
+.ro-content {
+  padding: 16px;
+  background: var(--ro-paper);
+}
+
+.ro-welcome {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.ro-avatar {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 110px;
+  height: 110px;
+  font-family: "VT323", monospace;
+  font-size: 4rem;
+  color: #fff;
+  background: repeating-linear-gradient(45deg, #000080 0 8px, #1084d0 8px 16px);
+  border: 2px solid;
+  border-color: var(--ro-shade) var(--ro-light) var(--ro-light) var(--ro-shade);
+}
+
+.ro-name {
+  font-family: "VT323", monospace;
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  font-weight: 400;
+  line-height: 1;
+}
+
+.ro-role {
+  margin: 0.25rem 0 0.75rem;
+  font-weight: 700;
+}
+
+.ro-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.ro-stats span {
+  padding: 2px 8px;
+  font-size: 0.85rem;
+}
+
+.ro-progress {
+  height: 22px;
+  margin-top: 1rem;
+  padding: 2px;
+}
+
+.ro-progress span {
+  display: block;
+  width: 72%;
+  height: 100%;
+  background: repeating-linear-gradient(90deg, #000080 0 12px, transparent 12px 15px);
+}
+
+[data-pf-mode="dark"] .ro-progress span {
+  background: repeating-linear-gradient(90deg, #9b3fd0 0 12px, transparent 12px 15px);
+}
+
+.pf-retro .pfb-about p {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.98rem;
+  line-height: 1.7;
+}
+
+.pf-retro .pfb-item {
+  grid-template-columns: 150px minmax(0, 1fr);
+}
+
+.pf-retro .pfb-title {
+  font-size: 1rem;
+}
+
+.pf-retro .pfb-date {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.8rem;
+}
+
+.pf-retro .pfb-now {
+  border-radius: 0;
+  color: #fff;
+  background: var(--ro-select);
+  border: 0;
+}
+
+.pf-retro .pfb-item + .pfb-item {
+  padding-top: 1rem;
+  border-top: 1px dotted var(--pfb-line);
+}
+
+.pf-retro .pfb-tags span {
+  border-radius: 0;
+  font-family: "IBM Plex Mono", monospace;
+}
+
+.pf-retro .pfb-skill {
+  flex-direction: column;
+  align-items: stretch;
+  min-width: 150px;
+  border-radius: 0;
+  font-size: 0.85rem;
+}
+
+.pf-retro .pfb-meter {
+  display: block;
+  width: auto;
+  height: 10px;
+  border-radius: 0;
+  background: var(--ro-paper);
+}
+
+.pf-retro .pfb-meter i {
+  background: repeating-linear-gradient(90deg, var(--ro-select) 0 6px, transparent 6px 8px);
+}
+
+.pf-retro .pfb-card {
+  border-radius: 0;
+}
+
+.pf-retro .pfb-card-link {
+  border-radius: 0;
+}
+
+.pf-retro .pfb-quote {
+  border-radius: 0;
+  border-style: dashed;
+  font-family: "IBM Plex Mono", monospace;
+}
+
+.ro-dial {
+  font-weight: 700;
+}
+
+.ro-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ro-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  color: var(--ro-text) !important;
+  font-size: 0.88rem;
+  text-decoration: none;
+}
+
+.ro-button:active {
+  border-color: var(--ro-dark) var(--ro-light) var(--ro-light) var(--ro-dark);
+}
+
+.ro-taskbar {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px;
+  background: var(--ro-face);
+  border-top: 2px solid var(--ro-light);
+}
+
+.ro-start {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  font-weight: 700;
+}
+
+.ro-task {
+  flex: 1;
+  max-width: 260px;
+  padding: 3px 10px;
+  font-size: 0.85rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.ro-clock {
+  margin-left: auto;
+  padding: 3px 10px;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 760px) {
+  .ro-desktop { grid-template-columns: 1fr; padding: 12px; }
+  .ro-icons { position: static; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); }
+  .ro-welcome { flex-direction: column; align-items: flex-start; }
+  .pf-retro .pfb-item { grid-template-columns: 1fr; }
+}

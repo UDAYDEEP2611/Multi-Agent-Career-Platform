@@ -1,0 +1,193 @@
+/* Light: a printed screenplay. Dark: a black-and-white film. */
+.pf-noir {
+  --nr-bg: #f4f1ea;
+  --nr-ink: #121212;
+  --nr-muted: #5f5c57;
+  --nr-screen: #121212;
+  --nr-screen-ink: #f4f1ea;
+  --pfb-line: #cfcac0;
+  --pfb-muted: var(--nr-muted);
+  --pfb-accent: var(--nr-ink);
+  --pfb-radius: 0;
+  --pf-empty-btn-bg: var(--nr-ink);
+  background: var(--nr-bg);
+  color: var(--nr-ink);
+  font-family: "Space Mono", "Courier New", monospace;
+}
+
+[data-pf-mode="dark"] .pf-noir {
+  --nr-bg: #0a0a0a;
+  --nr-ink: #ededed;
+  --nr-muted: #9a9a9a;
+  --nr-screen: #000;
+  --nr-screen-ink: #f2f2f2;
+  --pfb-line: #2c2c2c;
+  --pf-empty-btn-text: #0a0a0a;
+}
+
+/* Letterboxed title card with a vignette and faint grain */
+.nr-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 86vh;
+  padding: 8rem 40px;
+  border-block: 64px solid #000;
+  background:
+    repeating-radial-gradient(circle at 30% 40%, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 3px),
+    radial-gradient(ellipse at center, #3a3a3a 0%, #151515 55%, #000 100%);
+  color: #f2f2f2;
+  text-align: center;
+}
+
+.nr-presents,
+.nr-starring {
+  margin: 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.45em;
+  text-transform: uppercase;
+  color: #b5b5b5;
+}
+
+.nr-name {
+  margin: 1.75rem 0 !important;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(3rem, 9vw, 7rem);
+  font-weight: 900;
+  font-style: italic;
+  line-height: 0.95;
+  text-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+}
+
+.nr-role {
+  margin: 0.75rem 0 0;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(1.3rem, 3vw, 2rem);
+  font-weight: 700;
+}
+
+.nr-credits {
+  margin: 2.5rem 0 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  white-space: pre-wrap;
+  color: #b5b5b5;
+}
+
+.nr-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1.75rem;
+  margin-top: 2rem;
+  font-size: 0.85rem;
+}
+
+.nr-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
+
+.nr-hero .nr-links a {
+  color: #f2f2f2 !important;
+}
+
+.nr-body {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 40px 3rem;
+}
+
+.nr-section {
+  padding: 3.5rem 0;
+  border-bottom: 1px solid var(--pfb-line);
+}
+
+.nr-slug {
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--nr-muted);
+}
+
+.nr-heading {
+  margin-bottom: 1.75rem !important;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(2rem, 4.5vw, 3rem);
+  font-weight: 900;
+  font-style: italic;
+}
+
+.pf-noir .pfb-about p {
+  font-size: 1.02rem;
+  line-height: 1.85;
+}
+
+.pf-noir .pfb-title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 1.35rem;
+}
+
+.pf-noir .pfb-date {
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.pf-noir .pfb-now,
+.pf-noir .pfb-tags span,
+.pf-noir .pfb-skill {
+  border-radius: 0;
+}
+
+.pf-noir .pfb-meter {
+  display: block;
+  border-radius: 0;
+}
+
+.pf-noir .pfb-card {
+  border-color: var(--nr-ink);
+}
+
+.pf-noir .pfb-quote {
+  border: 0;
+  border-left: 3px solid var(--nr-ink);
+}
+
+.pf-noir .pfb-quote blockquote {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 1.2rem;
+  font-style: italic;
+}
+
+.nr-foot {
+  padding: 5rem 40px 6rem;
+  background: var(--nr-screen);
+  color: var(--nr-screen-ink);
+  text-align: center;
+}
+
+.nr-end {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(2.6rem, 6vw, 4rem);
+  font-weight: 900;
+  font-style: italic;
+}
+
+.nr-foot .nr-links a {
+  color: var(--nr-screen-ink) !important;
+}
+
+@media (max-width: 760px) {
+  .nr-hero { min-height: 0; padding: 5rem 20px; border-width: 36px; }
+  .nr-body { padding: 1rem 20px 2rem; }
+  .nr-section { padding: 2.5rem 0; }
+  .nr-foot { padding: 3.5rem 20px 4.5rem; }
+}

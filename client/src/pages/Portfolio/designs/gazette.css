@@ -1,0 +1,250 @@
+.pf-gazette {
+  --gz-desk: #d8d1c2;
+  --gz-paper: #f4efe3;
+  --gz-ink: #1a1917;
+  --gz-muted: #5f5a50;
+  --gz-rule: #1a1917;
+  --gz-soft: #cdc5b3;
+  --pfb-line: var(--gz-soft);
+  --pfb-muted: var(--gz-muted);
+  --pfb-accent: var(--gz-ink);
+  --pfb-radius: 0;
+  --pf-empty-btn-bg: var(--gz-ink);
+  padding: 32px 20px;
+  background: var(--gz-desk);
+  color: var(--gz-ink);
+  font-family: "Libre Baskerville", Georgia, serif;
+}
+
+[data-pf-mode="dark"] .pf-gazette {
+  --gz-desk: #0b0b0a;
+  --gz-paper: #181715;
+  --gz-ink: #ebe5d8;
+  --gz-muted: #a49d8f;
+  --gz-rule: #ebe5d8;
+  --gz-soft: #38352f;
+  --pf-empty-btn-text: #181715;
+}
+
+.gz-paper {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 2rem 48px 3rem;
+  background: var(--gz-paper);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+}
+
+.gz-masthead {
+  text-align: center;
+  border-bottom: 4px double var(--gz-rule);
+}
+
+.gz-ears {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.72rem;
+  font-style: italic;
+  color: var(--gz-muted);
+}
+
+.gz-masthead-name {
+  margin: 0.5rem 0 0.75rem;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(2.4rem, 8vw, 5.6rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+
+.gz-dateline {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  padding: 0.45rem 0;
+  border-top: 1px solid var(--gz-rule);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.gz-front {
+  padding: 2.5rem 0;
+  border-bottom: 1px solid var(--gz-rule);
+  text-align: center;
+}
+
+.gz-kicker {
+  display: inline-block;
+  margin-bottom: 1rem;
+  padding: 0.15rem 0.7rem;
+  background: var(--gz-ink);
+  color: var(--gz-paper);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.gz-name {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(2.6rem, 7vw, 5rem);
+  font-weight: 900;
+  line-height: 1.02;
+}
+
+.gz-deck {
+  max-width: 44rem;
+  margin: 1rem auto 0;
+  font-size: 1.35rem;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+.gz-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem 1.5rem;
+  margin-top: 1.5rem;
+  font-size: 0.85rem;
+}
+
+.gz-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.gz-section {
+  padding: 2rem 0 2.5rem;
+  border-bottom: 1px solid var(--gz-rule);
+}
+
+.gz-heading {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+  padding: 0.5rem 0;
+  border-block: 3px double var(--gz-rule);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gz-muted);
+}
+
+.gz-heading span:last-child {
+  text-align: right;
+}
+
+.gz-heading h2 {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 1.9rem;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--gz-ink);
+}
+
+/* The About story runs in newspaper columns with a drop cap */
+.pf-gazette .pfb-about {
+  column-count: 2;
+  column-gap: 2.5rem;
+  column-rule: 1px solid var(--gz-soft);
+}
+
+.pf-gazette .pfb-about p {
+  font-size: 1rem;
+  line-height: 1.75;
+  text-align: justify;
+  hyphens: auto;
+}
+
+.pf-gazette .pfb-about p:first-child::first-letter {
+  float: left;
+  padding: 0.06em 0.1em 0 0;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 3.7em;
+  font-weight: 900;
+  line-height: 0.8;
+}
+
+.pf-gazette .pfb-list-experience {
+  gap: 0;
+}
+
+.pf-gazette .pfb-list-experience > .pfb-item {
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--gz-soft);
+}
+
+.pf-gazette .pfb-list-experience > .pfb-item:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.pf-gazette .pfb-title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 900;
+}
+
+.pf-gazette .pfb-sub,
+.pf-gazette .pfb-date {
+  font-style: italic;
+}
+
+.pf-gazette .pfb-now {
+  border-radius: 0;
+}
+
+.pf-gazette .pfb-tags span,
+.pf-gazette .pfb-skill {
+  border-radius: 0;
+  border-color: var(--gz-ink);
+}
+
+.pf-gazette .pfb-meter {
+  display: block;
+  border-radius: 0;
+}
+
+.pf-gazette .pfb-card {
+  padding: 1rem 0 0;
+  border: 0;
+  border-top: 3px solid var(--gz-ink);
+}
+
+.pf-gazette .pfb-quote {
+  border: 0;
+  padding: 0 1rem;
+  border-left: 1px solid var(--gz-soft);
+  font-style: italic;
+}
+
+.gz-foot {
+  padding-top: 2rem;
+  text-align: center;
+}
+
+.gz-foot h2 {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  font-style: italic;
+}
+
+@media (max-width: 760px) {
+  .pf-gazette { padding: 10px; }
+  .gz-paper { padding: 1.25rem 18px 2rem; }
+  .gz-ears span:last-child { display: none; }
+  .gz-dateline { justify-content: center; }
+  .gz-heading { grid-template-columns: minmax(0, 1fr); gap: 0.2rem; text-align: center; }
+  .gz-heading span:last-child { display: none; }
+  .pf-gazette .pfb-about { column-count: 1; }
+}

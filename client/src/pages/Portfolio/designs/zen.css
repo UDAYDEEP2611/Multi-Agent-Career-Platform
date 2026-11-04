@@ -1,0 +1,229 @@
+.pf-zen {
+  --zen-paper: #f5f0e6;
+  --zen-ink: #1f1d1a;
+  --zen-muted: #7b7368;
+  --zen-red: #b7282e;
+  --zen-rule: #ddd3c2;
+  --pfb-line: var(--zen-rule);
+  --pfb-muted: var(--zen-muted);
+  --pfb-accent: var(--zen-red);
+  --pfb-radius: 2px;
+  --pf-empty-btn-bg: var(--zen-red);
+  background:
+    radial-gradient(circle at 88% 0%, rgba(183, 40, 46, 0.07), transparent 40%),
+    var(--zen-paper);
+  color: var(--zen-ink);
+  font-family: "Shippori Mincho", "Fraunces", Georgia, serif;
+}
+
+[data-pf-mode="dark"] .pf-zen {
+  --zen-paper: #14130f;
+  --zen-ink: #ece6da;
+  --zen-muted: #9d958a;
+  --zen-red: #e2585c;
+  --zen-rule: #2c2923;
+  --pf-empty-btn-text: #14130f;
+}
+
+.zen-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 3rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 7rem 40px 4rem;
+}
+
+.zen-enso {
+  position: absolute;
+  top: 2.5rem;
+  right: 6%;
+  width: min(46vw, 420px);
+  aspect-ratio: 1;
+  border: 20px solid var(--zen-ink);
+  border-right-color: transparent;
+  border-radius: 50%;
+  opacity: 0.07;
+  transform: rotate(-30deg);
+  pointer-events: none;
+}
+
+.zen-hero-text {
+  position: relative;
+  min-width: 0;
+}
+
+.zen-kicker {
+  margin-bottom: 1.5rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--zen-muted);
+}
+
+.zen-name {
+  font-size: clamp(2.8rem, 7vw, 5.5rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: 0.02em;
+}
+
+.zen-role {
+  margin: 1.25rem 0 0;
+  font-size: 1.25rem;
+  color: var(--zen-red);
+}
+
+.zen-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  margin-top: 2rem;
+  font-size: 0.9rem;
+}
+
+.zen-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--zen-rule);
+  text-decoration: none;
+}
+
+.zen-seal {
+  display: grid;
+  place-items: center;
+  width: 92px;
+  height: 92px;
+  border: 3px solid var(--zen-red);
+  border-radius: 10px;
+  box-shadow: inset 0 0 0 4px var(--zen-paper), inset 0 0 0 6px var(--zen-red);
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--zen-red);
+  transform: rotate(4deg);
+}
+
+.zen-stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem 4rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.75rem 40px;
+  border-block: 1px solid var(--zen-rule);
+}
+
+.zen-stats div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.zen-stats strong {
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.zen-stats span {
+  font-size: 0.72rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--zen-muted);
+}
+
+.zen-body {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1rem 40px 5rem;
+}
+
+.zen-section {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 1.5rem 3rem;
+  padding: 3.5rem 0;
+  border-bottom: 1px solid var(--zen-rule);
+}
+
+.zen-section:last-child {
+  border-bottom: 0;
+}
+
+.zen-section-body {
+  min-width: 0;
+}
+
+.zen-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  align-self: start;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+.zen-num {
+  font-size: 2.6rem;
+  line-height: 1;
+  letter-spacing: 0;
+  color: var(--zen-red);
+}
+
+.pf-zen .pfb-about p {
+  line-height: 2;
+}
+
+.pf-zen .pfb-skill-list .pfb-skill {
+  border-color: var(--zen-ink);
+  border-radius: 2px;
+}
+
+.pf-zen .pfb-meter {
+  display: block;
+}
+
+.pf-zen .pfb-card {
+  padding: 1.25rem 0 0;
+  border: 0;
+  border-top: 2px solid var(--zen-ink);
+  border-radius: 0;
+}
+
+.pf-zen .pfb-quote {
+  border: 0;
+  border-left: 2px solid var(--zen-red);
+  border-radius: 0;
+}
+
+.zen-foot {
+  padding: 4rem 40px 5rem;
+  border-top: 1px solid var(--zen-rule);
+  text-align: center;
+}
+
+.zen-foot p {
+  margin-bottom: 0;
+  font-size: 1.5rem;
+}
+
+.zen-foot .zen-links {
+  justify-content: center;
+}
+
+@media (max-width: 760px) {
+  .zen-hero { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; padding: 4rem 20px 2.5rem; }
+  .zen-seal { order: -1; width: 68px; height: 68px; font-size: 1.4rem; }
+  .zen-stats { gap: 1rem 2rem; padding: 1.25rem 20px; }
+  .zen-body { padding: 0 20px 3rem; }
+  .zen-section { grid-template-columns: minmax(0, 1fr); padding: 2.25rem 0; }
+  .zen-heading { flex-direction: row; align-items: baseline; gap: 1rem; }
+  .zen-num { font-size: 1.8rem; }
+  .zen-foot { padding: 3rem 20px; }
+}

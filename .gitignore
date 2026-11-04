@@ -1,0 +1,16 @@
+
+# NLTK corpora, downloaded by ml/build_lexicon.py
+server/ml/nltk_data/
+
+# Secrets and local files
+.env
+.env.*
+cookies.txt
+*.pem
+*.key
+.vscode/
+.DS_Store
+
+# Dependencies and builds
+node_modules/
+dist/
