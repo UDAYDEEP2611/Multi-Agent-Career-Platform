@@ -298,7 +298,7 @@ Limits on the free plans:
 
 - The service sleeps when idle, so the first visit afterwards takes about a minute.
 - Uploaded files are stored on the server's disk and are lost on every restart. Keeping them needs a paid Render disk, with `UPLOAD_DIR` pointing at it.
-- There's no Ollama on the host, so the agents use their rules unless you set `ANTHROPIC_API_KEY`.
+- There's no Ollama on the host, so the agents can only use their rules. Pointing `OLLAMA_BASE_URL` at a machine running Ollama brings the language model back.
 - Atlas's free cluster allows 500 collections, and each account has its own database. Keep `MAX_USERS` at its default of 10.
 - Password reset and contact emails need the `SMTP_*` settings.
 
