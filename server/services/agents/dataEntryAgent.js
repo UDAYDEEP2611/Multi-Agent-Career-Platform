@@ -208,7 +208,9 @@ function ruleExtract(sectionId, text) {
     if (place) Object.assign(profile, { city: place[1].trim(), ...(place[2] ? { stateProvince: place[2].trim() } : {}), ...(place[3] ? { country: place[3].trim() } : {}) });
     const headline = text.match(/\bheadline\s*(?:to|is|as|should be|:|-)\s*["“]?(.+?)["”]?\s*$/im);
     if (headline) profile.headline = headline[1].trim();
-    const roles = text.match(/\b(?:looking for|target roles?(?: are| is|:)?|open to)\s+(?:a |an )?(.+?)\s*(?:roles?|positions?|jobs?)?\s*$/im);
+    const role = text.match(/\b(?:role targeting|target(?:ing)? role)\s*(?:is|to|as|should be|:|-)\s*["“]?(.+?)["”]?\s*$/im);
+    if (role) profile.roleTargeting = role[1].trim();
+    const roles = !role && text.match(/\b(?:looking for|target roles?(?: are| is|:)?|open to)\s+(?:a |an )?(.+?)\s*(?:roles?|positions?|jobs?)?\s*$/im);
     if (roles) profile.targetRoles = roles[1].split(/,|\bor\b|\band\b/).map((role) => role.trim()).filter(Boolean);
     return profile;
   }

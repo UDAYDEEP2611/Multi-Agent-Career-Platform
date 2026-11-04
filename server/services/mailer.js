@@ -26,9 +26,9 @@ function getTransporter() {
   return transporter;
 }
 
-async function sendMail({ to, subject, text, html }) {
+async function sendMail({ to, replyTo, subject, text, html }) {
   if (process.env.NODE_ENV === "test") {
-    outbox.push({ to, subject, text, html });
+    outbox.push({ to, replyTo, subject, text, html });
     return;
   }
 
@@ -42,6 +42,7 @@ async function sendMail({ to, subject, text, html }) {
   await getTransporter().sendMail({
     from: process.env.MAIL_FROM || process.env.SMTP_USER,
     to,
+    replyTo,
     subject,
     text,
     html

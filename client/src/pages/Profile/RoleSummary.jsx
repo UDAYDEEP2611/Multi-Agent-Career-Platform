@@ -17,6 +17,10 @@ export default function RoleSummary({ roles }) {
     <div className="role-summary">
       {roles.headline && <p className="role-summary-headline">{roles.headline}</p>}
 
+      {roles.roleTargeting && (
+        <p className="role-summary-roles">{roles.roleTargeting}</p>
+      )}
+
       {roles.targetRoles?.length > 0 && (
         <p className="role-summary-roles">
           {roles.targetRoles.map((role, index) => (

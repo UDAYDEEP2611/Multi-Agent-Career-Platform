@@ -107,6 +107,8 @@ export default function ActivityLog() {
       ) : !lock.unlocked ? (
         <LockScreen
           unlockMinutes={lock.unlockMinutes || 10}
+          hasPassword={lock.hasPassword}
+          hasGoogle={lock.hasGoogle}
           onUnlocked={(unlockedUntil) => {
             setNow(Date.now());
             setLock((previous) => ({ ...previous, unlocked: true, unlockedUntil }));

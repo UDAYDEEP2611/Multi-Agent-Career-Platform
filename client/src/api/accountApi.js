@@ -9,6 +9,7 @@ const api = axios.create({
 // with status 423
 export const getLockStatus = () => api.get("/lock");
 export const unlockActivity = (password) => api.post("/unlock", { password });
+export const unlockActivityWithGoogle = (credential) => api.post("/unlock", { credential });
 export const lockActivity = () => api.post("/lock");
 
 // kind: "data" (changes) or "auth" (sign-ins)

@@ -1,0 +1,278 @@
+.pf-kanban {
+  --kb-bg: #eef1f6;
+  --kb-column: #e1e5ed;
+  --kb-card: #ffffff;
+  --kb-ink: #172036;
+  --kb-muted: #5b6579;
+  --kb-accent: #2563eb;
+  --pfb-line: #d3d9e4;
+  --pfb-muted: var(--kb-muted);
+  --pfb-accent: var(--kb-accent);
+  --pfb-card: var(--kb-card);
+  --pfb-radius: 8px;
+  --pf-empty-btn-bg: var(--kb-accent);
+  background: var(--kb-bg);
+  color: var(--kb-ink);
+  font-family: "Inter", system-ui, sans-serif;
+}
+
+[data-pf-mode="dark"] .pf-kanban {
+  --kb-bg: #0f131c;
+  --kb-column: #181e2b;
+  --kb-card: #232b3b;
+  --kb-ink: #e9edf5;
+  --kb-muted: #a0aabd;
+  --kb-accent: #7aa5ff;
+  --pfb-line: #343d50;
+  --pf-empty-btn-text: #0f131c;
+}
+
+.kb-top {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 1.5rem;
+  align-items: start;
+  padding: 2rem clamp(16px, 3vw, 36px);
+  border-top: 6px solid var(--kb-accent);
+  background: var(--kb-card);
+  box-shadow: 0 1px 0 var(--pfb-line);
+}
+
+.kb-avatar {
+  display: grid;
+  place-items: center;
+  width: 84px;
+  height: 84px;
+  border-radius: 16px;
+  background: var(--kb-accent);
+  color: var(--kb-card);
+  font-family: "Manrope", sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+}
+
+.kb-name {
+  font-family: "Manrope", sans-serif;
+  font-size: clamp(1.8rem, 3.6vw, 2.6rem);
+  font-weight: 800;
+  line-height: 1.12;
+}
+
+.kb-role {
+  margin: 0.25rem 0 0;
+  font-weight: 500;
+  color: var(--kb-muted);
+}
+
+.kb-lede {
+  max-width: 76ch;
+  font-size: 0.98rem;
+}
+
+.kb-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 1rem;
+}
+
+.kb-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  background: var(--kb-column);
+  font-size: 0.82rem;
+  font-weight: 500;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.kb-stats {
+  list-style: none;
+  display: flex;
+  gap: 0.6rem;
+}
+
+.kb-stats li {
+  min-width: 82px;
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  background: var(--kb-column);
+  text-align: center;
+}
+
+.kb-stats strong {
+  display: block;
+  font-family: "Manrope", sans-serif;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--kb-accent);
+}
+
+.kb-stats span {
+  font-size: 0.72rem;
+  color: var(--kb-muted);
+}
+
+/* Columns fill top to bottom and stay whole, like lists on a board */
+.kb-board {
+  columns: 3 320px;
+  column-gap: 1rem;
+  padding: 1.25rem clamp(16px, 3vw, 36px) 3rem;
+}
+
+.kb-column {
+  break-inside: avoid;
+  margin-bottom: 1rem;
+  padding: 0.85rem;
+  border-radius: 12px;
+  background: var(--kb-column);
+}
+
+.kb-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.8rem !important;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.kb-heading i {
+  width: 28px;
+  height: 7px;
+  border-radius: 6px;
+  background: var(--kb-c);
+}
+
+.pf-kanban .pf-about-headline {
+  margin-bottom: 0.6rem;
+  font-size: 0.95rem;
+  line-height: 1.35;
+}
+
+.pf-kanban .pfb-about {
+  padding: 0.9rem;
+  border-radius: 8px;
+  background: var(--kb-card);
+}
+
+.pf-kanban .pfb-about p {
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.pf-kanban .pfb-list {
+  gap: 0.6rem;
+}
+
+/* Every entry is a card with its dates at the bottom */
+.pf-kanban .pfb-item {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.5rem;
+  padding: 0.9rem;
+  border-radius: 8px;
+  background: var(--kb-card);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.14);
+}
+
+.pf-kanban .pfb-item-side {
+  order: 2;
+  flex-direction: row;
+  align-items: center;
+}
+
+.pf-kanban .pfb-date {
+  font-size: 0.78rem;
+}
+
+.pf-kanban .pfb-title {
+  font-size: 0.98rem;
+}
+
+.pf-kanban .pfb-sub,
+.pf-kanban .pfb-text,
+.pf-kanban .pfb-bullets {
+  font-size: 0.85rem;
+}
+
+.pf-kanban .pfb-now {
+  border: 0;
+  background: var(--kb-accent);
+  color: var(--kb-card);
+}
+
+.pf-kanban .pfb-tags span {
+  border: 0;
+  border-radius: 5px;
+  background: var(--kb-column);
+}
+
+.pf-kanban .pfb-skill-list {
+  padding: 0.75rem !important;
+  border-radius: 8px;
+  background: var(--kb-card);
+}
+
+.pf-kanban .pfb-skill {
+  padding: 0.2rem 0.55rem;
+  border: 0;
+  border-radius: 5px;
+  background: var(--kb-column);
+  font-size: 0.82rem;
+}
+
+.pf-kanban .pf-other-skills {
+  font-size: 0.85rem;
+}
+
+/* A column is narrow: projects stack instead of scrolling sideways */
+.pf-kanban .pf-rail-controls {
+  display: none;
+}
+
+.pf-kanban .pf .pf-projects[data-layout],
+.pf.pf-kanban .pf-projects[data-layout] {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+}
+
+.pf.pf-kanban .pf-projects[data-layout] > * {
+  width: auto;
+  min-width: 0;
+  max-width: none;
+  flex: none;
+}
+
+.pf-kanban .pfb-card,
+.pf-kanban .pfb-quote {
+  padding: 0.9rem;
+  border: 0;
+  background: var(--kb-card);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.14);
+}
+
+.pf-kanban .pfb-quotes {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.6rem;
+}
+
+.pf-kanban .pfb-quote blockquote {
+  font-size: 0.88rem;
+}
+
+@media (max-width: 860px) {
+  .kb-top { grid-template-columns: auto minmax(0, 1fr); }
+  .kb-stats { grid-column: 1 / -1; flex-wrap: wrap; }
+}
+
+@media (max-width: 520px) {
+  .kb-top { grid-template-columns: minmax(0, 1fr); }
+  .kb-avatar { width: 64px; height: 64px; font-size: 1.35rem; }
+}

@@ -44,7 +44,8 @@ test("a new account gets an empty portfolio with its username, so every section 
   assert.equal(p.contact.name, "empty_showcase");
   assert.equal(p.hasProfile, false);
   assert.equal(p.headline, "");
-  assert.deepEqual(p.openTo.targetRoles, []);
+  assert.equal(p.openTo.roleTargeting, "");
+  assert.equal(p.openTo.targetRoles, undefined);
   assert.equal(p.summary, "");
   for (const key of ["experiences", "educations", "projects", "skills", "certifications", "achievements", "recommendations", "volunteering", "publications", "patents", "interests"]) {
     assert.deepEqual(p[key], [], key);
@@ -96,6 +97,7 @@ test("the Role Details headline and preferences lead the showcase", async () => 
 
   await agent.patch("/api/profile/roles").send({
     headline: "AI Engineer building LLM agents",
+    roleTargeting: "Generative AI Engineer",
     targetRoles: ["Machine Learning Engineer"],
     employmentTypes: ["Full-time"],
     workplaceTypes: ["Remote"]
@@ -103,6 +105,8 @@ test("the Role Details headline and preferences lead the showcase", async () => 
 
   const { body } = await agent.get("/api/portfolio/showcase").expect(200);
   assert.equal(body.portfolio.headline, "AI Engineer building LLM agents");
-  assert.deepEqual(body.portfolio.openTo.targetRoles, ["Machine Learning Engineer"]);
+  // One role for resumes and portfolios; the other roles stay private
+  assert.equal(body.portfolio.openTo.roleTargeting, "Generative AI Engineer");
+  assert.equal(body.portfolio.openTo.targetRoles, undefined);
   assert.deepEqual(body.portfolio.openTo.workplaceTypes, ["Remote"]);
 });

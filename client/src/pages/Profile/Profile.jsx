@@ -74,6 +74,7 @@ export default function Profile() {
   const roles = profile?.roleDetails;
   const hasRoles = roles && (
     roles.headline ||
+    roles.roleTargeting ||
     ["targetRoles", "employmentTypes", "workplaceTypes", "locations", "services", "industries"]
       .some((key) => roles[key]?.length)
   );

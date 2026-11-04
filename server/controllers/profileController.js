@@ -232,6 +232,13 @@ function cleanRoleDetails(input) {
         return { error: `Headline can be at most ${ROLE_LIMITS.maxHeadlineLength} characters` };
       }
       updates.headline = headline;
+    } else if (key === "roleTargeting") {
+      if (typeof value !== "string") return { error: "Role targeting must be text" };
+      const role = value.replace(/\s+/g, " ").trim();
+      if (role.length > ROLE_LIMITS.maxRoleLength) {
+        return { error: `Role targeting can be at most ${ROLE_LIMITS.maxRoleLength} characters` };
+      }
+      updates.roleTargeting = role;
     } else if (roleListRules[key]) {
       const { list, error } = roleListRules[key](value);
       if (error) return { error };

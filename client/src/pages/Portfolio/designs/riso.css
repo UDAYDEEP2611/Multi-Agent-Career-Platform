@@ -1,0 +1,226 @@
+.pf-riso {
+  --rs2-paper: #f6f1e4;
+  --rs2-ink: #1d2f8c;
+  --rs2-pink: #ff4d6d;
+  --rs2-sun: #ff6b84;
+  --rs2-block: #ffc93c;
+  --rs2-blend: multiply;
+  --pfb-line: color-mix(in srgb, var(--rs2-ink) 35%, transparent);
+  --pfb-muted: color-mix(in srgb, var(--rs2-ink) 75%, var(--rs2-paper));
+  --pfb-accent: var(--rs2-pink);
+  --pfb-radius: 0;
+  --pf-empty-btn-bg: var(--rs2-ink);
+  background: var(--rs2-paper);
+  color: var(--rs2-ink);
+  font-family: "Space Grotesk", sans-serif;
+}
+
+[data-pf-mode="dark"] .pf-riso {
+  --rs2-paper: #14152a;
+  --rs2-ink: #dfe4ff;
+  --rs2-pink: #ff5f7e;
+  --rs2-sun: #8f2c4d;
+  --rs2-block: #6a5a1c;
+  --rs2-blend: normal;
+  --pf-empty-btn-text: #14152a;
+}
+
+.rs2-hero {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: 640px;
+  padding: 72px clamp(20px, 6vw, 88px) 56px;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.rs2-shapes i {
+  position: absolute;
+  z-index: -1;
+  mix-blend-mode: var(--rs2-blend);
+}
+
+.rs2-sun {
+  top: -70px;
+  right: 5%;
+  width: min(500px, 62vw);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--rs2-sun);
+}
+
+.rs2-block {
+  top: 96px;
+  right: 17%;
+  width: min(320px, 42vw);
+  aspect-ratio: 1.2;
+  background: var(--rs2-block);
+  transform: rotate(-9deg);
+}
+
+.rs2-dots {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 58%;
+  background: radial-gradient(circle, var(--rs2-pink) 2.6px, transparent 3px) 0 0 / 11px 11px;
+  -webkit-mask: linear-gradient(200deg, #000 15%, transparent 72%);
+  mask: linear-gradient(200deg, #000 15%, transparent 72%);
+}
+
+.rs2-hero-text {
+  width: 100%;
+  min-width: 0;
+  max-width: 880px;
+}
+
+.rs2-role {
+  display: inline-block;
+  margin: 0 0 1rem;
+  padding: 0.25rem 0.7rem;
+  background: var(--rs2-ink);
+  color: var(--rs2-paper);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+/* The second ink lands slightly off register */
+.rs2-name {
+  font-family: "Archivo Black", sans-serif;
+  font-size: clamp(3rem, 10vw, 7.5rem);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  text-shadow: 5px 4px 0 color-mix(in srgb, var(--rs2-pink) 80%, transparent);
+}
+
+.rs2-lede {
+  margin-top: 1.4rem;
+  font-size: 1.12rem;
+  font-weight: 500;
+}
+
+.rs2-stats {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.5rem;
+  margin-top: 1.1rem !important;
+}
+
+.rs2-stats strong {
+  font-family: "Archivo Black", sans-serif;
+  font-weight: 400;
+  color: var(--rs2-pink);
+}
+
+.rs2-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.rs2-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0.85rem;
+  border: 2px solid var(--rs2-ink);
+  background: var(--rs2-paper);
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.rs2-link:hover {
+  background: var(--rs2-pink);
+  color: #14152a !important;
+}
+
+.rs2-body {
+  padding: 0 clamp(20px, 6vw, 88px);
+}
+
+.rs2-section {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 9fr);
+  gap: 2rem;
+  padding: 3.5rem 0;
+  border-top: 4px solid var(--rs2-ink);
+}
+
+.rs2-heading {
+  font-family: "Archivo Black", sans-serif;
+  font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+  font-weight: 400;
+  line-height: 1.05;
+  overflow-wrap: anywhere;
+}
+
+.rs2-heading span {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  margin-bottom: 0.8rem;
+  border-radius: 50%;
+  background: var(--rs2-pink);
+  font-size: 1.1rem;
+  color: #14152a;
+}
+
+.rs2-section-body {
+  min-width: 0;
+}
+
+.pf-riso .pfb-title {
+  font-weight: 700;
+}
+
+.pf-riso .pfb-now {
+  background: var(--rs2-pink);
+  border-color: var(--rs2-pink);
+  color: #14152a;
+}
+
+.pf-riso .pfb-meter {
+  display: block;
+}
+
+.pf-riso .pfb-tags span,
+.pf-riso .pfb-skill {
+  border: 2px solid var(--rs2-ink);
+  border-radius: 0;
+  font-weight: 500;
+}
+
+/* Cards sit on a halftone shadow in the second ink */
+.pf-riso .pfb-card,
+.pf-riso .pfb-quote {
+  border: 2px solid var(--rs2-ink);
+  background: var(--rs2-paper);
+  box-shadow: 8px 8px 0 -2px var(--rs2-pink);
+}
+
+.rs2-foot {
+  padding: 2.5rem clamp(20px, 6vw, 88px) 3.5rem;
+  background: radial-gradient(circle, var(--rs2-pink) 2.2px, transparent 2.6px) 0 0 / 10px 10px;
+}
+
+.rs2-foot p {
+  display: inline-block;
+  margin: 0;
+  padding: 0.2rem 0.6rem;
+  background: var(--rs2-paper);
+  font-family: "Archivo Black", sans-serif;
+  font-size: clamp(1.3rem, 3vw, 2rem);
+}
+
+@media (max-width: 760px) {
+  .rs2-hero { min-height: 540px; padding-top: 180px; }
+  .rs2-section { grid-template-columns: minmax(0, 1fr); gap: 1.25rem; padding: 2.25rem 0; }
+  .rs2-heading span { width: 46px; height: 46px; font-size: 0.95rem; }
+}

@@ -49,6 +49,10 @@ const resumeSettingsSchema = new mongoose.Schema(
     // How skills are drawn, when not the design's own way
     skillStyle: { type: String, enum: ["", ...RESUME_SKILL_STYLES], default: "" },
 
+    // Sizes changed from the design's own: sideShift (sidebar width, % of the
+    // page) and margin, gutter, text, spacing (% change)
+    tweaks: { type: mongoose.Schema.Types.Mixed, default: undefined },
+
     // One resume design's own changes over the settings above, by design id
     // (made in that resume's AI chat): limits, optional sections, skills,
     // columns, details, skill style, entries left off this resume ("projects:<id>") and its colour
@@ -60,6 +64,7 @@ const resumeSettingsSchema = new mongoose.Schema(
       hiddenFields: { type: [String], default: undefined },
       order: { type: [String], default: undefined },
       rewrites: { type: mongoose.Schema.Types.Mixed, default: undefined },
+      tweaks: { type: mongoose.Schema.Types.Mixed, default: undefined },
       skillStyle: { type: String, enum: ["", ...RESUME_SKILL_STYLES], default: undefined },
       hiddenEntries: { type: [String], default: [] },
       accent: { type: String, default: "", match: /^(#[0-9a-fA-F]{6})?$/ }

@@ -1,13 +1,38 @@
 
+const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 const { prepareUserDatabase } = require("../utils/userDatabase");
 const { recordAuthEvent } = require("../utils/activityLog");
 const { maxUsers } = require("../utils/projectLimits");
+const { googleClientId, verifyGoogleCredential } = require("../services/googleAuth");
 
 const fullMessage = () =>
   `This site is limited to ${maxUsers()} accounts and is full. Contact the site administrator.`;
 require("../models/userModels");
+
+// Two sign-ups at the same moment can both pass the limit check; the newest
+// accounts past the limit are removed again
+const removedOverLimit = async (user) => {
+  const overLimit = await User.find({}, { _id: 1 })
+    .sort({ createdAt: 1, _id: 1 })
+    .skip(maxUsers())
+    .lean();
+
+  if (!overLimit.some((extra) => String(extra._id) === String(user._id))) return false;
+  await user.deleteOne();
+  return true;
+};
+
+// Each user gets their own database for their portfolio data. If this fails
+// it is retried on their first signed-in request.
+const prepareDatabase = async (user) => {
+  try {
+    await prepareUserDatabase(user._id);
+  } catch (error) {
+    console.error("User database setup error:", error);
+  }
+};
 
 const registerUser = async (req, res) => {
   try {
@@ -79,25 +104,11 @@ const registerUser = async (req, res) => {
       isEmailVerified: false
     });
 
-    // Two sign-ups at the same moment can both pass the check above; the
-    // newest accounts past the limit are removed again
-    const overLimit = await User.find({}, { _id: 1 })
-      .sort({ createdAt: 1, _id: 1 })
-      .skip(maxUsers())
-      .lean();
-
-    if (overLimit.some((extra) => String(extra._id) === String(user._id))) {
-      await user.deleteOne();
+    if (await removedOverLimit(user)) {
       return res.status(403).json({ success: false, message: fullMessage() });
     }
 
-    // Each user gets their own database for their portfolio data. If this
-    // fails it is retried on their first signed-in request.
-    try {
-      await prepareUserDatabase(user._id);
-    } catch (error) {
-      console.error("User database setup error:", error);
-    }
+    await prepareDatabase(user);
 
     return res.status(201).json({
       success: true,
@@ -124,6 +135,58 @@ const registerUser = async (req, res) => {
       message: "Unable to create account"
     });
   }
+};
+
+// Signs this browser in to the account and sends the reply
+const startSession = (req, res, user, { status = 200, label = "" } = {}) => {
+  // Regenerate the session to prevent session fixation
+  req.session.regenerate((error) => {
+    if (error) {
+      return res.status(500).json({
+        success: false,
+        message: "Unable to create login session"
+      });
+    }
+
+    req.session.userId = user._id.toString();
+    // Shown in the user's own session list
+    req.session.device = {
+      userAgent: String(req.get("user-agent") || "").slice(0, 300),
+      ip: String(req.ip || "").slice(0, 64),
+      signedInAt: new Date().toISOString()
+    };
+
+    req.session.save(async (saveError) => {
+      if (saveError) {
+        return res.status(500).json({
+          success: false,
+          message: "Unable to save login session"
+        });
+      }
+
+      try {
+        await User.updateOne(
+          { _id: user._id },
+          { $set: { lastLoginAt: new Date() } }
+        );
+      } catch (updateError) {
+        console.error("Last login update failed:", updateError);
+      }
+
+      if (user.role !== "admin") await recordAuthEvent(req, user._id, "signed_in", label);
+
+      return res.status(status).json({
+        success: true,
+        message: "Login successful",
+        user: {
+          id: user._id,
+          username: user.username,
+          email: user.email,
+          role: user.role
+        }
+      });
+    });
+  });
 };
 
 const loginUser = async (req, res) => {
@@ -180,55 +243,7 @@ const loginUser = async (req, res) => {
       });
     }
 
-    // Regenerate the session to prevent session fixation
-    req.session.regenerate((error) => {
-      if (error) {
-        return res.status(500).json({
-          success: false,
-          message: "Unable to create login session"
-        });
-      }
-
-      req.session.userId = user._id.toString();
-      // Shown in the user's own session list
-      req.session.device = {
-        userAgent: String(req.get("user-agent") || "").slice(0, 300),
-        ip: String(req.ip || "").slice(0, 64),
-        signedInAt: new Date().toISOString()
-      };
-
-      req.session.save(async (saveError) => {
-        if (saveError) {
-          return res.status(500).json({
-            success: false,
-            message: "Unable to save login session"
-          });
-        }
-
-        try {
-          await User.updateOne(
-            { _id: user._id },
-            { $set: { lastLoginAt: new Date() } }
-          );
-        } catch (updateError) {
-          console.error("Last login update failed:", updateError);
-        }
-
-        if (user.role !== "admin") await recordAuthEvent(req, user._id, "signed_in");
-
-        return res.status(200).json({
-          success: true,
-          message: "Login successful",
-          user: {
-            id: user._id,
-            username: user.username,
-            email: user.email,
-            role: user.role
-          }
-        });
-      });
-    });
-
+    return startSession(req, res, user);
   } catch (error) {
     console.error("Login error:", error);
 
@@ -236,6 +251,120 @@ const loginUser = async (req, res) => {
       success: false,
       message: "Unable to login"
     });
+  }
+};
+
+// A username from the email address, with a suffix if it's taken
+const newUsername = async (email) => {
+  const base = email.split("@")[0].toLowerCase().replace(/[^a-z0-9_]+/g, "_").replace(/^_+|_+$/g, "").slice(0, 24);
+  const start = base.length >= 3 ? base : `user_${base}`.replace(/_$/, "");
+
+  if (!(await User.exists({ username: start }))) return start;
+  for (let tries = 0; tries < 20; tries += 1) {
+    const candidate = `${start}_${crypto.randomBytes(2).toString("hex")}`;
+    if (!(await User.exists({ username: candidate }))) return candidate;
+  }
+  throw new Error("No free username");
+};
+
+const disabledReply = (res) => res.status(403).json({
+  success: false,
+  message: "This account has been disabled. Contact the site administrator."
+});
+
+// GET /api/auth/google/config: the button only shows when Google is set up
+const getGoogleConfig = (req, res) =>
+  res.json({ success: true, clientId: googleClientId() });
+
+// POST /api/auth/google  { credential, password? }
+// Signs in with a Google ID token, creating the account the first time. An
+// email that already has a password account needs that password once: anyone
+// can register an address they don't own, so a matching email alone doesn't
+// prove the account belongs to the person signing in.
+const googleSignIn = async (req, res) => {
+  try {
+    if (!googleClientId()) {
+      return res.status(503).json({ success: false, message: "Google sign-in isn't set up on this site" });
+    }
+
+    const google = await verifyGoogleCredential(req.body?.credential);
+    if (!google) {
+      return res.status(401).json({ success: false, message: "Google sign-in failed. Please try again." });
+    }
+
+    const linked = await User.findOne({ googleId: google.googleId });
+    if (linked) {
+      if (linked.isDisabled) return disabledReply(res);
+      return startSession(req, res, linked, { label: "With Google" });
+    }
+
+    if (!google.email || !google.emailVerified) {
+      return res.status(403).json({ success: false, message: "Your Google account's email isn't verified" });
+    }
+
+    const existing = await User.findOne({ email: google.email }).select("+passwordHash");
+
+    if (existing) {
+      if (existing.isDisabled) return disabledReply(res);
+
+      if (existing.googleId) {
+        return res.status(409).json({ success: false, message: "This email is already connected to a different Google account" });
+      }
+
+      if (!existing.passwordHash) {
+        return res.status(409).json({ success: false, message: "Reset this account's password first, then connect Google" });
+      }
+
+      const { password } = req.body;
+      if (typeof password !== "string" || !password) {
+        return res.status(409).json({
+          success: false,
+          needsPassword: true,
+          email: existing.email,
+          message: "An account already uses this email. Enter its password to connect Google."
+        });
+      }
+
+      if (!(await bcrypt.compare(password, existing.passwordHash))) {
+        if (existing.role !== "admin") await recordAuthEvent(req, existing._id, "sign_in_failed", "Wrong password while connecting Google");
+        return res.status(401).json({ success: false, needsPassword: true, email: existing.email, message: "Incorrect password" });
+      }
+
+      existing.googleId = google.googleId;
+      existing.isEmailVerified = true;
+      existing.authProviders = [...new Set([...existing.authProviders, "google"])];
+      await existing.save();
+
+      return startSession(req, res, existing, { label: "Connected Google" });
+    }
+
+    if ((await User.countDocuments()) >= maxUsers()) {
+      return res.status(403).json({ success: false, message: fullMessage() });
+    }
+
+    const user = await User.create({
+      username: await newUsername(google.email),
+      email: google.email,
+      googleId: google.googleId,
+      authProviders: ["google"],
+      isEmailVerified: true
+    });
+
+    if (await removedOverLimit(user)) {
+      return res.status(403).json({ success: false, message: fullMessage() });
+    }
+
+    await prepareDatabase(user);
+
+    return startSession(req, res, user, { status: 201, label: "With Google" });
+  } catch (error) {
+    if (error.code === 11000) {
+      return res.status(409).json({ success: false, message: "Google sign-in was already in progress. Please try again." });
+    }
+
+    console.error("Google sign-in error:", error);
+
+    return res.status(500).json({ success: false, message: "Unable to sign in with Google" });
   }
 };
 
@@ -304,6 +433,8 @@ const logoutUser = async (req, res) => {
 module.exports = {
   registerUser,
   loginUser,
+  getGoogleConfig,
+  googleSignIn,
   getCurrentUser,
   logoutUser
 };

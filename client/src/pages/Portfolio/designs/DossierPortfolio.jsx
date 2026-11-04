@@ -8,7 +8,7 @@ import "./dossier.css";
 // A manila case file: typewritten fields, a red stamp and lettered exhibits
 export default function DossierPortfolio({ data }) {
   const hero = heroOf(data);
-  const open = data.openTo?.targetRoles?.length > 0;
+  const open = Boolean(data.openTo?.roleTargeting);
   const links = hero.links.map((link) => <ContactLink key={link.href} link={link} />);
   const fields = [
     ["Occupation", hero.role],

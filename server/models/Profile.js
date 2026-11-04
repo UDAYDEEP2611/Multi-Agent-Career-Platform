@@ -66,6 +66,8 @@ const profileSchema = new mongoose.Schema(
     // What the user is looking for; private to them
     roleDetails: {
       headline: { type: String, trim: true, maxlength: ROLE_LIMITS.maxHeadlineLength, default: "" },
+      // The one role resumes and portfolios show
+      roleTargeting: { type: String, trim: true, maxlength: ROLE_LIMITS.maxRoleLength, default: "" },
       targetRoles: { type: [String], default: [] },
       employmentTypes: { type: [{ type: String, enum: EMPLOYMENT_TYPES }], default: [] },
       workplaceTypes: { type: [{ type: String, enum: WORKPLACE_TYPES }], default: [] },

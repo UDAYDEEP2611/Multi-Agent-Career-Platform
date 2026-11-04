@@ -10,7 +10,8 @@ const DESIGNS = [
   ["zen", "Zen"], ["gazette", "Gazette"], ["polaroid", "Polaroid"], ["arcade", "Arcade"], ["cosmos", "Cosmos"],
   ["ledger", "Ledger"], ["boarding", "Boarding Pass"], ["metro", "Metro"], ["museum", "Museum"], ["vinyl", "Vinyl"],
   ["botanical", "Botanical"], ["memphis", "Memphis"], ["launch", "Launch"], ["dossier", "Dossier"], ["noir", "Noir"],
-  ["candy", "Candy"], ["circuit", "Circuit"], ["ide", "Code Editor"], ["atlas", "Atlas"], ["slate", "Slate"]
+  ["candy", "Candy"], ["circuit", "Circuit"], ["ide", "Code Editor"], ["atlas", "Atlas"], ["slate", "Slate"],
+  ["receipt", "Receipt"], ["postcard", "Postcard"], ["riso", "Riso"], ["kanban", "Kanban"], ["atelier", "Atelier"]
 ].map(([id, name]) => ({ id, name }));
 
 // Designs that draw their sections from the shared section list, so hiding,

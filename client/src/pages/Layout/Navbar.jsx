@@ -119,6 +119,9 @@ export default function Navbar() {
                   <li className="nav-item">
                     <NavLink to="/services" onClick={closeMenu} className="nav-link">Services</NavLink>
                   </li>
+                  <li className="nav-item">
+                    <NavLink to="/contact" onClick={closeMenu} className="nav-link">Contact Us</NavLink>
+                  </li>
                 </>
               )}
 
@@ -175,6 +178,12 @@ export default function Navbar() {
                       </Dropdown.Menu>
                     </Dropdown>
                   )}
+
+                  <li className="nav-item">
+                    <NavLink to="/contact" onClick={closeMenu} className="nav-link">
+                      <i className="bi bi-headset me-1" aria-hidden="true"></i>Contact Us
+                    </NavLink>
+                  </li>
 
                   <Dropdown as="li" className="nav-item" align="end">
                     <Dropdown.Toggle

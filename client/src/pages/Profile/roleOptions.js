@@ -36,6 +36,7 @@ export const INDUSTRIES = [
 
 export const emptyRoleDetails = {
   headline: "",
+  roleTargeting: "",
   targetRoles: [],
   employmentTypes: [],
   workplaceTypes: [],

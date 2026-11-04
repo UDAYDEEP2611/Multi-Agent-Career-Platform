@@ -9,11 +9,11 @@ import { AGENT_EVENTS, getCustomDesign, getCustomDesigns } from "../../api/agent
 // The CSS variable each design paints its accent with (its --pfb-accent
 // points at it). Designs not listed only get --pfb-accent.
 const ACCENT_VARS = {
-  arcade: "--arc-hot", atlas: "--at-route", bento: "--ben-accent", blueprint: "--bp-ink", boarding: "--bd-accent",
+  arcade: "--arc-hot", atelier: "--atl-gold", atlas: "--at-route", bento: "--ben-accent", blueprint: "--bp-ink", boarding: "--bd-accent",
   botanical: "--bo-sage", brutal: "--bru-ink", candy: "--cd-hot", circuit: "--ci-copper", cosmos: "--cos-a",
   dossier: "--ds-red", essay: "--es-accent", executive: "--ex-gold", gazette: "--gz-ink", ide: "--ide-status",
-  launch: "--ln-a", ledger: "--lg-accent", memphis: "--mp-pink", metro: "--mt-c", museum: "--mu-gold",
-  neon: "--neo-pink", noir: "--nr-ink", polaroid: "--pol-pin", resume: "--rs-accent", sidebar: "--sb-accent",
+  kanban: "--kb-accent", launch: "--ln-a", ledger: "--lg-accent", memphis: "--mp-pink", metro: "--mt-c", museum: "--mu-gold",
+  neon: "--neo-pink", noir: "--nr-ink", polaroid: "--pol-pin", postcard: "--pc-red", receipt: "--rc-accent", resume: "--rs-accent", riso: "--rs2-pink", sidebar: "--sb-accent",
   slate: "--sl-accent", split: "--sp-accent", studio: "--st-accent", swiss: "--sw-red", timeline: "--tl-a",
   vinyl: "--vn-orange", zen: "--zen-red"
 };

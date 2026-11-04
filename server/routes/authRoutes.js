@@ -4,6 +4,8 @@ const { rateLimit } = require("express-rate-limit");
 const {
   registerUser,
   loginUser,
+  getGoogleConfig,
+  googleSignIn,
   getCurrentUser,
   logoutUser
 } = require("../controllers/authController");
@@ -32,6 +34,8 @@ const limiter = (minutes, limit, message) =>
 const forgotLimiter = limiter(15, 5, "Too many reset requests. Try again in 15 minutes.");
 // Guessing a 64-character token is hopeless, but there's no reason to allow many tries
 const tokenLimiter = limiter(15, 20, "Too many attempts. Try again in 15 minutes.");
+// Connecting Google to an existing account takes its password, so guesses are limited
+const googleLimiter = limiter(15, 20, "Too many attempts. Try again in 15 minutes.");
 const changeLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   limit: 5,
@@ -43,6 +47,8 @@ const changeLimiter = rateLimit({
 
 router.post("/register", registerUser);
 router.post("/login", loginUser);
+router.get("/google/config", getGoogleConfig);
+router.post("/google", googleLimiter, googleSignIn);
 
 router.post("/forgot-password", forgotLimiter, forgotPassword);
 router.post("/reset-password/check", tokenLimiter, checkResetToken);

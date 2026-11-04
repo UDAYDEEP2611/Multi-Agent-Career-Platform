@@ -1,0 +1,266 @@
+.pf-receipt {
+  --rc-bg: #d9d5cc;
+  --rc-paper: #fdfcf7;
+  --rc-ink: #24221e;
+  --rc-muted: #6d6a62;
+  --rc-accent: #b3261e;
+  --pfb-line: #bdb9ae;
+  --pfb-muted: var(--rc-muted);
+  --pfb-accent: var(--rc-accent);
+  --pfb-radius: 0;
+  --pf-empty-btn-bg: var(--rc-ink);
+  padding: 48px 16px 72px;
+  background: var(--rc-bg);
+  color: var(--rc-ink);
+  font-family: "Space Mono", "JetBrains Mono", monospace;
+}
+
+[data-pf-mode="dark"] .pf-receipt {
+  --rc-bg: #111110;
+  --rc-paper: #22211e;
+  --rc-ink: #efe9da;
+  --rc-muted: #a8a294;
+  --rc-accent: #ff8a7a;
+  --pfb-line: #4c4a43;
+  --pf-empty-btn-text: #111110;
+}
+
+.rc-shadow {
+  max-width: 720px;
+  margin: 0 auto;
+  filter: drop-shadow(0 14px 22px rgba(0, 0, 0, 0.22));
+}
+
+/* Torn zigzag edges, top and bottom */
+.rc-paper {
+  padding: 56px 44px 60px;
+  background: var(--rc-paper);
+  --rc-tear: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / 18px 51% repeat-x,
+    conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) top / 18px 51% repeat-x;
+  -webkit-mask: var(--rc-tear);
+  mask: var(--rc-tear);
+}
+
+.rc-hero {
+  text-align: center;
+}
+
+.rc-store {
+  margin: 0 0 1.25rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--rc-muted);
+}
+
+.rc-name {
+  font-size: clamp(2rem, 6vw, 3rem);
+  font-weight: 700;
+  line-height: 1.1;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+
+.rc-role {
+  margin: 0.7rem 0 0;
+  font-size: 0.95rem;
+}
+
+.rc-place {
+  margin: 0.2rem 0 0;
+  font-size: 0.85rem;
+  color: var(--rc-muted);
+}
+
+.rc-lede {
+  margin-inline: auto;
+  font-size: 0.92rem;
+}
+
+.rc-lines {
+  margin: 1.5rem 0 0;
+  padding: 0.75rem 0;
+  border-block: 2px dashed var(--pfb-line);
+  text-align: left;
+}
+
+.rc-lines > div {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.rc-lines > div::after {
+  content: "";
+  order: 1;
+  flex: 1;
+  border-bottom: 2px dotted var(--pfb-line);
+}
+
+.rc-lines dt {
+  order: 0;
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+
+.rc-lines dd {
+  order: 2;
+  margin: 0;
+  font-weight: 700;
+}
+
+.rc-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem 1.1rem;
+  margin-top: 1.25rem;
+}
+
+.rc-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+}
+
+.rc-section {
+  margin-top: 2.5rem;
+}
+
+.rc-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 1.25rem !important;
+  padding: 0.4rem 0.7rem;
+  background: var(--rc-ink);
+  color: var(--rc-paper);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.rc-heading span {
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+.pf-receipt .pfb-about p {
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+.pf-receipt .pfb-list {
+  gap: 1.25rem;
+}
+
+.pf-receipt .pfb-list > .pfb-item + .pfb-item {
+  padding-top: 1.25rem;
+  border-top: 2px dashed var(--pfb-line);
+}
+
+/* A line item: the name, then the date where a price would be */
+.pf-receipt .pfb-item {
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.2rem 1rem;
+}
+
+.pf-receipt .pfb-item-side {
+  grid-column: 2;
+  grid-row: 1;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.pf-receipt .pfb-item-main {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.pf-receipt .pfb-date {
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.pf-receipt .pfb-title {
+  font-size: 1rem;
+  text-transform: uppercase;
+}
+
+.pf-receipt .pfb-text,
+.pf-receipt .pfb-bullets {
+  font-size: 0.88rem;
+}
+
+.pf-receipt .pfb-bullets {
+  list-style: "- ";
+}
+
+.pf-receipt .pfb-tags span,
+.pf-receipt .pfb-skill {
+  border-radius: 0;
+  border-style: dashed;
+}
+
+.pf-receipt .pfb-skill {
+  padding: 0.25rem 0.6rem;
+  font-size: 0.85rem;
+}
+
+.pf-receipt .pfb-meter {
+  display: block;
+  border-radius: 0;
+}
+
+.pf-receipt .pfb-card,
+.pf-receipt .pfb-quote {
+  padding: 1.1rem;
+  border: 2px dashed var(--pfb-line);
+}
+
+.rc-foot {
+  margin-top: 2.5rem;
+  padding-top: 1rem;
+  border-top: 2px dashed var(--pfb-line);
+  text-align: center;
+}
+
+.rc-total {
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.rc-thanks {
+  margin: 1.5rem 0 1rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.rc-barcode {
+  height: 62px;
+  max-width: 340px;
+  margin: 0 auto;
+  background: repeating-linear-gradient(90deg,
+    var(--rc-ink) 0 2px, transparent 2px 5px,
+    var(--rc-ink) 5px 9px, transparent 9px 11px,
+    var(--rc-ink) 11px 12px, transparent 12px 16px,
+    var(--rc-ink) 16px 21px, transparent 21px 24px);
+}
+
+@media (max-width: 600px) {
+  .pf-receipt { padding: 20px 8px 40px; }
+  .rc-paper { padding: 44px 20px 48px; }
+  .pf-receipt .pfb-item { grid-template-columns: minmax(0, 1fr); }
+  .pf-receipt .pfb-item-side { grid-column: 1; grid-row: 2; flex-direction: row; align-items: center; }
+}

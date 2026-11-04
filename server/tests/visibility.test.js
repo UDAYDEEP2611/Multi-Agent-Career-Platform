@@ -178,6 +178,29 @@ test("the language model's reading is kept only where the message says so", asyn
   assert.match(result.reply, /left Housing Analytics off this resume/);
 });
 
+test("column widths and other sizes are saved per resume, and a reset clears them", async () => {
+  const chat = async (message) => (await agent.post("/api/resume-chat/slate-size").send({ message, layout: "right", sideWidth: 34 }).expect(200)).body;
+
+  let body = await chat("Can U Increase right Layout by 5%");
+  assert.equal(body.changed, true, body.reply);
+  assert.deepEqual(body.settings.designs["slate-size"].tweaks, { sideShift: 5 });
+
+  body = await chat("increase right layout by 5% and tighter spacing");
+  assert.deepEqual(body.settings.designs["slate-size"].tweaks, { sideShift: 10, spacing: -10 });
+  assert.equal(body.settings.tweaks?.sideShift, undefined, "other resumes keep their widths");
+
+  body = await chat("put the column widths back to default");
+  assert.equal(body.settings.designs["slate-size"].tweaks.sideShift, 0);
+
+  await agent.patch("/api/resume-settings").send({ tweaks: "wide" }).expect(400);
+  // Nonsense sizes are dropped, not saved
+  body = (await agent.patch("/api/resume-settings").send({ designId: "slate-size", tweaks: { text: 9000, nope: 3, margin: 20 } }).expect(200)).body;
+  assert.deepEqual(body.settings.designs["slate-size"].tweaks, { sideShift: 0, spacing: -10, margin: 20 });
+
+  body = (await agent.patch("/api/resume-settings").send({ designId: "slate-size", reset: true }).expect(200)).body;
+  assert.equal(body.settings.designs["slate-size"]?.tweaks, undefined);
+});
+
 test("the resume chat moves whole sections between the columns", async () => {
   const chat = async (message, layout = "left") => (await agent.post("/api/resume-chat/slate").send({ message, layout }).expect(200)).body;
 

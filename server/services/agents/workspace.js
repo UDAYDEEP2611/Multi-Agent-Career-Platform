@@ -138,7 +138,7 @@ async function checkSkill(userId, rawName) {
 async function getSectionRecord(userId, section) {
   if (section === "profile") {
     const profile = await require("../../models/Profile").findOne({ userId }).lean();
-    return { exists: Boolean(profile), data: profile ? { ...profile.contact, headline: profile.roleDetails?.headline || "", targetRoles: profile.roleDetails?.targetRoles || [] } : {} };
+    return { exists: Boolean(profile), data: profile ? { ...profile.contact, headline: profile.roleDetails?.headline || "", roleTargeting: profile.roleDetails?.roleTargeting || "", targetRoles: profile.roleDetails?.targetRoles || [] } : {} };
   }
   if (section === "summary") {
     const summary = await require("../../models/Summary").findOne({ userId }).lean();
@@ -147,7 +147,7 @@ async function getSectionRecord(userId, section) {
   return { exists: false, data: {} };
 }
 
-const ROLE_FIELDS = ["headline", "targetRoles"];
+const ROLE_FIELDS = ["headline", "roleTargeting", "targetRoles"];
 
 // Saving a single record: update it if it's there, create it if not, through
 // the same controllers as the Profile and Summary pages
@@ -190,6 +190,7 @@ function overrideView(override = {}) {
   if (Object.keys(columns).length) view.columns = columns;
   if (Array.isArray(override.hiddenFields)) view.hiddenFields = override.hiddenFields;
   if (override.skillStyle) view.skillStyle = override.skillStyle;
+  if (override.tweaks && Object.keys(override.tweaks).length) view.tweaks = override.tweaks;
   if (override.order?.length) view.order = override.order;
   if (override.rewrites && Object.keys(override.rewrites).length) view.rewrites = override.rewrites;
   return view;
@@ -199,7 +200,7 @@ function resumeSettingsView(doc) {
   const { RESUME_LIMIT_DEFAULTS } = require("../../models/ResumeSettings");
   const limits = doc?.limits ? { ...RESUME_LIMIT_DEFAULTS, ...JSON.parse(JSON.stringify(doc.limits)) } : { ...RESUME_LIMIT_DEFAULTS };
   const designs = Object.fromEntries(Object.entries(plain(doc?.designs)).map(([id, override]) => [id, overrideView(override)]));
-  return { limits, extras: doc?.extras || [], allSkills: Boolean(doc?.allSkills), columns: plain(doc?.columns), hiddenFields: doc?.hiddenFields || [], skillStyle: doc?.skillStyle || "", order: doc?.order || [], rewrites: doc?.rewrites || {}, designs };
+  return { limits, extras: doc?.extras || [], allSkills: Boolean(doc?.allSkills), columns: plain(doc?.columns), hiddenFields: doc?.hiddenFields || [], skillStyle: doc?.skillStyle || "", tweaks: doc?.tweaks || {}, order: doc?.order || [], rewrites: doc?.rewrites || {}, designs };
 }
 
 // Wording for every resume, with one resume's own on top
@@ -223,6 +224,7 @@ function effectiveResumeSettings(settings, designId) {
     columns: { ...(settings.columns || {}), ...(override.columns || {}) },
     hiddenFields: override.hiddenFields || settings.hiddenFields || [],
     skillStyle: override.skillStyle || settings.skillStyle || "",
+    tweaks: { ...(settings.tweaks || {}), ...(override.tweaks || {}) },
     order: override.order?.length ? override.order : settings.order || [],
     rewrites: mergedRewrites(settings.rewrites, override.rewrites),
     hiddenEntries: override.hiddenEntries || [],
@@ -271,6 +273,10 @@ function changedRewrites(current = {}, rewrite = {}) {
 }
 
 const validOrder = (order) => Array.isArray(order) && order.length > 0 && order.every((id) => require("../../models/ResumeSettings").RESUME_COLUMN_SECTIONS.includes(id));
+// Sizes that are numbers within sense; anything else is dropped
+const TWEAK_LIMITS = { sideShift: [-40, 40], margin: [-100, 200], gutter: [-100, 200], text: [-100, 200], spacing: [-100, 200] };
+const validTweaks = (tweaks) => Object.fromEntries(Object.entries(tweaks || {})
+  .filter(([key, value]) => TWEAK_LIMITS[key] && Number.isFinite(value) && value >= TWEAK_LIMITS[key][0] && value <= TWEAK_LIMITS[key][1]));
 const validSkillStyle = (style) => require("../../models/ResumeSettings").RESUME_SKILL_STYLES.includes(style);
 
 // changes: { limits: { projects: 3 | null (all) | "default" }, show: [...], hide: [...], allSkills, columns: { education: "right" }, hideFields / showFields: [...], skillStyle }
@@ -303,6 +309,7 @@ async function updateResumeSettings(userId, changes = {}, designId = "") {
     if (columns.length) next.columns = { ...(current.columns || {}), ...Object.fromEntries(columns) };
     if (changes.hideFields?.length || changes.showFields?.length) next.hiddenFields = changedFields(current.hiddenFields || doc.hiddenFields || [], changes);
     if (validSkillStyle(changes.skillStyle)) next.skillStyle = changes.skillStyle;
+    if (Object.keys(validTweaks(changes.tweaks)).length) next.tweaks = { ...(current.tweaks || {}), ...validTweaks(changes.tweaks) };
     if (validOrder(changes.order)) next.order = changes.order;
     if (changes.rewrite) {
       const rewrites = changedRewrites(current.rewrites, changes.rewrite);
@@ -359,6 +366,16 @@ async function updateResumeSettings(userId, changes = {}, designId = "") {
   if (validSkillStyle(changes.skillStyle)) {
     doc.skillStyle = changes.skillStyle;
     for (const override of doc.designs.values()) override.skillStyle = undefined;
+    doc.markModified("designs");
+  }
+  const tweaks = validTweaks(changes.tweaks);
+  if (Object.keys(tweaks).length) {
+    doc.tweaks = { ...(doc.tweaks || {}), ...tweaks };
+    doc.markModified("tweaks");
+    for (const override of doc.designs.values()) {
+      if (!override.tweaks) continue;
+      override.tweaks = Object.fromEntries(Object.entries(override.tweaks).filter(([key]) => !(key in tweaks)));
+    }
     doc.markModified("designs");
   }
   doc.markModified("limits");

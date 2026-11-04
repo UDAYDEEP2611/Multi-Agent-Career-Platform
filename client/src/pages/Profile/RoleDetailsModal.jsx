@@ -15,7 +15,7 @@ const WORKPLACE_TILES = [
 ].filter((tile) => WORKPLACE_TYPES.includes(tile.value));
 
 // The parts of the form, counted by the progress bar
-const PARTS = ["headline", "targetRoles", "industries", "employmentTypes", "workplaceTypes", "services", "locations"];
+const PARTS = ["headline", "roleTargeting", "targetRoles", "industries", "employmentTypes", "workplaceTypes", "services", "locations"];
 
 // One part of the form: an icon, a title, a hint, and a count or a tick when filled
 function Section({ id, icon, tone, title, hint, count, filled, children }) {
@@ -138,11 +138,30 @@ export default function RoleDetailsModal({ show, onHide, roleDetails, onSave }) 
             </Section>
 
             <Section
+              id="role-targeting"
+              icon="bi-crosshair"
+              tone="blue"
+              title="Role targeting"
+              hint="The one role your resumes and portfolio show."
+              count={`${form.roleTargeting.length}/${ROLE_LIMITS.maxRoleLength}`}
+              filled={filled("roleTargeting")}
+            >
+              <Form.Control
+                id="role-targeting"
+                className="role-text"
+                value={form.roleTargeting}
+                onChange={(event) => set("roleTargeting")(event.target.value)}
+                maxLength={ROLE_LIMITS.maxRoleLength}
+                placeholder="e.g. Generative AI Engineer"
+              />
+            </Section>
+
+            <Section
               id="role-titles"
               icon="bi-bullseye"
               tone="blue"
-              title="Roles you're targeting"
-              hint="The job titles you want next."
+              title="Other roles you'd consider"
+              hint="Private job preferences. These don't appear on your resumes or portfolio."
               count={`${form.targetRoles.length}/${ROLE_LIMITS.maxRoles}`}
               filled={filled("targetRoles")}
             >

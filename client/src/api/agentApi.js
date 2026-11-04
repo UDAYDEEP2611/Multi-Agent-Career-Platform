@@ -54,6 +54,6 @@ export const getResumeSettings = () => api.get("/resume-settings");
 export const updateResumeSettings = (changes) => api.patch("/resume-settings", changes);
 
 // The AI chat on one designed resume: { reply, steps, changed, settings, ai }
-export const sendResumeChat = (designId, message, layout) => api.post(`/resume-chat/${designId}`, { message, layout });
+export const sendResumeChat = (designId, message, layout, sideWidth) => api.post(`/resume-chat/${designId}`, { message, layout, sideWidth });
 // Whether the language model is running: { ai: { available, model } }
 export const getResumeChatStatus = () => api.get("/resume-chat/status");

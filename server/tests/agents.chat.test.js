@@ -428,7 +428,7 @@ test("a design can show only the first few items of a section", async () => {
 
 test("the assistant changes what the resumes show", async () => {
   let { settings } = (await agent.get("/api/resume-settings").expect(200)).body;
-  assert.deepEqual(settings, { limits: { experience: 0, education: 2, projects: 2, certifications: 0 }, extras: [], allSkills: false, columns: {}, hiddenFields: [], skillStyle: "", order: [], rewrites: {}, designs: {} });
+  assert.deepEqual(settings, { limits: { experience: 0, education: 2, projects: 2, certifications: 0 }, extras: [], allSkills: false, columns: {}, hiddenFields: [], skillStyle: "", tweaks: {}, order: [], rewrites: {}, designs: {} });
 
   let body = await say("show all my projects on my resume");
   assert.equal(last(body).agent, "design");
@@ -437,7 +437,7 @@ test("the assistant changes what the resumes show", async () => {
   assert.match(last(body).text, /interests\.$/);
   await say("3 jobs and all skills on my resume");
   ({ settings } = (await agent.get("/api/resume-settings").expect(200)).body);
-  assert.deepEqual(settings, { limits: { experience: 3, education: 2, projects: 0, certifications: 0 }, extras: ["interests"], allSkills: true, columns: {}, hiddenFields: [], skillStyle: "", order: [], rewrites: {}, designs: {} });
+  assert.deepEqual(settings, { limits: { experience: 3, education: 2, projects: 0, certifications: 0 }, extras: ["interests"], allSkills: true, columns: {}, hiddenFields: [], skillStyle: "", tweaks: {}, order: [], rewrites: {}, designs: {} });
 
   // The resume page's own switch
   ({ settings } = (await agent.patch("/api/resume-settings").send({ allSkills: false }).expect(200)).body);

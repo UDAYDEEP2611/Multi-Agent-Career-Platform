@@ -452,8 +452,49 @@
   overflow-wrap: anywhere;
 }
 
-.uuv-draft-save {
-  grid-column: 1 / -1;
+/* The form opens in a scrollable modal, so the form must pass its height on */
+.uuv-draft-form {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+}
+
+.uuv-draft-modal-sub {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--bs-secondary-color);
+  overflow-wrap: anywhere;
+}
+
+.uuv-draft-label {
+  margin-bottom: 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.uuv-draft-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.uuv-draft-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px 5px 12px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  white-space: normal;
+  text-align: start;
+}
+
+.uuv-draft-pill .btn-close {
+  font-size: 0.5rem;
 }
 
 .uuv-chat-meta {

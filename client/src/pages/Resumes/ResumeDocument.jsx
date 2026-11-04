@@ -492,9 +492,8 @@ function nameCap(name, width) {
   return `${Math.floor(width / (longest * 0.7))}px`;
 }
 
-// Under the name: the roles being targeted, else the headline
-const MAX_HEADER_ROLES = 6;
-const headerLine = (data) => (data.leftOffPage?.line ? "" : data.rewrittenLine || (data.leftOffPage?.roles ? [] : data.openTo?.targetRoles || []).map((role) => String(role).trim()).filter(Boolean).slice(0, MAX_HEADER_ROLES).join(" | ") || data.headline);
+// Under the name: the role being targeted, else the headline
+const headerLine = (data) => (data.leftOffPage?.line ? "" : data.rewrittenLine || (data.leftOffPage?.roles ? "" : String(data.openTo?.roleTargeting || "").trim()) || data.headline);
 
 function NameBlock({ data, width = 700 }) {
   const line = headerLine(data);
@@ -516,12 +515,28 @@ const contentHeight = (column) => {
   return last ? last.getBoundingClientRect().bottom - column.getBoundingClientRect().top : 0;
 };
 
+// Sizes changed in the chat, as a share of the design's own (see resumes.css)
+const tweakStyle = ({ margin, gutter, text, spacing }) => ({
+  ...(margin ? { "--rd-margin": `${0.5 * (1 + margin / 100)}in` } : {}),
+  ...(gutter ? { "--rd-gutter": `${0.3 * (1 + gutter / 100)}in` } : {}),
+  ...(text ? { "--rd-text": 1 + text / 100 } : {}),
+  ...(spacing ? { "--rd-spacing": 1 + spacing / 100 } : {})
+});
+
 // settings: what the resume includes (useResumeSettings): how many of each
 // section, which optional sections, and every skill or the key ones
 export default function ResumeDocument({ data: portfolio, design: baseDesign, accent, settings }) {
   const data = forResume(portfolio, settings);
-  const design = settings?.allSkills || settings?.skillStyle || settings?.rewrites?.titles
-    ? { ...baseDesign, allSkills: Boolean(settings.allSkills), skillStyle: settings.skillStyle, sectionTitles: settings.rewrites?.titles }
+  const tweaks = settings?.tweaks || {};
+  const design = settings?.allSkills || settings?.skillStyle || settings?.rewrites?.titles || tweaks.sideShift
+    ? {
+      ...baseDesign,
+      allSkills: Boolean(settings.allSkills),
+      skillStyle: settings.skillStyle,
+      sectionTitles: settings.rewrites?.titles,
+      // Asked for in the chat; a sidebar stays between 20% and 50% of the page
+      sideWidth: tweaks.sideShift ? Math.min(50, Math.max(20, (baseDesign.sideWidth || 32) + tweaks.sideShift)) : baseDesign.sideWidth
+    }
     : baseDesign;
   const color = accent || design.accent;
   const recolor = Boolean(accent) && accent !== design.accent;
@@ -548,7 +563,7 @@ export default function ResumeDocument({ data: portfolio, design: baseDesign, ac
   // a time. Each move is measured and kept only if the resume gets shorter.
   const article = useRef(null);
   const [fontsReady, setFontsReady] = useState(false);
-  const balanceKey = `${design.id}|${fontsReady}|${JSON.stringify(data).length}|${baseSideIds.join()}|${baseMainIds.join()}`;
+  const balanceKey = `${design.id}|${fontsReady}|${JSON.stringify(data).length}|${baseSideIds.join()}|${baseMainIds.join()}|${JSON.stringify(tweaks)}`;
   const [balance, setBalance] = useState({ key: "", moved: [], tried: [], pending: null, before: 0 });
   const current = balance.key === balanceKey ? balance : { key: balanceKey, moved: [], tried: [], pending: null, before: 0 };
   const sideIds = inOrder([...baseSideIds, ...current.moved], settings?.order);
@@ -605,7 +620,8 @@ export default function ResumeDocument({ data: portfolio, design: baseDesign, ac
     "--rd-side-width-number": (design.sideWidth || 32) / 100,
     "--rd-font": isSerif(design.font) ? SERIF : SANS,
     "--rd-head-font": isSerif(design.headFont || design.font) ? SERIF : SANS,
-    "--rd-body": bodySize(portfolio.experiences)
+    "--rd-body": bodySize(portfolio.experiences),
+    ...tweakStyle(tweaks)
   };
 
   const headerContact = !sideIds.includes("contact");

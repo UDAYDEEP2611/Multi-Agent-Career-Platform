@@ -111,7 +111,7 @@ exports.getShowcase = async (req, res) => {
         heroSummaries: await heroSummariesFor(userId, portfolio.summary, headline),
         // What the person is looking for, from Role Details
         openTo: {
-          targetRoles: roles.targetRoles || [],
+          roleTargeting: roles.roleTargeting || "",
           employmentTypes: roles.employmentTypes || [],
           workplaceTypes: roles.workplaceTypes || [],
           industries: roles.industries || [],

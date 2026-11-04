@@ -49,6 +49,7 @@ const HINTS = {
   githubUrl: { label: "GitHub URL" },
   portfolioUrl: { label: "portfolio URL" },
   headline: { label: "headline" },
+  roleTargeting: { label: "role targeting" },
   targetRoles: { label: "roles you're looking for" },
   content: { label: "summary", ask: "What should your professional summary say?" },
   rating: { label: "level (1 to 5)" },
@@ -66,12 +67,12 @@ const SECTIONS = [
   {
     id: "profile", label: "Profile", singular: "profile update", route: "/dashboard/profile",
     model: "Profile", singleton: true,
-    fields: [...PROFILE_CONTACT, "headline", "targetRoles"],
-    paths: { ...Object.fromEntries(PROFILE_CONTACT.map((name) => [name, `contact.${name}`])), headline: "roleDetails.headline", targetRoles: "roleDetails.targetRoles" },
+    fields: [...PROFILE_CONTACT, "headline", "roleTargeting", "targetRoles"],
+    paths: { ...Object.fromEntries(PROFILE_CONTACT.map((name) => [name, `contact.${name}`])), headline: "roleDetails.headline", roleTargeting: "roleDetails.roleTargeting", targetRoles: "roleDetails.targetRoles" },
     // A new profile needs the contact details the profile form requires
     requiredWhenNew: ["firstName", "lastName", "email", "phoneNumber", "addressLine", "country", "stateProvince", "city", "postalCode", "linkedinUrl"],
     keys: [],
-    keywords: /\b(my profile|contact details?|phone(?: number)?|e-?mail|linkedin|github (?:url|link|profile)|portfolio (?:url|link|site)|address|my name is|headline|i live in|(?:looking for|open to|targeting)\b.{0,60}?\b(?:roles?|jobs?|positions?|opportunit(?:y|ies))|target roles?)\b/i,
+    keywords: /\b(my profile|contact details?|phone(?: number)?|e-?mail|linkedin|github (?:url|link|profile)|portfolio (?:url|link|site)|address|my name is|headline|role targeting|target role\b|i live in|(?:looking for|open to|targeting)\b.{0,60}?\b(?:roles?|jobs?|positions?|opportunit(?:y|ies))|target roles?)\b/i,
     describe: (d) => Object.keys(d).length ? `profile: ${Object.keys(d).map((key) => HINTS[key]?.label || key).join(", ")}` : "profile update"
   },
   {

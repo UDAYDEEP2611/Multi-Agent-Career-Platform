@@ -12,6 +12,7 @@ export const DEFAULT_RESUME_SETTINGS = {
   columns: {},
   hiddenFields: [],
   skillStyle: "",
+  tweaks: {},
   order: [],
   rewrites: {},
   designs: {}
@@ -28,6 +29,7 @@ export function settingsFor(settings, designId) {
     columns: { ...(settings.columns || {}), ...(own.columns || {}) },
     hiddenFields: own.hiddenFields || settings.hiddenFields || [],
     skillStyle: own.skillStyle || settings.skillStyle || "",
+    tweaks: { ...(settings.tweaks || {}), ...(own.tweaks || {}) },
     order: own.order?.length ? own.order : settings.order || [],
     // Wording changed for resumes only: the portfolio keeps the original
     rewrites: {

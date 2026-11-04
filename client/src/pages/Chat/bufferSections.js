@@ -1,3 +1,5 @@
+export const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
 // Sections the data entry agent can prepare entries for, by page
 const SECTION_BY_PATH = {
   "/dashboard/profile": "profile",

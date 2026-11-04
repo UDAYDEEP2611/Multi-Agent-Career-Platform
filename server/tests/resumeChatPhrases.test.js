@@ -334,10 +334,10 @@ test("odd requests get a useful reply and never change anything they didn't ask 
 
   const nothing = ["make it one page", "make it pop", "undo", "undo that", "clear it all", "delete everything", "remove everything", "hide all", "remove all", "delete my account", "delete my resume", "drop table users",
     "go back", "yes", "no", "do it", "hide it", "put it back", "remove that one", "never mind", "this is ugly", "i hate this", "something feels off", "not good", "make it better", "make it look professional",
-    "make the font bigger", "use a serif font", "reduce the spacing", "add a photo", "remove my photo", "add languages", "translate to spanish", "download this as pdf", "email this to my boss",
+    "use a serif font", "add a photo", "remove my photo", "add languages", "translate to spanish", "download this as pdf", "email this to my boss",
     "write a better summary", "tailor this to a data engineer job", "add python to my skills", "add a project called zorb", "my job at oracle ended in 2024", "remove the second project", "hide my oldest job", "remove soft skills", "hide skills below 3",
     "what's my gpa", "where did i work", "is this resume good", "what should i improve", "will this pass ATS", "do i know python", "why is education missing", "who are you", "what can you do", "what is the weather", "lol", "asdfghjkl", "???", "123", "<script>alert(1)</script>", "tell me a joke",
-    "black and white", "dark mode", "make the sidebar wider", "remove the sidebar", "one column please", "use a different template", "change the order of sections", "show less", "show more"];
+    "black and white", "dark mode", "remove the sidebar", "one column please", "use a different template", "change the order of sections", "show less", "show more"];
   for (const text of nothing) {
     const { result, saved } = await run(text);
     assert.equal(saved, undefined, `${text} changed something: ${JSON.stringify(saved)}`);

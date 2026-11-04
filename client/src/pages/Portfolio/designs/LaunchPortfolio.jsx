@@ -10,7 +10,7 @@ export default function LaunchPortfolio({ data }) {
   const hero = heroOf(data);
   const email = hero.links.find((link) => link.href.startsWith("mailto:")) || hero.links[0];
   const companies = [...new Set(data.experiences.map((job) => job.organization).filter(Boolean))].slice(0, 6);
-  const open = data.openTo?.targetRoles?.length > 0;
+  const open = Boolean(data.openTo?.roleTargeting);
   const links = hero.links.map((link) => <ContactLink key={link.href} link={link} className="ln-link" />);
 
   return (

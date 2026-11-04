@@ -271,6 +271,13 @@ function createPortfolioMcpServer({ user = null, run = (fn) => fn() } = {}) {
         showFields: z.array(z.string().max(80)).max(100).optional(),
         skillStyle: z.enum(["boxes", "list", "bars", "dots", "inline"]).optional(),
         order: z.array(z.string().max(30)).max(20).optional(),
+        tweaks: z.object({
+          sideShift: z.number().min(-40).max(40).optional(),
+          margin: z.number().min(-100).max(200).optional(),
+          gutter: z.number().min(-100).max(200).optional(),
+          text: z.number().min(-100).max(200).optional(),
+          spacing: z.number().min(-100).max(200).optional()
+        }).optional(),
         rewrite: z.object({
           replace: z.object({ from: z.string().max(1000), to: z.string().max(1000) }).optional(),
           summary: z.string().max(1500).optional(),

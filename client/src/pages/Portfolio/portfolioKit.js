@@ -347,7 +347,7 @@ export function openToLines(openTo) {
   if (!openTo) return [];
   const plain = (list = []) => list.map((text) => ({ text }));
   return [
-    { key: "roles", label: "Looking for", icon: "bi-bullseye", items: plain(openTo.targetRoles) },
+    { key: "roles", label: "Looking for", icon: "bi-bullseye", items: plain(openTo.roleTargeting ? [openTo.roleTargeting] : []) },
     {
       key: "open",
       label: "Open to",

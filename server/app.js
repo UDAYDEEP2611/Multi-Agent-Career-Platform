@@ -41,6 +41,7 @@ const visibilityRoutes = require("./routes/visibilityRoutes");
 const resumeChatRoutes = require("./routes/resumeChatRoutes");
 const accountRoutes = require("./routes/accountRoutes");
 const resumeRoutes = require("./routes/resumeRoutes");
+const contactRoutes = require("./routes/contactRoutes");
 
 // Builds the Express app without connecting to MongoDB or listening.
 // options.sessionStore: replace the MongoDB session store (tests)
@@ -215,6 +216,7 @@ function createApp(options = {}) {
   app.use("/api/resume-chat", resumeChatRoutes);
   app.use("/api/account", accountRoutes);
   app.use("/api/resume", resumeRoutes);
+  app.use("/api/contact", contactRoutes);
 
   // Handle unknown routes
   app.use((req, res) => {

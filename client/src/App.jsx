@@ -10,6 +10,7 @@ import Footer from "./pages/Layout/Footer";
 import Home from "./pages/Home/Home";
 import About from "./pages/Info/About";
 import Services from "./pages/Info/Services";
+import Contact from "./pages/Contact/Contact";
 import Login from "./pages/Auth/Login";
 import Signup from "./pages/Auth/Signup";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
@@ -68,6 +69,7 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/services" element={<Services />} />
+            <Route path="/contact" element={<Contact />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />

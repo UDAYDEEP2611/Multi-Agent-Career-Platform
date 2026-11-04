@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { loginUser } from "../../api/authApi";
+import GoogleSignIn from "./GoogleSignIn";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -57,19 +58,7 @@ export default function Login() {
             </p>
           )}
 
-          <button
-            type="button"
-            className="google-button"
-            disabled
-            title="Google Sign-In coming next"
-          >
-            <span className="google-logo">G</span>
-            Continue with Google
-          </button>
-
-          <div className="auth-divider">
-            <span>Or continue with username/email</span>
-          </div>
+          <GoogleSignIn dividerText="Or continue with username/email" text="signin_with" />
 
           <form onSubmit={handleSubmit}>
             <label htmlFor="identifier">

@@ -14,7 +14,7 @@ exports.getStatus = async (req, res) => {
   res.json({ success: true, ai: { available: Boolean(ai.available), model: ai.model || "" } });
 };
 
-// POST /api/resume-chat/:designId { message, layout }
+// POST /api/resume-chat/:designId { message, layout, sideWidth }
 // The AI chat on one designed resume: the resume customizer agent changes
 // that resume (or all of them, or the portfolio when asked) through MCP.
 // Returns { reply, steps, changed, settings, ai }.
@@ -39,6 +39,8 @@ exports.sendMessage = async (req, res) => {
       text,
       designId,
       layout: ["left", "right", "single"].includes(req.body?.layout) ? req.body.layout : "",
+      // The design's own sidebar width, % of the page
+      sideWidth: Number.isFinite(req.body?.sideWidth) && req.body.sideWidth >= 10 && req.body.sideWidth <= 60 ? req.body.sideWidth : 0,
       llm: ai.available ? createOllamaLlm() : null,
       tools,
       signal: controller.signal

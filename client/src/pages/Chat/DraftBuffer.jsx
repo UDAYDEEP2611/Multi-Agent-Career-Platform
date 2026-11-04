@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useState } from "react";
-import { Alert, Badge, Button, Form, Spinner } from "react-bootstrap";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Alert, Badge, Button, Spinner } from "react-bootstrap";
 
 import { AGENT_EVENTS, confirmDraft, discardDraft, getDrafts, updateDraft } from "../../api/agentApi";
-
-const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+import { MONTHS } from "./bufferSections";
+import DraftEditModal from "./DraftEditModal";
 
 function shown(field, value) {
   if (value === undefined || value === null || value === "") return "—";
@@ -13,48 +13,9 @@ function shown(field, value) {
   return String(value);
 }
 
-// One input per field, in the field's type
-function FieldInput({ field, value, onChange, id }) {
-  if (field.type === "boolean") {
-    return <Form.Check type="switch" id={id} checked={Boolean(value)} onChange={(event) => onChange(event.target.checked)} label={value ? "Yes" : "No"} />;
-  }
-  if (field.type === "enum" || field.type === "month") {
-    const options = field.type === "month" ? MONTHS.map((label, index) => [index + 1, label]) : field.options.map((option) => [option, option]);
-    return (
-      <Form.Select id={id} size="sm" value={value ?? ""} onChange={(event) => onChange(event.target.value === "" ? null : field.type === "month" ? Number(event.target.value) : event.target.value)}>
-        <option value="">—</option>
-        {options.map(([optionValue, label]) => <option key={optionValue} value={optionValue}>{label}</option>)}
-      </Form.Select>
-    );
-  }
-  if (field.type === "list") {
-    return (
-      <Form.Control
-        id={id}
-        size="sm"
-        value={Array.isArray(value) ? value.join(", ") : value ?? ""}
-        placeholder="Separate with commas"
-        onChange={(event) => onChange(event.target.value.split(",").map((item) => item.trim()).filter(Boolean))}
-      />
-    );
-  }
-  if (field.name === "description" || field.name === "summary" || field.name === "content" || field.name === "text") {
-    return <Form.Control id={id} as="textarea" rows={4} size="sm" value={value ?? ""} onChange={(event) => onChange(event.target.value || null)} />;
-  }
-  return (
-    <Form.Control
-      id={id}
-      size="sm"
-      type={field.type === "year" || field.type === "number" ? "number" : field.type === "date" ? "date" : "text"}
-      value={value ?? ""}
-      onChange={(event) => onChange(event.target.value === "" ? null : field.type === "year" || field.type === "number" ? Number(event.target.value) : event.target.value)}
-    />
-  );
-}
-
 function DraftCard({ draft, onConfirmed, onChanged }) {
   const [editing, setEditing] = useState(false);
-  const [values, setValues] = useState(draft.data);
+  const saved = useRef(false);
   const [busy, setBusy] = useState("");
   const [error, setError] = useState(draft.error);
 
@@ -87,7 +48,7 @@ function DraftCard({ draft, onConfirmed, onChanged }) {
         <div className="d-flex flex-wrap gap-2">
           <Button
             size="sm"
-            disabled={Boolean(busy) || editing}
+            disabled={Boolean(busy)}
             onClick={async () => {
               if (await run("confirm", () => confirmDraft(draft.id))) onConfirmed(draft.id);
               else onChanged();
@@ -95,8 +56,8 @@ function DraftCard({ draft, onConfirmed, onChanged }) {
           >
             {busy === "confirm" ? <Spinner size="sm" /> : <><i className="bi bi-check2 me-1" aria-hidden="true" />Confirm & add</>}
           </Button>
-          <Button size="sm" variant="outline-secondary" disabled={Boolean(busy)} onClick={() => setEditing(!editing)}>
-            {editing ? "Cancel" : "Edit"}
+          <Button size="sm" variant="outline-secondary" disabled={Boolean(busy)} onClick={() => setEditing(true)}>
+            <i className="bi bi-pencil me-1" aria-hidden="true" />Edit
           </Button>
           <Button
             size="sm"
@@ -113,46 +74,38 @@ function DraftCard({ draft, onConfirmed, onChanged }) {
 
       {draft.notes.map((note) => <p key={note} className="uuv-draft-note"><i className="bi bi-exclamation-triangle me-1" aria-hidden="true" />{note}</p>)}
 
-      {editing ? (
-        <Form
-          className="uuv-draft-grid mt-3"
-          onSubmit={async (event) => {
-            event.preventDefault();
-            if (await run("save", () => updateDraft(draft.id, values))) {
-              setEditing(false);
-              onChanged();
-            }
-          }}
-        >
-          {draft.fields.map((field) => (
-            <Form.Group key={field.name}>
-              <Form.Label htmlFor={`draft-${draft.id}-${field.name}`} className="small mb-1">
-                {field.label}{field.required && <span className="text-danger"> *</span>}
-              </Form.Label>
-              <FieldInput
-                id={`draft-${draft.id}-${field.name}`}
-                field={field}
-                value={values[field.name]}
-                onChange={(value) => setValues((current) => ({ ...current, [field.name]: value }))}
-              />
-            </Form.Group>
-          ))}
-          <div className="uuv-draft-save">
-            <Button type="submit" size="sm" disabled={Boolean(busy)}>{busy === "save" ? <Spinner size="sm" /> : "Save changes"}</Button>
+      <dl className="uuv-draft-grid mt-3 mb-0">
+        {filled.map((field) => (
+          <div key={field.name}>
+            <dt>{field.label}</dt>
+            <dd>{shown(field, draft.data[field.name])}</dd>
           </div>
-        </Form>
-      ) : (
-        <dl className="uuv-draft-grid mt-3 mb-0">
-          {filled.map((field) => (
-            <div key={field.name}>
-              <dt>{field.label}</dt>
-              <dd>{shown(field, draft.data[field.name])}</dd>
-            </div>
-          ))}
-        </dl>
-      )}
+        ))}
+      </dl>
 
       {error && <Alert variant="danger" className="small mt-3 mb-0">{error} Edit the entry and confirm again.</Alert>}
+
+      <DraftEditModal
+        show={editing}
+        draft={draft}
+        onHide={() => {
+          setEditing(false);
+          // A save that went through before adding failed: show what was saved
+          if (saved.current) onChanged();
+        }}
+        onSave={async (values) => {
+          await updateDraft(draft.id, values);
+          setEditing(false);
+          onChanged();
+        }}
+        onSaveAndAdd={async (values) => {
+          await updateDraft(draft.id, values);
+          saved.current = true;
+          await confirmDraft(draft.id);
+          setEditing(false);
+          onConfirmed(draft.id);
+        }}
+      />
     </div>
   );
 }

@@ -17,12 +17,13 @@ exports.getSettings = async (req, res) => {
 // With designId, one resume design's own changes instead, which also take
 // hideEntries / showEntries (["projects:<id>"]), accent and reset
 exports.updateSettings = async (req, res) => {
-  const { limits, show, hide, allSkills, columns, designId, hideEntries, showEntries, hideFields, showFields, skillStyle, order, rewrite, accent, reset } = req.body || {};
+  const { limits, show, hide, allSkills, columns, designId, hideEntries, showEntries, hideFields, showFields, skillStyle, order, rewrite, tweaks, accent, reset } = req.body || {};
   const list = (value) => value === undefined || (Array.isArray(value) && value.length <= 200 && value.every((item) => typeof item === "string"));
   if ((limits !== undefined && (typeof limits !== "object" || Array.isArray(limits))) || !list(show) || !list(hide) ||
       (columns !== undefined && (!columns || typeof columns !== "object" || Array.isArray(columns))) ||
       !list(hideEntries) || !list(showEntries) || !list(hideFields) || !list(showFields) || !list(order) ||
       (skillStyle !== undefined && typeof skillStyle !== "string") ||
+      (tweaks !== undefined && (!tweaks || typeof tweaks !== "object" || Array.isArray(tweaks))) ||
       (rewrite !== undefined && (!rewrite || typeof rewrite !== "object" || Array.isArray(rewrite))) ||
       (allSkills !== undefined && typeof allSkills !== "boolean") ||
       (designId !== undefined && typeof designId !== "string") ||
@@ -33,7 +34,7 @@ exports.updateSettings = async (req, res) => {
   try {
     const settings = await updateResumeSettings(
       req.session.userId,
-      { limits, show, hide, allSkills, columns, hideEntries, showEntries, hideFields, showFields, skillStyle, order, rewrite, accent, reset },
+      { limits, show, hide, allSkills, columns, hideEntries, showEntries, hideFields, showFields, skillStyle, order, rewrite, tweaks, accent, reset },
       designId || ""
     );
     res.json({ success: true, settings });

@@ -46,6 +46,11 @@ const HERO_VOICES = {
   ide: { words: [14, 22], voice: "A code comment or README tagline: concise and technical." },
   atlas: { words: [18, 28], voice: "An explorer's map legend: terrain covered and routes ahead." },
   slate: { words: [20, 30], voice: "A professional network 'About' opener: clear, credible, approachable." },
+  receipt: { words: [12, 20], voice: "A printed receipt footer: short, itemised and dry, with a light wink." },
+  postcard: { words: [16, 26], voice: "A note on a postcard: warm and first person, still factual." },
+  riso: { words: [12, 20], voice: "A gig poster line: bold, direct and full of energy." },
+  kanban: { words: [16, 26], voice: "A project board description: what is in progress and what gets shipped." },
+  atelier: { words: [14, 22], voice: "A fashion house note: refined and spare, focused on craft." },
 
   // Not a design: the short summary at the top of the designed resumes. Its
   // own angle and facts, the way a resume summary is written.

@@ -1,4 +1,5 @@
 const { StateGraph, Annotation, START, END } = require("@langchain/langgraph");
+const { readLayoutAsks, layoutChanges } = require("./resumeLayout");
 const { planResume, ruleChanges } = require("./designPlanner");
 const { planViaA2A } = require("../../a2a/designerClient");
 const { effectiveResumeSettings } = require("./workspace");
@@ -54,6 +55,7 @@ const asksColour = (text) => /\b(?:make|change|use|recolou?r|turn|set|switch|col
 const COLOUR_WORDS = /\b(colou?r|accent|navy|blue|green|red|teal|purple|violet|pink|orange|amber|gold|black|gr[ae]y|brown|maroon|crimson|#[0-9a-f]{3,6})\b/i;
 // Moving a section between columns: "move Education to the right column"
 const COLUMN_SECTIONS = { ...SECTION_WORDS, summary: /\b(?:summary|profile|objective)\b/i };
+const SECTIONS_NAMED = new RegExp(Object.values(COLUMN_SECTIONS).map((words) => words.source).join("|"), "i");
 const COLUMN_PLACE = /\b(to|in|into|on|onto|at)?\s*(?:the\s+|my\s+)?(left|right|sidebar|side|main|narrower|narrow|smaller|small|wider|wide|bigger|big|larger|large)(?:[- ]?hand)?(\s+(?:column|col|side|sidebar|bar|panel|part|area))?\b/i;
 const MOVE_VERB = /\b(?:move|shift|put|place|keep|send|show|have|want|make|switch|add|like)\b/gi;
 const STAYS_THERE = /\b(?:(?:should|must|can|could|needs? to|has to|have to)\s+)?(?:be|go|goes|stay|stays|sit|sits)\s*$/i;
@@ -149,7 +151,7 @@ const PAGE_PARTS = [
   [/^(?:portfolio|personal website|website)(?: links?| urls?| address)$|^(?:personal )?website$/, ["contact:portfolio"], "your website link"],
   [/^contact(?: details?| info(?:rmation)?| sections?)?$/, ["contact:phone", "contact:email", "contact:linkedin", "contact:github", "contact:location", "contact:portfolio"], "your contact details"],
   [/^(?:professional )?summary(?: sections?)?$|^(?:about me|objective)(?: sections?)?$/, ["page:summary"], "the Summary"],
-  [/^(?:headline|tagline|head ?tag|target(?:ing)? roles?|roles? under my name|line under my name)$/, ["page:line"], "the line under your name"]
+  [/^(?:headline|tagline|head ?tag|target(?:ing)? roles?|role targeting|roles? under my name|line under my name)$/, ["page:line"], "the line under your name"]
 ];
 const pagePartOf = (phrase) => {
   const said = String(phrase).toLowerCase().replace(/^(?:a|an|the|my)\s+/, "").trim();
@@ -201,9 +203,9 @@ const CANT_DO = [
   [/\b(?:order|sequence|arrangement|rearrange|re-?order)\b/i, () => `Tell me which section goes where, like "put Projects before Experience", "move Skills to the top" or "swap Education and Experience".`],
   [/\b(?:languages?|courses?|coursework)\b/i, () => `Resumes don't have that section yet. The ones I can add are ${SECTIONS_AVAILABLE}.`],
   [/\b(?:photos?|pictures?|headshot|avatar|profile pic)\b/i, () => "I can't add or remove a photo here. Some designs include a picture spot: pick one from the resume gallery."],
-  [/\b(?:fonts?|typeface|serif|bold|italics?|underline|text size|font size|name bigger|bigger name|name smaller)\b/i, () => "I can't change fonts or text size yet. Each design has its own, so another design from the gallery is the way to change them."],
+  [/\b(?:fonts?|typeface|serif|bold|italics?|underline|text size|font size|name bigger|bigger name|name smaller)\b/i, () => `I can't change the font itself yet: each design has its own, so another design from the gallery is the way to change it. I can change its size: "make the text bigger" or "font smaller by 5%".`],
   [/\b(?:one|1|single|two|2)[- ]pages?\b|\b(?:shorter|too long|so long|fewer pages)\b/i, () => `I can't force a page count, but I can shorten it: try "only 1 project", "only 2 jobs", or "remove the description from" an entry.`],
-  [/\b(?:spacing|margins?|padding|gaps?|sidebar (?:wider|narrower|bigger|smaller)|(?:wider|narrower) sidebar)\b/i, () => "I can't change spacing or column widths yet. Each design sets its own, so try another from the gallery."],
+  [/\b(?:spacing|margins?|padding|gaps?|sidebar (?:wider|narrower|bigger|smaller)|(?:wider|narrower) sidebar)\b/i, () => `Tell me how it should change: "make the right column wider by 5%", "wider margins", "tighter spacing" or "more gap between the columns".`],
   [/\b(?:one|1|single|two|2) columns?\b|\b(?:remove|without|no) (?:the )?sidebar\b|\b(?:different|another|other|new|change) (?:the )?(?:template|design|layout)\b/i, () => "This resume keeps its design's layout. Pick a one-column or two-column design from the resume gallery."],
   [/\b(?:dark mode|black and white|grayscale|greyscale)\b/i, () => `Resumes print on white, so there's no dark mode. I can change the accent colour: try "make it navy", or "default colour".`],
   [/\b(?:translate|spanish|french|german|hindi|telugu|chinese|japanese)\b/i, () => "I can't translate a resume yet. It uses the wording in your portfolio."],
@@ -602,7 +604,20 @@ function showMoved(plan) {
 
 // Rules: the resume planner's limits, sections and skills, plus entries,
 // columns, scope, reset and colour
+// Sizes first ("increase the right column by 5%"), then whatever else was asked
 function rulePlan(typed) {
+  const sizes = readLayoutAsks(String(typed || ""), SECTIONS_NAMED);
+  if (!sizes) return contentPlan(typed);
+  const whole = String(typed);
+  const others = sizes.rest && /[a-z]{3}/i.test(sizes.rest) ? contentPlan(sizes.rest) : {};
+  return {
+    ...others,
+    layoutAsks: sizes.asks,
+    scope: PORTFOLIO.test(whole) && !/r[eé]sum[eé]/i.test(whole) ? "portfolio" : EVERY_RESUME.test(whole) ? "all" : "this"
+  };
+}
+
+function contentPlan(typed) {
   const said0 = plainOrder(typed);
   if (NEW_ENTRY.test(said0)) return { newEntry: true, scope: "this" };
   if (/^\s*how (?:do|can|should|to)\b/i.test(said0)) return { howTo: true, scope: "this" };
@@ -679,7 +694,7 @@ function rulePlan(typed) {
   }
   if (/\bshow\b.*\bheadline\b.*\b(?:instead|not|rather)\b.*\broles?\b|\b(?:instead of|not)\b.*\broles?\b.*\bheadline\b/i.test(whole)) {
     delete plan.showEntries;
-    pageHide.push([null, ["page:roles"], "your target roles (your headline shows instead)"]);
+    pageHide.push([null, ["page:roles"], "your role targeting (your headline shows instead)"]);
   }
   // "remove my website" is the link on the resume, not a request about the portfolio site
   if ([...pageHide, ...pageShow].length && plan.scope === "portfolio") plan.scope = "this";
@@ -729,7 +744,7 @@ function trainedPlan(text, vocabulary) {
   return { plan, confidence: result.p, label: result.top };
 }
 
-const hasWork = (plan) => Boolean(plan.smallTalk || plan.limits || plan.show?.length || plan.hide?.length || typeof plan.allSkills === "boolean" ||
+const hasWork = (plan) => Boolean(plan.layoutAsks || plan.smallTalk || plan.limits || plan.show?.length || plan.hide?.length || typeof plan.allSkills === "boolean" ||
   plan.hideEntries?.length || plan.showEntries?.length || plan.colour || plan.reset || plan.status || plan.columns || plan.moveAsk || plan.fieldAsk || plan.partAsk || plan.skillStyle || plan.styleAsk || plan.editAsk || plan.order || plan.pageHide || plan.pageShow || plan.clearAccent || plan.offTopic || plan.rewrite || plan.detailsAsk || plan.newEntry || plan.bareAsk || plan.howTo);
 
 const NUMBER_WORDS = { 1: "one", 2: "two", 3: "three", 4: "four", 5: "five", 6: "six", 7: "seven", 8: "eight", 9: "nine", 10: "ten" };
@@ -1014,7 +1029,7 @@ async function answer(text, config) {
 }
 
 async function apply({ text, plan, targets }, config) {
-  const { tools, designId, layout } = config.configurable;
+  const { tools, designId, layout, sideWidth } = config.configurable;
   if (plan.question) return answer(text, config);
   const steps = [];
   if (plan.rewrite) {
@@ -1039,6 +1054,18 @@ async function apply({ text, plan, targets }, config) {
     settingsChanges.order = reordered(shared.designs?.[designId]?.order || shared.order || [], plan.order);
   }
   const orderDone = plan.order ? [orderText(plan.order)] : [];
+  // Sizes: each change builds on what this resume already has
+  let layoutDone = [];
+  let layoutNote = "";
+  if (plan.layoutAsks) {
+    const shared = await tools.call("get_resume_settings");
+    const current = { ...(shared.tweaks || {}), ...(plan.scope === "this" ? shared.designs?.[designId]?.tweaks || {} : {}) };
+    const sizes = layoutChanges(plan.layoutAsks, { current, base: sideWidth || 32, layout, scope: plan.scope });
+    if (plan.scope !== "portfolio" && Object.keys(sizes.tweaks).length) settingsChanges.tweaks = sizes.tweaks;
+    layoutDone = plan.scope === "portfolio" ? [] : sizes.done;
+    layoutNote = sizes.notes.length ? ` ${sizes.notes.join(" ")}` : "";
+    if (plan.scope === "portfolio" && sizes.done.length) layoutNote = " These sizes are only on resumes: ask for it on a resume instead of your portfolio.";
+  }
   // Asked to show a section with nothing in it: it can't appear, so say so
   let emptyNote = "";
   if (settingsChanges.show?.length) {
@@ -1063,7 +1090,7 @@ async function apply({ text, plan, targets }, config) {
       }
     }
     if (done.length) steps.push("Saved with the MCP tool set_entry_visibility (Show in portfolio)");
-    return { result: { done }, steps };
+    return { result: { done, layoutNote }, steps };
   }
 
   if (plan.scope === "all") {
@@ -1076,7 +1103,7 @@ async function apply({ text, plan, targets }, config) {
     if (targets.hide.length || targets.show.length) steps.push("Saved with the MCP tool set_entry_visibility (Show in resume)");
     if (Object.keys(settingsChanges).length) {
       await tools.call("update_resume_settings", settingsChanges);
-      const said = [...describeChanges(settingsChanges), fieldDone, ...pageDone, ...orderDone].filter(Boolean);
+      const said = [...describeChanges(settingsChanges), fieldDone, ...pageDone, ...orderDone, ...layoutDone].filter(Boolean);
       done.push(`on every resume: ${said.join(", ")}`);
       steps.push("Saved for every resume with the MCP tool update_resume_settings");
     }
@@ -1084,7 +1111,7 @@ async function apply({ text, plan, targets }, config) {
       await tools.call("update_resume_settings", { designId, accent: plan.accent });
       done.push("recoloured this resume");
     }
-    return { result: { done, emptyNote }, steps };
+    return { result: { done, emptyNote, layoutNote }, steps };
   }
 
   // This resume only. "All my certifications" also brings back any left off it
@@ -1108,12 +1135,12 @@ async function apply({ text, plan, targets }, config) {
     if (targets.show.length) done.push(`put ${namesOf(targets.show)} back on this resume`);
     if (broughtBack.length) done.push(`put ${namesOf(broughtBack)} back on this resume`);
     if (fieldDone) done.push(fieldDone);
-    done.push(...pageDone, ...orderDone);
+    done.push(...pageDone, ...orderDone, ...layoutDone);
     done.push(...describeChanges(settingsChanges));
     if (plan.accent) done.push("recoloured this resume");
     if (plan.clearAccent) done.push("back to this design's own colour");
   }
-  return { result: { done, oneColumn, emptyNote }, steps };
+  return { result: { done, oneColumn, emptyNote, layoutNote }, steps };
 }
 
 const LABELS = { experience: "jobs", education: "schools", projects: "projects", certifications: "certifications" };
@@ -1143,6 +1170,7 @@ function reply({ text, plan, targets, result }, config) {
   if (plan.offTopic) return { reply: `I only help with this resume, so I can't answer that. Ask me about your portfolio, or tell me what to change.` };
   if (result?.status) return { reply: `${statusText(result.status, result.labels, config.configurable.designId)} Tell me what to change.` };
   const done = result?.done || [];
+  if (!done.length && result?.layoutNote) return { reply: `${result.layoutNote.trim()}${result.layoutNote.includes("?") || result.layoutNote.includes("Try") ? "" : " Nothing changed."}` };
   const moveNote = result?.oneColumn
     ? " This design has one column, so there's no other column to move a section to. Open a two-column design to do that."
     : plan.columns && plan.scope === "portfolio"
@@ -1169,7 +1197,7 @@ function reply({ text, plan, targets, result }, config) {
       reply: `${missing ? missing.trim() : "I couldn't tell what to change."} Try: "hide" and an entry's name, "change AWS to Amazon Web Services", "remove the grade in MS", "skills in boxes", "only 1 project", "show all my certifications", "add interests", "all skills", "move Education to the right column", "make it navy", "hide Docker from every resume" or "reset this resume".`
     };
   }
-  return { reply: `Done: ${done.join("; ")}.${missing}${result?.emptyNote || ""}` };
+  return { reply: `Done: ${done.join("; ")}.${missing}${result?.emptyNote || ""}${result?.layoutNote || ""}` };
 }
 
 const customizerGraph = new StateGraph(State)
@@ -1185,8 +1213,8 @@ const customizerGraph = new StateGraph(State)
   .compile();
 
 // text: the user's message; designId: the resume it's about; tools: MCP client
-async function runResumeCustomizer({ text, designId, layout = "", llm = null, tools, signal }) {
-  const state = await customizerGraph.invoke({ text }, { configurable: { llm, tools, signal, designId, layout }, signal });
+async function runResumeCustomizer({ text, designId, layout = "", sideWidth = 0, llm = null, tools, signal }) {
+  const state = await customizerGraph.invoke({ text }, { configurable: { llm, tools, signal, designId, layout, sideWidth }, signal });
   const changed = Boolean(state.result?.done?.length);
   return { reply: state.reply, steps: state.steps, changed, readAs: state.readAs || "" };
 }

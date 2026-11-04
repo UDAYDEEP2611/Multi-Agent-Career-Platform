@@ -185,24 +185,25 @@ body {
   outline-offset: 1px;
 }
 
-.google-button {
-  width: 100%;
-  height: 42px;
-  border: 1px solid #d2d8e2;
-  background: white;
-  border-radius: 4px;
-  color: #356dca;
+.google-button-box {
+  display: flex;
+  justify-content: center;
+  min-height: 44px;
 }
 
-.google-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+.google-connect label {
+  display: block;
 }
 
-.google-logo {
-  font-weight: bold;
-  margin-right: 8px;
-  color: #4285f4;
+.google-connect-note {
+  margin: 8px 0 12px;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.google-connect-cancel {
+  display: block;
+  margin: 10px auto 0;
 }
 
 .auth-divider {
@@ -549,8 +550,7 @@ body {
   border-bottom: 1px solid #1f2937;
 }
 
-[data-bs-theme="dark"] .auth-card,
-[data-bs-theme="dark"] .google-button {
+[data-bs-theme="dark"] .auth-card {
   background: #111827;
   border-color: #334155;
 }
@@ -561,8 +561,7 @@ body {
   color: #e2e8f0;
 }
 
-[data-bs-theme="dark"] .text-button,
-[data-bs-theme="dark"] .google-button {
+[data-bs-theme="dark"] .text-button {
   color: #8fb4f5;
 }
 
@@ -641,89 +640,10 @@ body {
 }
 
 /* ---------- Footer ---------- */
-/* Footer type follows common product sites (GitHub, Stripe, Vercel):
-   ~14px links and text, ~13px bottom row, small uppercase headings */
-.uuv-footer {
-  background: #0b1120;
-  color: #94a3b8;
-  border-top: 1px solid rgba(148, 163, 184, 0.12);
-  font-size: 0.875rem;
-}
-
-.uuv-footer li {
-  margin-bottom: 0.55rem !important;
-}
-
-.uuv-footer-brand {
-  color: #fff;
-  font-size: 1.15rem;
-  font-weight: 700;
-}
-
-.uuv-footer-slogan {
-  color: #d07be6;
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-}
-
-.uuv-footer-heading {
-  color: #fff;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin-bottom: 0.9rem;
-}
-
-.uuv-footer-text {
-  color: #94a3b8;
-  font-size: 0.875rem;
-  line-height: 1.65;
-}
-
-.uuv-footer-intro {
-  max-width: 36ch;
-}
-
-.uuv-footer-link {
-  font-size: 0.875rem;
-  color: #cbd5e1;
-  text-decoration: none;
-  transition: color 0.15s ease;
-}
-
-.uuv-footer-link:hover,
-.uuv-footer-link:focus-visible {
-  color: #fff;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-.uuv-footer-services .bi {
-  color: #a78bfa;
-}
-
-.uuv-footer-bottom {
-  border-top: 1px solid rgba(148, 163, 184, 0.18);
-}
-
-.uuv-footer-bottom,
-.uuv-footer-bottom .uuv-footer-text,
-.uuv-footer-bottom .uuv-footer-link {
-  font-size: 0.8125rem;
-}
-
 /* Lets a flex child shrink below its content, so text-truncate can work
    (Bootstrap 5 has no such utility) */
 .min-w-0 {
   min-width: 0;
-}
-
-.uuv-footer-author {
-  color: #fff;
-  font-weight: 600;
 }
 
 /* ---------- About & Services ---------- */

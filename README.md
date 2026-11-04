@@ -45,11 +45,11 @@ Record your career once, then reuse it everywhere:
 - Recommendations from people you've worked with
 - Separate switches for showing an entry in your portfolio or on your resumes
 
-### 40 portfolio designs
+### 45 portfolio designs
 
-View your portfolio in 40 designs, each in light and dark mode, grouped into Minimal, Creative, Classic, Playful, Developer, and Professional. You can also create a custom version in chat, for example: "Make a dark green Slate called Forest and hide projects".
+View your portfolio in 45 designs, each in light and dark mode, grouped into Minimal, Creative, Classic, Playful, Developer, and Professional. You can also create a custom version in chat, for example: "Make a dark green Slate called Forest and hide projects".
 
-### 22 resume designs
+### 28 resume designs
 
 Choose from one-column and two-column designs, change the colour, choose what each resume shows, and save it as a PDF.
 
@@ -263,7 +263,9 @@ Add these to `server/.env` as needed:
 | `USER_STORAGE_LIMIT_MB` | Upload storage per user | Total divided by `MAX_USERS` |
 | `A2A_REVIEWER_PORT` | ATS Reviewer port | `5051` |
 | `A2A_DESIGNER_PORT` | Portfolio Designer port | `5052` |
+| `GOOGLE_CLIENT_ID` | Sign in with Google (the button is hidden until it's set) | Not set |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `MAIL_FROM` | Email delivery | Not set |
+| `CONTACT_EMAIL` | Where Contact Us messages are sent | `rajprasadverse@gmail.com` |
 | `ANTHROPIC_API_KEY`, `ANTHROPIC_MODEL` | AI check for skills | Not set |
 
 ## Useful commands
@@ -313,7 +315,7 @@ This project runs locally and has no public demo yet. Hosting it will require a 
 
 ## Author
 
-Created by **Sai Uday R Udumula**.
+Created by **UltraUnityVerse Core**.
 
 ## License
 

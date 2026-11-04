@@ -12,6 +12,14 @@ export const registerUser = (data) =>
 export const loginUser = (data) =>
   authApi.post("/login", data);
 
+// Whether Google sign-in is set up: { clientId } ("" when it isn't)
+export const getGoogleConfig = () =>
+  authApi.get("/google/config");
+
+// data: { credential, password? }
+export const googleSignIn = (data) =>
+  authApi.post("/google", data);
+
 export const getCurrentUser = () =>
   authApi.get("/me");
 

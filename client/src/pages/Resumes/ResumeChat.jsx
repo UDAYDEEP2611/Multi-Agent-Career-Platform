@@ -86,7 +86,7 @@ export default function ResumeChat({ show, onHide, design, data, hiddenEntries =
     setSending(true);
     setMessages((current) => [...current, { role: "user", text: clean }]);
     try {
-      const { data: result } = await sendResumeChat(design.id, clean, design.layout);
+      const { data: result } = await sendResumeChat(design.id, clean, design.layout, design.sideWidth);
       if (result.ai) setAi(result.ai);
       setMessages((current) => [...current, { role: "assistant", text: result.reply, steps: result.steps, changed: result.changed, readAs: result.readAs }]);
       onSettings(result.settings);
@@ -132,7 +132,7 @@ export default function ResumeChat({ show, onHide, design, data, hiddenEntries =
         {!messages.length && (
           <div className="rd-chat-intro">
             <h3>What should this resume show?</h3>
-            <p>Hide or bring back any entry by its name or what it uses, change how many jobs and projects it lists, remove one detail like a grade, draw skills in boxes, add sections, move a section to the other column, or recolour it.</p>
+            <p>Hide or bring back any entry by its name or what it uses, change how many jobs and projects it lists, remove one detail like a grade, draw skills in boxes, add sections, move a section to the other column, change column widths, margins, text size or spacing, or recolour it.</p>
             <p className="rd-chat-scope"><i className="bi bi-info-circle" aria-hidden="true" /> Only this resume changes, unless you say "all my resumes" or "my portfolio".</p>
           </div>
         )}

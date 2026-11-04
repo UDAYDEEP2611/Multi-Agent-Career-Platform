@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { registerUser } from "../../api/authApi";
+import GoogleSignIn from "./GoogleSignIn";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -65,6 +66,8 @@ export default function Signup() {
         </p>
 
         <div className="auth-card">
+          <GoogleSignIn dividerText="Or sign up with email" text="signup_with" />
+
           <form onSubmit={handleSubmit}>
             <label htmlFor="username">Username</label>
             <input

@@ -91,6 +91,7 @@ const LABELS = {
   linkedinUrl: ["linkedin", "linkedin url"],
   portfolioUrl: ["portfolio", "portfolio url", "personal website"],
   headline: ["headline", "tagline"],
+  roleTargeting: ["role targeting", "target role", "targeting role"],
   targetRoles: ["target roles", "roles", "looking for", "open to"]
 };
 

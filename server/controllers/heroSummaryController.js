@@ -51,7 +51,7 @@ async function loadSource(userId) {
   return {
     source,
     headline: roles.headline?.trim() || source.experiences[0]?.title || "",
-    targetRoles: roles.targetRoles || []
+    targetRoles: roles.roleTargeting ? [roles.roleTargeting] : []
   };
 }
 

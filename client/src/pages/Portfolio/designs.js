@@ -38,6 +38,11 @@ import CircuitPortfolio from "./designs/CircuitPortfolio";
 import IdePortfolio from "./designs/IdePortfolio";
 import AtlasPortfolio from "./designs/AtlasPortfolio";
 import SlatePortfolio from "./designs/SlatePortfolio";
+import ReceiptPortfolio from "./designs/ReceiptPortfolio";
+import PostcardPortfolio from "./designs/PostcardPortfolio";
+import RisoPortfolio from "./designs/RisoPortfolio";
+import KanbanPortfolio from "./designs/KanbanPortfolio";
+import AtelierPortfolio from "./designs/AtelierPortfolio";
 
 // The portfolio designs, in gallery order. Every one has a light and a dark
 // mode; `tags` drive the gallery filter.
@@ -81,7 +86,12 @@ export const DESIGNS = [
   { id: "circuit", name: "Circuit", tagline: "A circuit board with your name on the chip", tags: ["Developer"], Component: CircuitPortfolio },
   { id: "ide", name: "Code Editor", tagline: "A file explorer, line numbers and one file per section", tags: ["Developer"], Component: IdePortfolio },
   { id: "atlas", name: "Atlas", tagline: "A contour map with a compass and route waypoints", tags: ["Creative"], Component: AtlasPortfolio },
-  { id: "slate", name: "Slate", tagline: "A clean professional profile with a cover banner", tags: ["Professional", "Minimal"], Component: SlatePortfolio }
+  { id: "slate", name: "Slate", tagline: "A clean professional profile with a cover banner", tags: ["Professional", "Minimal"], Component: SlatePortfolio },
+  { id: "receipt", name: "Receipt", tagline: "A long till receipt with line items and a barcode", tags: ["Playful", "Minimal"], Component: ReceiptPortfolio },
+  { id: "postcard", name: "Postcard", tagline: "Airmail stripes, a stamp and a handwritten hello", tags: ["Classic", "Playful"], Component: PostcardPortfolio },
+  { id: "riso", name: "Riso", tagline: "A risograph print with overlapping shapes and halftone dots", tags: ["Creative"], Component: RisoPortfolio },
+  { id: "kanban", name: "Kanban", tagline: "A project board with each section as a column of cards", tags: ["Developer", "Professional"], Component: KanbanPortfolio },
+  { id: "atelier", name: "Atelier", tagline: "A fashion lookbook with an oversized italic name", tags: ["Minimal", "Classic"], Component: AtelierPortfolio }
 ];
 
 // Every design needs its own id (it is the URL) and its own name

@@ -52,6 +52,7 @@ test("role details are cleaned and saved", async () => {
 
   const { body } = await agent.patch("/api/profile/roles").send({
     headline: "  AI/ML Engineer building LLM agents  ",
+    roleTargeting: "  Generative   AI Engineer ",
     targetRoles: ["Generative AI Engineer", " machine  learning engineer ", "Machine Learning Engineer", ""],
     employmentTypes: ["W2", "Full-time", "W2"],
     workplaceTypes: ["Remote", "On-site"],
@@ -62,6 +63,7 @@ test("role details are cleaned and saved", async () => {
 
   const roles = body.profile.roleDetails;
   assert.equal(roles.headline, "AI/ML Engineer building LLM agents");
+  assert.equal(roles.roleTargeting, "Generative AI Engineer");
   // Spaces collapsed, blanks and case-insensitive duplicates dropped
   assert.deepEqual(roles.targetRoles, ["Generative AI Engineer", "machine learning engineer"]);
   // Choices keep their listed order
@@ -92,4 +94,7 @@ test("role details enforce the limits and the fixed choices", async () => {
   await agent.patch("/api/profile/roles").send({ targetRoles: ["x".repeat(81)] }).expect(400);
   await agent.patch("/api/profile/roles").send({ salary: 100 }).expect(400);
   await agent.patch("/api/profile/roles").send({ targetRoles: "AI Engineer" }).expect(400);
+  // Role targeting is one role, not a list
+  await agent.patch("/api/profile/roles").send({ roleTargeting: ["AI Engineer", "ML Engineer"] }).expect(400);
+  await agent.patch("/api/profile/roles").send({ roleTargeting: "x".repeat(81) }).expect(400);
 });

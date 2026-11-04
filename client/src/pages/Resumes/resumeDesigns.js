@@ -141,6 +141,40 @@ export const RESUME_DESIGNS = [
     id: "ruby", name: "Ruby Line", tagline: "A red top rule and a dense one-page layout", tags: ["One column", "Minimal", "ATS friendly"],
     layout: "single", header: "plain", topRule: true, avatar: "none", heading: "accent", skills: "inline", entries: "standard",
     accent: "#b91c1c", font: "\"Open Sans\", sans-serif", headFont: "\"Open Sans\", sans-serif"
+  },
+  {
+    id: "sage", name: "Sage", tagline: "A soft sage column with serif headings and skill tags", tags: ["Two column", "Classic"],
+    layout: "left", sideWidth: 32, header: "plain", avatar: "circle", avatarInSide: true, heading: "serif", skills: "tags", entries: "standard",
+    side: ["contact", "skills", "education", "interests"],
+    accent: "#3f6b4f", sideBg: "#e6efe6", sideInk: "#26372c", font: "\"DM Sans\", sans-serif", headFont: "\"Fraunces\", serif"
+  },
+  {
+    id: "terracotta", name: "Terracotta", tagline: "A clay name band over a warm cream column", tags: ["Two column", "Creative"],
+    layout: "right", sideWidth: 32, header: "band", avatar: "none", heading: "lines", skills: "dots", entries: "standard",
+    side: ["contact", "skills", "certifications", "interests"],
+    accent: "#b4532a", band: "#b4532a", sideBg: "#f8efe4", sideInk: "#40291c", font: "\"Open Sans\", sans-serif", headFont: "\"Bricolage Grotesque\", sans-serif"
+  },
+  {
+    id: "scholar", name: "Scholar", tagline: "An academic one-pager with dates down the left", tags: ["One column", "Classic", "ATS friendly"],
+    layout: "single", header: "centered", avatar: "none", heading: "underline", skills: "inline", entries: "dates",
+    accent: "#7f1d1d", font: "\"Libre Baskerville\", Georgia, serif", headFont: "\"Cormorant Garamond\", serif"
+  },
+  {
+    id: "plum", name: "Plum", tagline: "A deep plum banner with tabbed headings and skill bars", tags: ["Two column", "Bold"],
+    layout: "left", sideWidth: 32, header: "banner", headerDark: true, avatar: "none", heading: "tab", skills: "bars", entries: "standard",
+    side: ["contact", "skills", "education", "certifications"],
+    accent: "#6b2158", band: "#4a1740", sideBg: "#f7eff5", sideInk: "#34152d", font: SANS, headFont: "\"Sora\", sans-serif"
+  },
+  {
+    id: "meridian", name: "Meridian", tagline: "Initials badge, side-barred headings and a career timeline", tags: ["One column", "Modern"],
+    layout: "single", header: "split", avatar: "square", heading: "bar", skills: "tags", entries: "timeline",
+    accent: "#4338ca", font: SANS, headFont: "\"Outfit\", sans-serif"
+  },
+  {
+    id: "onyx", name: "Onyx", tagline: "A black sidebar with gold headings and serif type", tags: ["Two column", "Executive"],
+    layout: "left", sideWidth: 33, header: "side", avatar: "none", heading: "rule", skills: "list", entries: "standard",
+    side: ["contact", "skills", "education", "certifications"],
+    accent: "#a67c1e", sideBg: "#15151a", sideInk: "#efe7d3", font: "\"Open Sans\", sans-serif", headFont: "\"Playfair Display\", serif"
   }
 ];
 
