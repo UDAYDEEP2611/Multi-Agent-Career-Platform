@@ -332,7 +332,7 @@ async function applyRewrite(plan, config, steps) {
   if (ask.generate) {
     if (!llm) return { answer: `Writing new text needs the language model, which isn't running (start Ollama). You can give me the text yourself: "change my summary to ...". Nothing changed.` };
     const { entries } = await tools.call("list_entries");
-    const named = ask.generate === "entry" && entries.filter((entry) => nameScore(entry.label, keywordsOf(ask.phrase).join(" ")) >= 0.5).sort((a, b) => nameScore(b.label, ask.phrase) - nameScore(a.label, ask.phrase))[0];
+    const named = ask.generate === "entry" && entries.filter((entry) => nameScore(entry.label, keywordsOf(ask.phrase).join(" ")) > 0.5).sort((a, b) => nameScore(b.label, ask.phrase) - nameScore(a.label, ask.phrase))[0];
     if (ask.generate === "entry" && !named) return { answer: `I couldn't find "${ask.phrase}" on your resume, so nothing changed.` };
     const lists = { experience: source.experiences, projects: source.projects, education: source.educations };
     const item = named && [...(lists[named.section] || []), ...(source.experiences || []).flatMap((job) => job.projects || [])].find((row) => String(row.id) === String(named.id));
@@ -428,6 +428,15 @@ const CORE_SECTIONS = ["experience", "education", "projects", "certifications", 
 const FILLER = new Set("the my a an all every each of this that these those from on in and with using use used".split(" "));
 const keywordsOf = (phrase) => String(phrase).toLowerCase().replace(/[^a-z0-9+#.]+/g, " ").split(" ")
   .filter((word) => word.length > 1 && !FILLER.has(word) && !Object.values(SECTION_WORDS).some((pattern) => pattern.test(word)));
+
+// Nothing here but colour talk: "the colour", "dark red", "make it navy". "Red Cross" has a name in it
+const noNameIn = (phrase) => keywordsOf(String(phrase).replace(new RegExp(COLOUR_WORDS.source, "gi"), " ")).every((word) => /^(?:it|make|turn|set|change|paint|switch|dark|light|deep|bright|pale|resume|cv|theme|please)$/.test(word));
+const isColourTalk = (phrase) => COLOUR_WORDS.test(phrase) && noNameIn(phrase);
+// "change it to red" recolours; "change Red Cross to American Red Cross" rewords
+const saysRecolour = (said) => {
+  const asked = said.match(/\b(?:change|rename|replace|edit|update|reword|rewrite)\b(.*?)\b(?:to|with|as)\b(.*)$/i);
+  return Boolean(asked) && COLOUR_WORDS.test(`${asked[1]} ${asked[2]}`) && noNameIn(asked[1]) && noNameIn(asked[2]);
+};
 
 // "hide the Blood Bank project and the AWS certification" -> ["the Blood Bank project", "the AWS certification"]
 function entryPhrases(part) {
@@ -618,7 +627,7 @@ function rulePlan(typed) {
   const skillStyle = part ? undefined : skillStyleIn(said);
   const text = part ? part.rest : said;
   // Rewording isn't hiding: never guess an entry out of "change it to ..."
-  if (!move && !part && !skillStyle && EDIT_WORDING.test(said) && !COLOUR_WORDS.test(said)) return { editAsk: true, scope: "this" };
+  if (!move && !part && !skillStyle && EDIT_WORDING.test(said) && !saysRecolour(said)) return { editAsk: true, scope: "this" };
   const plan = { ...planResume(text) };
   // The planner assumes a section named is a section wanted. It has to be asked
   // for: "patents should go" must never add them
@@ -645,8 +654,8 @@ function rulePlan(typed) {
   const wholeSection = (phrase) => sectionOnly(phrase) && CORE_SECTIONS.some((id) => SECTION_WORDS[id].test(phrase));
   const hidePart = text.match(new RegExp(`${HIDE.source}(.*?)(?=${SHOW.source}|$)`, "i"));
   const showPart = text.match(new RegExp(`${SHOW.source}(.*?)(?=${HIDE.source}|$)`, "i"));
-  const hideEntries = entryPhrases(hidePart?.[1]).filter((phrase) => (!sectionOnly(phrase) || wholeSection(phrase)) && !COLOUR_WORDS.test(phrase));
-  const showEntries = entryPhrases(showPart?.[1]).filter((phrase) => !sectionOnly(phrase) && !/^all\b|\bskills\b/i.test(phrase) && !COLOUR_WORDS.test(phrase));
+  const hideEntries = entryPhrases(hidePart?.[1]).filter((phrase) => (!sectionOnly(phrase) || wholeSection(phrase)) && !isColourTalk(phrase));
+  const showEntries = entryPhrases(showPart?.[1]).filter((phrase) => !sectionOnly(phrase) && !/^all\b|\bskills\b/i.test(phrase) && !isColourTalk(phrase));
   if (hideEntries.length) plan.hideEntries = hideEntries;
   if (showEntries.length) plan.showEntries = showEntries;
   // Names aren't colours: "hide the Black Friday project" keeps its colour
@@ -826,7 +835,7 @@ const keyOf = (entry) => `${isProject(entry) ? "projects" : entry.section}:${ent
 
 // How well an entry's name matches what the user wrote (0 to 1)
 function nameScore(label, phrase) {
-  const words = (value) => new Set(String(value).toLowerCase().replace(/[^a-z0-9+#]+/g, " ").split(" ").filter((word) => word.length > 1 && !["the", "my", "project", "job", "at", "of", "in", "and"].includes(word)));
+  const words = (value) => new Set(String(value).toLowerCase().replace(/[^a-z0-9+#]+/g, " ").split(" ").filter((word) => word.length > 1 && !["the", "my", "project", "job", "at", "of", "in", "into", "and"].includes(word)));
   const asked = words(phrase);
   if (!asked.size) return 0;
   const have = words(label);
@@ -848,8 +857,8 @@ async function resolvePhrases(plan, entries, config, steps) {
       // Every entry of a section, on this resume only: the switches stay as they are
       if (section && (plan.anySection || (designId && plan.scope === "this"))) found = pool;
     } else {
-      // 1. By name
-      const byName = (list) => list.map((entry) => ({ entry, score: nameScore(entry.label, keywordsOf(phrase).join(" ")) })).filter((item) => item.score >= 0.5).sort((a, b) => b.score - a.score);
+      // 1. By name, on most of its words: "Food Bank" isn't "Blood Bank"
+      const byName = (list) => list.map((entry) => ({ entry, score: nameScore(entry.label, keywordsOf(phrase).join(" ")) })).filter((item) => item.score > 0.5).sort((a, b) => b.score - a.score);
       // A section word is only a hint: "my UltraUnityVerse work" is still that project
       const inPool = byName(pool);
       const ranked = inPool.length ? inPool : byName(entries);
@@ -857,10 +866,10 @@ async function resolvePhrases(plan, entries, config, steps) {
       // 2. By meaning: hybrid RAG and GraphRAG ("projects that use LangGraph")
       if (!found.length) {
         const search = await tools.call("search_portfolio", { query: phrase, k: 6 });
-        // A match must mention one of the words asked for, so an unknown name
+        // A match must mention most of the words asked for, so an unknown name
         // never hides whatever ranked first
         const asked = keywordsOf(phrase);
-        const relevant = search.results.filter((doc) => asked.some((word) => String(doc.text || "").toLowerCase().includes(word)));
+        const relevant = search.results.filter((doc) => asked.filter((word) => String(doc.text || "").toLowerCase().includes(word)).length > asked.length / 2);
         const ids = new Set(relevant.map((doc) => {
           const [kind, id] = String(doc.id || "").split(":");
           return DOC_SECTION[kind] && id ? `${DOC_SECTION[kind]}:${id}` : null;
@@ -884,7 +893,7 @@ async function resolveFieldAsk(plan, entries, config, steps) {
   const pool = entries.filter((entry) => fields.some((id) => has(entry, id)));
   const found = phrases.length ? await resolvePhrases({ hideEntries: phrases, anySection: true, scope: plan.scope }, pool, config, steps) : { hide: pool, missing: [] };
   // Named, but that entry doesn't have this detail: say so instead of "not found"
-  const noDetail = found.missing.flatMap((phrase) => entries.filter((entry) => nameScore(entry.label, keywordsOf(phrase).join(" ")) >= 0.5).slice(0, 1).map((entry) => entry.label));
+  const noDetail = found.missing.flatMap((phrase) => entries.filter((entry) => nameScore(entry.label, keywordsOf(phrase).join(" ")) > 0.5).slice(0, 1).map((entry) => entry.label));
   return {
     fieldChange: {
       hide,
@@ -896,7 +905,7 @@ async function resolveFieldAsk(plan, entries, config, steps) {
       // Named and left off this resume: "remaining keep it" brings it back
       restore: hide && phrases.some((phrase) => keywordsOf(phrase).length) ? found.hide : []
     },
-    missing: found.missing.filter((phrase) => !entries.some((entry) => nameScore(entry.label, keywordsOf(phrase).join(" ")) >= 0.5))
+    missing: found.missing.filter((phrase) => !entries.some((entry) => nameScore(entry.label, keywordsOf(phrase).join(" ")) > 0.5))
   };
 }
 
@@ -1128,7 +1137,7 @@ function reply({ text, plan, targets, result }, config) {
   if (plan.detailsAsk) {
     const { section } = plan.detailsAsk;
     const name = FIELD_SECTION_NAMES[section];
-    if (name) return { reply: `From ${name} I can remove ${listOfWords(detailsOf(section))}. For example "remove the dates from ${name}", or "only the title in ${name}". Nothing changed yet.` };
+    if (name) return { reply: `From ${name} I can remove ${listOfWords(detailsOf(section))}. For example "remove the dates from ${name}", or "only the title in ${name}". To take off the whole section, say "remove ${name}". Nothing changed yet.` };
     return { reply: `Which detail? ${Object.entries(FIELD_SECTION_NAMES).map(([id, title]) => `${title}: ${listOfWords(detailsOf(id).map((word) => word.replace(/^the /, "")))}`).join(". ")}. Also your phone, email, LinkedIn, GitHub, location, website, summary and the line under your name. Nothing changed yet.` };
   }
   if (plan.offTopic) return { reply: `I only help with this resume, so I can't answer that. Ask me about your portfolio, or tell me what to change.` };

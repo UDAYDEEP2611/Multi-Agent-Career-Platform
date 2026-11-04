@@ -377,3 +377,51 @@ test("badly worded messages do what they ask, and nothing else", async () => {
   }
   assert.deepEqual(wrong, []);
 });
+
+test("names that share a word or a colour are still names, and details aren't the section", async () => {
+  const rows = [
+    { section: "projects", id: id("a"), label: "Blood Bank Management System" }, { section: "volunteering", id: id("b"), label: "Teacher at Food Bank" },
+    { section: "volunteering", id: id("c"), label: "First Aid Volunteer at Red Cross" }
+  ];
+  const ask = async (text, list = rows) => {
+    const calls = [];
+    const tools = {
+      call: async (name, args) => {
+        calls.push([name, args]);
+        if (name === "list_entries") return { entries: list };
+        if (name === "get_resume_settings") return { limits: {}, extras: ["volunteering"], allSkills: false, designs: { navy: {} } };
+        if (name === "search_portfolio") return { results: [{ id: `project:${id("a")}`, text: "Blood Bank Management System" }], mode: "keyword" };
+        if (name === "get_resume_text") return { summary: "", volunteering: [{ id: id("c"), organization: "Red Cross" }] };
+        return {};
+      }
+    };
+    const result = await runResumeCustomizer({ text, designId: "navy", layout: "left", llm: null, tools });
+    return { reply: result.reply, saved: calls.find(([name]) => name === "update_resume_settings")?.[1] };
+  };
+  const onlyProject = rows.slice(0, 1);
+
+  // One shared word isn't a name: nothing else comes off instead
+  assert.deepEqual((await ask("remove the dates from Food Bank")).saved.hideFields, [`volunteering:${id("b")}:dates`]);
+  assert.deepEqual((await ask("remove the dates from Blood Bank")).saved.hideFields, [`projects:${id("a")}:dates`]);
+  for (const text of ["remove the dates from Food Bank", "hide Food Bank", "put back Food Bank"]) assert.equal((await ask(text, onlyProject)).saved, undefined, text);
+  assert.match((await ask("hide Food Bank", onlyProject)).reply, /Food Bank/);
+
+  // Colour words inside names
+  assert.deepEqual((await ask("hide Red Cross")).saved.hideEntries, [`volunteering:${id("c")}`]);
+  assert.deepEqual((await ask("hide the Red Cross")).saved.hideEntries, [`volunteering:${id("c")}`]);
+  assert.deepEqual((await ask("put back Red Cross")).saved.showEntries, [`volunteering:${id("c")}`]);
+  const reworded = (await ask("change Red Cross to American Red Cross")).saved;
+  assert.deepEqual(reworded.rewrite, { replace: { from: "Red Cross", to: "American Red Cross" } });
+  assert.equal(reworded.accent, undefined);
+
+  // Real colour requests still recolour
+  for (const text of ["make it red", "red", "change it to red", "change the colour to red", "change the resume to dark red"]) assert.ok((await ask(text)).saved?.accent, text);
+
+  // Details of a section are a question; the section itself still comes off
+  const { reply, saved } = await ask("remove details from volunteer details");
+  assert.equal(saved, undefined);
+  assert.match(reply, /From Volunteering I can remove .*"remove Volunteering"\. Nothing changed yet/);
+  assert.deepEqual((await ask("remove volunteering")).saved.hide, ["volunteering"]);
+  assert.deepEqual((await ask("remove the volunteer section")).saved.hide, ["volunteering"]);
+  assert.equal((await ask("remove the dates from volunteer details")).saved.hideFields.length, 2);
+});
