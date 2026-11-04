@@ -286,7 +286,7 @@ Run these from `server/`:
 
 There are two ways to put this online.
 
-**Public pages on GitHub Pages.** This shows Home, About, Services and Contact, with a notice in place of anything that needs the server. Publish it from `client/` with `npm run deploy`.
+**A public demo on GitHub Pages.** This shows the public pages and a demo with three made-up accounts: Thessaly Varnhouse, Corvin Ashdale and the admin Amberson Gabby. The demo reads `client/src/demo/demoData.json`, needs no server, and doesn't save changes. Normal builds leave all of this out. Publish it from `client/` with `npm run deploy`.
 
 **The full app on Render with MongoDB Atlas.** `render.yaml` hosts the server and the app together, so sign-in cookies work in every browser.
 
@@ -332,7 +332,7 @@ docs/images/   README screenshots
 
 ## Project status
 
-The public pages are live at [udaydeep2611.github.io/Multi-Agent-Career-Platform](https://udaydeep2611.github.io/Multi-Agent-Career-Platform/). The full app runs locally and is ready to host; see [Host it online](#host-it-online).
+The public demo is live at [udaydeep2611.github.io/Multi-Agent-Career-Platform](https://udaydeep2611.github.io/Multi-Agent-Career-Platform/). The full app runs locally and is ready to host; see [Host it online](#host-it-online).
 
 ## Author
 

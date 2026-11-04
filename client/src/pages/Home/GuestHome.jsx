@@ -31,8 +31,8 @@ export default function GuestHome() {
       <div className="d-flex gap-3 justify-content-center flex-wrap">
         {STATIC_SITE ? (
           <>
-            <Link to="/services" className="btn btn-primary btn-lg px-4">See what it does</Link>
-            <Link to="/contact" className="btn btn-outline-secondary btn-lg px-4">Contact us</Link>
+            <Link to="/login" className="btn btn-primary btn-lg px-4">Try the demo</Link>
+            <Link to="/services" className="btn btn-outline-secondary btn-lg px-4">See what it does</Link>
           </>
         ) : (
           <>

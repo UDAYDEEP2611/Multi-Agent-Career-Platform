@@ -1,6 +1,6 @@
 
 import axios from "axios";
-import { API_URL, STATIC_SITE } from "../staticSite";
+import { API_URL } from "../staticSite";
 
 const authApi = axios.create({
   baseURL: `${API_URL}/api/auth`,
@@ -21,9 +21,8 @@ export const getGoogleConfig = () =>
 export const googleSignIn = (data) =>
   authApi.post("/google", data);
 
-// With no server behind the site, nobody is signed in
 export const getCurrentUser = () =>
-  STATIC_SITE ? Promise.reject(new Error("No server on this site")) : authApi.get("/me");
+  authApi.get("/me");
 
 export const logoutUser = () =>
   authApi.post("/logout");

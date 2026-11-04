@@ -56,6 +56,8 @@ import AdminSystem from "./pages/Admin/AdminSystem";
 import AdminAudit from "./pages/Admin/AdminAudit";
 
 import PreviewOnly from "./pages/Common/PreviewOnly";
+import DemoBanner from "./demo/DemoBanner";
+import DemoLogin from "./demo/DemoLogin";
 import { STATIC_SITE } from "./staticSite";
 
 import "./App.css";
@@ -65,6 +67,7 @@ export default function App() {
     <BrowserRouter basename={import.meta.env.BASE_URL}>
       <div className="uuv-app">
         <Navbar />
+        {STATIC_SITE && <DemoBanner />}
 
         <div className="uuv-app-body">
           <RouteErrorBoundary>
@@ -73,8 +76,8 @@ export default function App() {
             <Route path="/about" element={<About />} />
             <Route path="/services" element={<Services />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/login" element={STATIC_SITE ? <PreviewOnly /> : <Login />} />
-            <Route path="/signup" element={STATIC_SITE ? <PreviewOnly /> : <Signup />} />
+            <Route path="/login" element={STATIC_SITE ? <DemoLogin /> : <Login />} />
+            <Route path="/signup" element={STATIC_SITE ? <DemoLogin /> : <Signup />} />
             <Route path="/forgot-password" element={STATIC_SITE ? <PreviewOnly /> : <ForgotPassword />} />
             <Route path="/reset-password" element={STATIC_SITE ? <PreviewOnly /> : <ResetPassword />} />
             <Route

@@ -69,7 +69,7 @@ export default function Contact() {
           ) : STATIC_SITE ? (
             <div>
               <h2 className="uuv-contact-form-title">Send us a message</h2>
-              <p>This public preview can't send messages. Email us at <a href={CONTACT.emailUrl}>{CONTACT.email}</a>.</p>
+              <p>This public demo can't send messages. Email us at <a href={CONTACT.emailUrl}>{CONTACT.email}</a>.</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit}>
