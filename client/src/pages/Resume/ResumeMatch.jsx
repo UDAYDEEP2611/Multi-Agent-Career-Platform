@@ -7,6 +7,8 @@ import MatchQuickLook from "./MatchQuickLook";
 import ResumeFilePreview from "./ResumeFilePreview";
 import "./resume.css";
 import { JobPilotIcon } from "../Layout/FeatureIcons";
+import DemoJobPicker from "../../demo/DemoJobPicker";
+import { STATIC_SITE } from "../../staticSite";
 
 const JOB_DESCRIPTION_MAX = 8000;
 const ACCEPT = ".pdf,.docx,.rtf,.txt,.md";
@@ -82,7 +84,7 @@ export default function ResumeMatch() {
         <div>
           <h2 className="mb-1"><JobPilotIcon className="me-2" />JobPilot</h2>
           <p className="text-muted mb-0">
-            Upload any resume and paste a job description to see how well they match: keywords, responsibilities and qualifications, for any kind of role.
+            {STATIC_SITE ? "Paste a job description or try a sample job" : "Upload any resume and paste a job description"} to see how well they match: keywords, responsibilities and qualifications, for any kind of role.
           </p>
         </div>
         <Button as={Link} to="/dashboard/resume-match/logs" variant="outline-primary">
@@ -95,6 +97,17 @@ export default function ResumeMatch() {
           <Form onSubmit={compare}>
             <Row className="g-3">
               <Col lg={4}>
+                {STATIC_SITE ? (
+                  <DemoJobPicker
+                    file={file}
+                    onFile={setFile}
+                    onPreview={() => setPreview(true)}
+                    onJob={(description) => {
+                      setJobDescription(description);
+                      setResult(null);
+                    }}
+                  />
+                ) : (
                 <Form.Group controlId="match-resume-file">
                   <Form.Label className="small fw-semibold">Resume</Form.Label>
                   <Form.Control
@@ -114,6 +127,7 @@ export default function ResumeMatch() {
                     </div>
                   )}
                 </Form.Group>
+                )}
               </Col>
               <Col lg={8}>
                 <Row className="g-2 mb-2">

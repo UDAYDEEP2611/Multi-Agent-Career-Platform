@@ -70,6 +70,9 @@ export const compareResume = (file, jobDescription, signal, details = {}) => {
   return api.post("/compare", form, { signal });
 };
 
+// The demo person's resume, as { fileName, text } (GitHub Pages demo only)
+export const getDemoResume = () => api.get("/demo-resume");
+
 // { title, company } read from a pasted job description, to fill the form
 export const getJobInfo = (jobDescription, signal) => api.post("/job-info", { jobDescription }, { signal });
 

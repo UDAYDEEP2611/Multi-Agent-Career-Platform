@@ -37,7 +37,7 @@ export function resetStore(account) {
   }
 }
 
-const newId = () => Array.from(crypto.getRandomValues(new Uint8Array(12)), (byte) => byte.toString(16).padStart(2, "0")).join("");
+export const newId = () => Array.from(crypto.getRandomValues(new Uint8Array(12)), (byte) => byte.toString(16).padStart(2, "0")).join("");
 const idOf = (entry) => String(entry._id ?? entry.id);
 const singular = (name) => ({ experiences: "experience", educations: "education", skills: "skill", volunteering: "volunteering", media: "media", patents: "patent" })[name] || name.replace(/s$/, "");
 const isId = (text) => /^[a-f0-9]{24}$/i.test(text);
@@ -262,7 +262,7 @@ const nestedProject = (project, source) => ({
   link: ""
 });
 
-function gather(store, audience) {
+export function gather(store, audience) {
   const shown = (entry) => (audience === "portfolio" ? entry?.showInPortfolio !== false : entry?.showInResume !== false);
   const list = (name) => (store[`/api/${name}`]?.[name] || []).filter(shown);
   const contact = store["/api/profile"]?.profile?.contact || {};

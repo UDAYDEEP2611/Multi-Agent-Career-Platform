@@ -1,5 +1,6 @@
 import { AxiosError } from "axios";
 
+import { jobPilotReply } from "./demoJobLogs";
 import { readReply, resetStore, saveStore, storeFor, writeEntry, writeRecord } from "./demoStore";
 
 // The GitHub Pages build has no server. Its demo accounts answer from
@@ -67,6 +68,13 @@ export async function demoAdapter(config) {
   }
 
   const store = await storeFor(account);
+
+  const jobPilot = await jobPilotReply(store, account, method, path, config.data);
+  if (jobPilot) {
+    saveStore(account);
+    if (jobPilot.status !== 200) refuse(jobPilot.status, jobPilot.body.message);
+    return reply(200, jobPilot.body);
+  }
 
   if (method === "get") {
     const found = readReply(store, path, address.search);
