@@ -5,19 +5,19 @@ import { runResumeCustomizer } from "../../../../server/services/agents/resumeCu
 import { specOf } from "../../../../server/services/agents/sectionSpecs";
 import { runSupervisor } from "../../../../server/services/agents/supervisor";
 import { modelCard } from "../../../../server/services/nlp/trainedModels";
+import { createOllamaLlm, ollamaStatus } from "./shims/ollama";
 import { newId } from "../demoStore";
 import { openAccount } from "./current";
 import * as workspace from "./workspace";
 
 // The server's agent endpoints, in the browser: the same LangGraph agents
-// and MCP tools, on the demo data. There is no language model in the demo,
-// so the agents use their rules and trained models, as the full app does
-// when Ollama isn't running.
+// and MCP tools, on the demo data. The language model is the AI proxy when
+// the build has one (see shims/ollama.js); otherwise the agents use their
+// rules and trained models, as the full app does when Ollama isn't running.
 
 const AGENTS = ["entry", "design", "qa"];
 const MAX_MESSAGES = 120;
 const MAX_TEXT = 2000;
-const AI = { available: false, model: "", message: "The demo runs the agents on their rules and trained models, without a language model." };
 
 const ok = (body, status = 200) => ({ status, body: { success: true, ...body } });
 const fail = (status, message) => ({ status, body: { success: false, message } });
@@ -46,9 +46,10 @@ async function chatMessage(store, account, body) {
 
   const chat = thread(store);
   const intentModel = intentModelFor(store, account);
+  const ai = await ollamaStatus();
   const tools = await toolsFor(account, store);
   try {
-    const result = await runSupervisor({ text, mode, pending: chat.pending, context: { path }, llm: null, tools, intentModel });
+    const result = await runSupervisor({ text, mode, pending: chat.pending, context: { path }, llm: ai.available ? createOllamaLlm() : null, tools, intentModel });
     const now = new Date().toISOString();
     const added = [
       { id: newId(), role: "user", agent: "", text: body?.rerunAs ? `↻ ${text}` : text, createdAt: now },
@@ -90,7 +91,7 @@ async function chatMessage(store, account, body) {
         designs: result.changed,
         designId: result.designId
       },
-      ai: AI,
+      ai: { available: ai.available, model: ai.model },
       intentModel: modelSummary(intentModel)
     });
   } finally {
@@ -140,6 +141,7 @@ async function resumeChat(store, account, designId, body) {
   if (!/^[a-z][a-z0-9-]{0,40}$/.test(designId)) return fail(400, "Unknown resume design");
   if (!text || text.length > 1000) return fail(400, "Send a message of 1–1000 characters");
 
+  const ai = await ollamaStatus();
   const tools = await toolsFor(account, store);
   try {
     const result = await runResumeCustomizer({
@@ -147,10 +149,10 @@ async function resumeChat(store, account, designId, body) {
       designId,
       layout: ["left", "right", "single"].includes(body?.layout) ? body.layout : "",
       sideWidth: Number.isFinite(body?.sideWidth) && body.sideWidth >= 10 && body.sideWidth <= 60 ? body.sideWidth : 0,
-      llm: null,
+      llm: ai.available ? createOllamaLlm() : null,
       tools
     });
-    return ok({ ...result, settings: await workspace.getResumeSettings(), ai: { available: false, model: "" } });
+    return ok({ ...result, settings: await workspace.getResumeSettings(), ai: { available: ai.available, model: ai.model } });
   } finally {
     await tools.close().catch(() => {});
   }
@@ -181,7 +183,8 @@ export async function agentReply(store, account, method, path, search, body) {
   if (area === "chat") {
     if (method === "get" && !id) {
       const chat = thread(store);
-      return ok({ messages: chat.messages.map(messageView), pending: pendingView(chat.pending), ai: AI, intentModel: modelSummary(intentModelFor(store, account)) });
+      const ai = await ollamaStatus();
+      return ok({ messages: chat.messages.map(messageView), pending: pendingView(chat.pending), ai: { available: ai.available, model: ai.model, message: ai.message }, intentModel: modelSummary(intentModelFor(store, account)) });
     }
     if (method === "get" && id === "model") return modelMetrics(store, account);
     if (method === "post" && id === "message") return chatMessage(store, account, body);
@@ -193,7 +196,10 @@ export async function agentReply(store, account, method, path, search, body) {
   }
 
   if (area === "resume-chat") {
-    if (method === "get" && id === "status") return ok({ ai: { available: false, model: "" } });
+    if (method === "get" && id === "status") {
+      const ai = await ollamaStatus();
+      return ok({ ai: { available: ai.available, model: ai.model } });
+    }
     if (method === "post" && id) return resumeChat(store, account, id, body);
   }
 

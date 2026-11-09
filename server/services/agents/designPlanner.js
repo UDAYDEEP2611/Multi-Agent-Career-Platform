@@ -306,4 +306,4 @@ function planResume(request) {
   return changes;
 }
 
-module.exports = { planDesign, ruleChanges, sanitizePlan, resolveOrder, planResume, isResumeRequest };
+module.exports = { planDesign, ruleChanges, sanitizePlan, resolveOrder, planResume, isResumeRequest, prompts: { PLAN_PROMPT } };

@@ -1244,7 +1244,9 @@ test("confirmation answers re-score a saved comparison; unknown questions are ig
   await agent.delete(`/api/resume/match-logs/${logId}`).expect(200);
 });
 
-test("the Job Match Assessment follows the scoring framework", async () => {
+test("the Job Match Assessment follows the scoring framework", async (t) => {
+  // "Jan 2024 – Present" counts up to today, so today is fixed
+  t.mock.timers.enable({ apis: ["Date"], now: new Date(2026, 9, 15) });
   const { parseResumeText } = require("../services/resume/resumeParser");
   const { compareResume, capabilitiesOf } = require("../services/match/resumeCompare");
   const { resume } = parseResumeText([

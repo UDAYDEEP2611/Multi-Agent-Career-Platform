@@ -1219,4 +1219,4 @@ async function runResumeCustomizer({ text, designId, layout = "", sideWidth = 0,
   return { reply: state.reply, steps: state.steps, changed, readAs: state.readAs || "" };
 }
 
-module.exports = { runResumeCustomizer, rulePlan, keywordsOf, customizerGraph };
+module.exports = { runResumeCustomizer, rulePlan, keywordsOf, customizerGraph, prompts: { ANSWER_PROMPT, WRITE_PROMPT, MODEL_PROMPT } };

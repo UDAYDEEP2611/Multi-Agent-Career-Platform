@@ -231,4 +231,4 @@ async function runSupervisor({ text, mode = "auto", pending = null, context = {}
   };
 }
 
-module.exports = { runSupervisor, supervisorGraph };
+module.exports = { runSupervisor, supervisorGraph, prompts: { ROUTE_PROMPT } };

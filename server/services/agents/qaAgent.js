@@ -85,4 +85,4 @@ async function runQa({ question, llm = null, tools, signal }) {
   return { reply: state.answer, sources: state.sources, links: state.links, steps: state.steps };
 }
 
-module.exports = { runQa, qaGraph };
+module.exports = { runQa, qaGraph, prompts: { ANSWER_PROMPT } };

@@ -286,7 +286,15 @@ Run these from `server/`:
 
 There are two ways to put this online.
 
-**A public demo on GitHub Pages.** This shows the public pages and a demo with four made-up accounts: Thessaly Varnhouse (AI engineer), Corvin Ashdale (software engineer), Lila Moore (fashion architect) and the admin Amberson Gabby. The demo reads `client/src/demo/demoData.json` and needs no server. Visitors can edit the data, and their changes stay in their own browser until they reset the demo. JobPilot runs the server's rule-based matching in the browser on the demo person's resume, with sample results in the Log Book. The assistant (data entry, design and Q&A agents) and each resume's chat run in the browser too: the same LangGraph agents, MCP server and trained models, with the server's database files swapped for versions that use the demo data (see `client/vite.config.js` and `client/src/demo/agents/`). The demo has no language model, so the agents use their rules and trained models, as the full app does without Ollama. AI writing, CV Maker and uploads need the full app. Normal builds leave all of this out. Publish it from `client/` with `npm run deploy`.
+**A public demo on GitHub Pages.** This shows the public pages and a demo with four made-up accounts: Thessaly Varnhouse (AI engineer), Corvin Ashdale (software engineer), Lila Moore (fashion architect) and the admin Amberson Gabby. The demo reads `client/src/demo/demoData.json` and needs no server. Visitors can edit the data, and their changes stay in their own browser until they reset the demo. JobPilot runs the server's rule-based matching in the browser on the demo person's resume, with sample results in the Log Book. The assistant (data entry, design and Q&A agents) and each resume's chat run in the browser too: the same LangGraph agents, MCP server and trained models, with the server's database files swapped for versions that use the demo data (see `client/vite.config.js` and `client/src/demo/agents/`). Without a language model the agents use their rules and trained models, as the full app does without Ollama; the AI proxy below adds one. AI writing, CV Maker and uploads need the full app. Normal builds leave all of this out. Publish it from `client/` with `npm run deploy`.
+
+**A language model for the demo (optional).** `ai-proxy/` is a Cloudflare Worker that runs the demo agents' model calls on Workers AI (Mistral Small 3.1 by default). It runs only the agents' own prompts, listed by hash in `ai-proxy/src/allowedPrompts.json`, so it can't be used as a general-purpose free model. It accepts calls only from the sites in `ALLOWED_ORIGINS`, limits each visitor to 12 calls a minute and everyone together to 120, and caps request size. If it's down, over its limits or answers badly, the agents fall back to their rules. To set it up:
+
+1. Create a free [Cloudflare](https://dash.cloudflare.com/sign-up) account.
+2. From `ai-proxy/`, run `npm install`, then `npx wrangler login`, then `npm run deploy`. Deploying rebuilds the prompt list and runs the tests first. Note the `https://uuv-ai-proxy.<your-subdomain>.workers.dev` address it prints.
+3. Put that address in `client/.env.production` as `VITE_AI_PROXY_URL=https://...`, then publish the demo again with `npm run deploy` from `client/`.
+
+Workers AI's free allowance is 10,000 neurons a day. When it runs out, the agents use their rules until the next day. Change the model with `MODEL` in `ai-proxy/wrangler.toml`.
 
 **The full app on Render with MongoDB Atlas.** `render.yaml` hosts the server and the app together, so sign-in cookies work in every browser.
 
@@ -309,7 +317,9 @@ client/
   public/      Logo and icons
   src/
     api/       API calls
+    demo/      The GitHub Pages demo: its data, and the agents in the browser
     pages/     App pages, portfolio designs, and resume designs
+ai-proxy/      Cloudflare Worker: the demo's language model (optional)
 server/
   a2a/         ATS Reviewer and Portfolio Designer agents
   controllers/ Request handlers

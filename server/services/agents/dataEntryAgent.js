@@ -656,4 +656,4 @@ async function runDataEntry({ text, pending = null, section = null, llm = null, 
   };
 }
 
-module.exports = { runDataEntry, dataEntryGraph, ruleExtract, grounded, groundedValues, MONTHS };
+module.exports = { runDataEntry, dataEntryGraph, ruleExtract, grounded, groundedValues, MONTHS, prompts: { SECTION_PROMPT, EXTRACT_PROMPT } };
