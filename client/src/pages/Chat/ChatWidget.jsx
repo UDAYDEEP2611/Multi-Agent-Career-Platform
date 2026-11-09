@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 import { AGENT_EVENTS, announce, clearChat, getChat, sendChatFeedback, sendChatMessage } from "../../api/agentApi";
+import { STATIC_SITE } from "../../staticSite";
 import "./chat.css";
 
 // What a correction can say the message was for
@@ -212,7 +213,7 @@ export default function ChatWidget({ raised = false }) {
                 <h2 className="uuv-chat-title">Assistant</h2>
                 <p className="uuv-chat-status">
                   <span className={`uuv-chat-dot ${ai?.available ? "is-on" : ""}`} aria-hidden="true" />
-                  {ai ? (ai.available ? `Agents online · ${ai.model}` : "Agents on rules and ML (start Ollama for the AI)") : "Connecting…"}
+                  {ai ? (ai.available ? `Agents online · ${ai.model}` : (STATIC_SITE ? "Agents on rules and ML (demo, no language model)" : "Agents on rules and ML (start Ollama for the AI)")) : "Connecting…"}
                   {intentModel && <span title={`Intent model ${intentModel.version}: ${intentModel.examples} training examples, ${intentModel.corrections} of them your corrections. Accuracy is 5-fold cross-validated.`}> · intent {Math.round(intentModel.accuracy * 100)}%</span>}
                 </p>
               </div>

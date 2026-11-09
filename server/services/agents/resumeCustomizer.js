@@ -2,7 +2,7 @@ const { StateGraph, Annotation, START, END } = require("@langchain/langgraph");
 const { readLayoutAsks, layoutChanges } = require("./resumeLayout");
 const { planResume, ruleChanges } = require("./designPlanner");
 const { planViaA2A } = require("../../a2a/designerClient");
-const { effectiveResumeSettings } = require("./workspace");
+const { effectiveResumeSettings } = require("./resumeSettingsRules");
 const { analyze, describeCorrections, fixCommandWords, isKnownWord } = require("../nlp/wordAnalyzer");
 const { predict } = require("../nlp/trainedModels");
 

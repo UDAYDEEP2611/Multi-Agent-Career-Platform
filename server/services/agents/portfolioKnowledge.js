@@ -100,7 +100,9 @@ function bm25Index(docs) {
 const embedModel = () => process.env.OLLAMA_EMBED_MODEL || "nomic-embed-text";
 const baseUrl = () => (process.env.OLLAMA_BASE_URL || "http://127.0.0.1:11434").replace(/\/$/, "");
 
+// OLLAMA_EMBED_MODEL=off: keyword search only, without asking Ollama
 async function embeddingsAvailable() {
+  if (embedModel() === "off") return false;
   try {
     const response = await fetch(`${baseUrl()}/api/tags`, { signal: AbortSignal.timeout(1500) });
     const { models = [] } = await response.json();

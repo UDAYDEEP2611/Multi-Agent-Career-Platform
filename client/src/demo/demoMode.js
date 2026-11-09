@@ -48,6 +48,22 @@ const parseBody = (data) => {
   }
 };
 
+// The agents (chat, resume chat, buffer zone, custom designs) run the
+// server's own code in the browser. Loaded on first use: it's large.
+const AGENT_AREAS = ["chat", "resume-chat", "resume-settings", "drafts", "custom-designs"];
+async function agentReply(store, account, method, path, search, data) {
+  if (!AGENT_AREAS.includes(path.split("/")[2])) return null;
+  // Written out so normal builds leave the agents out altogether
+  const agents = import.meta.env.VITE_STATIC_SITE === "true" ? await import("./agents/agentReplies") : null;
+  if (!agents) return null;
+  try {
+    return await agents.agentReply(store, account, method, path, search, parseBody(data));
+  } catch (error) {
+    console.error("Demo agent error:", error);
+    return { status: 500, body: { success: false, message: "The agents couldn't answer that. Please try again." } };
+  }
+}
+
 // Stands in for the network on every API client
 export async function demoAdapter(config) {
   const url = config.baseURL ? `${config.baseURL.replace(/\/$/, "")}/${String(config.url || "").replace(/^\//, "")}` : config.url;
@@ -68,6 +84,13 @@ export async function demoAdapter(config) {
   }
 
   const store = await storeFor(account);
+
+  const agents = await agentReply(store, account, method, path, address.search, config.data);
+  if (agents) {
+    saveStore(account);
+    if (agents.status >= 400) refuse(agents.status, agents.body.message);
+    return reply(agents.status, agents.body);
+  }
 
   const jobPilot = await jobPilotReply(store, account, method, path, config.data);
   if (jobPilot) {

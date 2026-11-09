@@ -170,17 +170,6 @@ export function writeRecord(store, method, path, body) {
     return { success: true, entry: found.entry };
   }
 
-  if (path === "/api/resume-settings" && method === "patch") {
-    const settings = store[path].settings;
-    const { designId, reset, ...changes } = body || {};
-    if (designId) {
-      settings.designs[designId] = reset ? {} : mergeSettings(settings.designs[designId] || {}, changes, settings);
-    } else {
-      Object.assign(settings, mergeSettings(settings, changes, settings));
-    }
-    return { success: true, settings };
-  }
-
   if (path.startsWith("/api/portfolio/hero-summaries")) {
     const designId = path.split("/")[4];
     const saved = (store.heroSummaries ||= {});
@@ -203,41 +192,6 @@ export function writeRecord(store, method, path, body) {
   }
 
   return null;
-}
-
-function mergeSettings(current, changes, base) {
-  const next = { ...current };
-  const limits = { ...current.limits };
-  for (const [id, count] of Object.entries(changes.limits || {})) {
-    if (count === null) limits[id] = 0;
-    else if (count === "default") delete limits[id];
-    else limits[id] = count;
-  }
-  if (changes.limits) next.limits = limits;
-  if (changes.show?.length || changes.hide?.length) {
-    const extras = new Set(current.extras || base.extras);
-    (changes.show || []).forEach((id) => extras.add(id));
-    (changes.hide || []).forEach((id) => extras.delete(id));
-    next.extras = [...extras];
-  }
-  if (changes.hideFields?.length || changes.showFields?.length) {
-    const fields = new Set(current.hiddenFields || base.hiddenFields);
-    (changes.hideFields || []).forEach((id) => fields.add(id));
-    (changes.showFields || []).forEach((id) => fields.delete(id));
-    next.hiddenFields = [...fields];
-  }
-  if (changes.hideEntries?.length || changes.showEntries?.length) {
-    const entries = new Set(current.hiddenEntries);
-    (changes.hideEntries || []).forEach((id) => entries.add(id));
-    (changes.showEntries || []).forEach((id) => entries.delete(id));
-    next.hiddenEntries = [...entries];
-  }
-  if (changes.columns) next.columns = { ...current.columns, ...changes.columns };
-  if (changes.tweaks) next.tweaks = { ...current.tweaks, ...changes.tweaks };
-  for (const key of ["allSkills", "skillStyle", "order", "accent"]) {
-    if (changes[key] !== undefined) next[key] = changes[key];
-  }
-  return next;
 }
 
 // The combined views: the same shapes the server's resume data builder makes
@@ -263,7 +217,8 @@ const nestedProject = (project, source) => ({
 });
 
 export function gather(store, audience) {
-  const shown = (entry) => (audience === "portfolio" ? entry?.showInPortfolio !== false : entry?.showInResume !== false);
+  // Left out, the audience keeps every entry
+  const shown = (entry) => (audience === "portfolio" ? entry?.showInPortfolio !== false : audience === "resume" ? entry?.showInResume !== false : true);
   const list = (name) => (store[`/api/${name}`]?.[name] || []).filter(shown);
   const contact = store["/api/profile"]?.profile?.contact || {};
   const account = store["/api/auth/me"].user;

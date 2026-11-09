@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Offcanvas } from "react-bootstrap";
 
 import { AGENT_EVENTS, announce, getResumeChatStatus, sendResumeChat } from "../../api/agentApi";
+import { STATIC_SITE } from "../../staticSite";
 import "./resumeChat.css";
 
 // The conversation is kept per design for this browser tab
@@ -122,7 +123,7 @@ export default function ResumeChat({ show, onHide, design, data, hiddenEntries =
           <h2 id="rd-chat-title" className="rd-chat-title">Customize {design.name}</h2>
           <p className={`rd-chat-status ${ai?.available ? "is-live" : ""}`}>
             <span className="rd-chat-dot" aria-hidden="true" />
-            {!ai ? "Connecting…" : ai.available ? `AI agent · ${ai.model}` : "Built-in rules · start Ollama for free-form requests"}
+            {!ai ? "Connecting…" : ai.available ? `AI agent · ${ai.model}` : (STATIC_SITE ? "Built-in rules · demo, no language model" : "Built-in rules · start Ollama for free-form requests")}
           </p>
         </div>
         <button type="button" className="btn-close" onClick={onHide} aria-label="Close" />

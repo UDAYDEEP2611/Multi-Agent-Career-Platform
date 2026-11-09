@@ -1,5 +1,3 @@
-const path = require("node:path");
-
 // The word analyzer: reads a chat message the way a person would, typos,
 // shorthand and ALL CAPS included, before any agent decides what it means.
 //
@@ -19,7 +17,7 @@ const path = require("node:path");
 
 let lexicon = { freq: {}, lemma: {}, stop: [] };
 try {
-  lexicon = require(path.join(__dirname, "lexicon.json"));
+  lexicon = require("./lexicon.json");
 } catch {
   // Without the dictionary: shorthand and product words still work
 }

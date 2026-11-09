@@ -1,5 +1,4 @@
-const fs = require("node:fs");
-const path = require("node:path");
+const { readModelFile } = require("./modelFiles");
 const { featuresOf } = require("./wordAnalyzer");
 
 // Runs the models trained in ml/train.py (Complement Naive Bayes, logistic
@@ -17,7 +16,7 @@ function modelFor(task) {
   if (loaded.has(task)) return loaded.get(task);
   let model = null;
   try {
-    model = JSON.parse(fs.readFileSync(path.join(__dirname, "models", `${task}.json`), "utf8"));
+    model = readModelFile(task);
     model.index = new Map(model.features.map((feature, index) => [feature, index]));
   } catch {
     model = null;
@@ -80,7 +79,7 @@ function predict(task, text, options) {
 // What was trained, and how it scored
 function modelCard() {
   try {
-    return JSON.parse(fs.readFileSync(path.join(__dirname, "models", "model-card.json"), "utf8"));
+    return readModelFile("model-card");
   } catch {
     return null;
   }

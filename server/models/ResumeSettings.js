@@ -1,19 +1,11 @@
 const mongoose = require("mongoose");
 const { userModel } = require("../utils/userDatabase");
 
-// What the designed resumes include, for every resume design. By default a
-// resume keeps to the essentials: every job (each trimmed to its best
-// bullets), the top or latest two schools and projects, every certification, and
-// the key skills. The user changes it by asking the assistant ("show all my
-// projects on my resume", "2 jobs on my resume"). A limit of 0 means all.
-const RESUME_LIMIT_DEFAULTS = { experience: 0, education: 2, projects: 2, certifications: 0 };
-const RESUME_EXTRAS = ["achievements", "volunteering", "publications", "patents", "interests", "recommendations"];
-// Sections that can move between a two-column resume's columns, and where to.
-// left / right are the page's sides; side / main are the columns, wherever the design puts them
-const RESUME_COLUMN_SECTIONS = ["summary", "skills", "experience", "education", "projects", "certifications", ...RESUME_EXTRAS];
-const RESUME_COLUMN_PLACES = ["left", "right", "side", "main"];
-const RESUME_SKILL_STYLES = ["boxes", "list", "bars", "dots", "inline"];
+const { RESUME_LIMIT_DEFAULTS, RESUME_EXTRAS, RESUME_SKILL_STYLES, ...options } = require("./resumeSettingsOptions");
 
+// What the designed resumes include, for every resume design (the choices
+// and defaults are in resumeSettingsOptions.js). The user changes it by asking
+// the assistant ("show all my projects on my resume", "2 jobs on my resume").
 const resumeSettingsSchema = new mongoose.Schema(
   {
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true, unique: true },
@@ -76,6 +68,6 @@ const resumeSettingsSchema = new mongoose.Schema(
 module.exports = userModel("ResumeSettings", resumeSettingsSchema);
 module.exports.RESUME_LIMIT_DEFAULTS = RESUME_LIMIT_DEFAULTS;
 module.exports.RESUME_EXTRAS = RESUME_EXTRAS;
-module.exports.RESUME_COLUMN_SECTIONS = RESUME_COLUMN_SECTIONS;
-module.exports.RESUME_COLUMN_PLACES = RESUME_COLUMN_PLACES;
+module.exports.RESUME_COLUMN_SECTIONS = options.RESUME_COLUMN_SECTIONS;
+module.exports.RESUME_COLUMN_PLACES = options.RESUME_COLUMN_PLACES;
 module.exports.RESUME_SKILL_STYLES = RESUME_SKILL_STYLES;

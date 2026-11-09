@@ -4,6 +4,7 @@ const CustomDesign = require("../../models/CustomDesign");
 const { callController } = require("../../utils/callController");
 const { specOf, coerceAll } = require("./sectionSpecs");
 const { designById, SECTIONS } = require("./designCatalog");
+const { resumeSettingsView, effectiveResumeSettings, changedResumeSettings } = require("./resumeSettingsRules");
 
 // What the agents (through MCP) and the pages (through REST) change on the
 // user's behalf: the buffer zone of prepared entries, and custom designs.
@@ -177,208 +178,23 @@ async function confirmSingleton(session, section, data) {
 }
 
 // ---- Resume settings -------------------------------------------------------
-
-const plain = (value) => (value instanceof Map ? Object.fromEntries(value) : JSON.parse(JSON.stringify(value || {})));
-
-function overrideView(override = {}) {
-  const view = { hiddenEntries: override.hiddenEntries || [], accent: override.accent || "" };
-  const limits = plain(override.limits);
-  if (Object.keys(limits).length) view.limits = limits;
-  if (Array.isArray(override.extras)) view.extras = override.extras;
-  if (typeof override.allSkills === "boolean") view.allSkills = override.allSkills;
-  const columns = plain(override.columns);
-  if (Object.keys(columns).length) view.columns = columns;
-  if (Array.isArray(override.hiddenFields)) view.hiddenFields = override.hiddenFields;
-  if (override.skillStyle) view.skillStyle = override.skillStyle;
-  if (override.tweaks && Object.keys(override.tweaks).length) view.tweaks = override.tweaks;
-  if (override.order?.length) view.order = override.order;
-  if (override.rewrites && Object.keys(override.rewrites).length) view.rewrites = override.rewrites;
-  return view;
-}
-
-function resumeSettingsView(doc) {
-  const { RESUME_LIMIT_DEFAULTS } = require("../../models/ResumeSettings");
-  const limits = doc?.limits ? { ...RESUME_LIMIT_DEFAULTS, ...JSON.parse(JSON.stringify(doc.limits)) } : { ...RESUME_LIMIT_DEFAULTS };
-  const designs = Object.fromEntries(Object.entries(plain(doc?.designs)).map(([id, override]) => [id, overrideView(override)]));
-  return { limits, extras: doc?.extras || [], allSkills: Boolean(doc?.allSkills), columns: plain(doc?.columns), hiddenFields: doc?.hiddenFields || [], skillStyle: doc?.skillStyle || "", tweaks: doc?.tweaks || {}, order: doc?.order || [], rewrites: doc?.rewrites || {}, designs };
-}
-
-// Wording for every resume, with one resume's own on top
-function mergedRewrites(shared = {}, own = {}) {
-  return {
-    ...shared,
-    ...own,
-    replace: [...(shared.replace || []), ...(own.replace || [])],
-    contact: { ...(shared.contact || {}), ...(own.contact || {}) },
-    titles: { ...(shared.titles || {}), ...(own.titles || {}) }
-  };
-}
-
-// One design's settings: the shared ones with its own changes on top
-function effectiveResumeSettings(settings, designId) {
-  const override = settings.designs?.[designId] || {};
-  return {
-    limits: { ...settings.limits, ...(override.limits || {}) },
-    extras: override.extras || settings.extras,
-    allSkills: override.allSkills ?? settings.allSkills,
-    columns: { ...(settings.columns || {}), ...(override.columns || {}) },
-    hiddenFields: override.hiddenFields || settings.hiddenFields || [],
-    skillStyle: override.skillStyle || settings.skillStyle || "",
-    tweaks: { ...(settings.tweaks || {}), ...(override.tweaks || {}) },
-    order: override.order?.length ? override.order : settings.order || [],
-    rewrites: mergedRewrites(settings.rewrites, override.rewrites),
-    hiddenEntries: override.hiddenEntries || [],
-    accent: override.accent || ""
-  };
-}
+// The rules are in resumeSettingsRules.js; this reads and stores them
 
 async function getResumeSettings(userId) {
   const ResumeSettings = require("../../models/ResumeSettings");
   return resumeSettingsView(await ResumeSettings.findOne({ userId }).lean());
 }
 
-const DESIGN_ID = /^[a-z][a-z0-9-]{0,40}$/;
-const ENTRY_KEY = /^[a-z]+:[0-9a-f]{24}$/;
-
-// The columns asked for, keeping only known sections and places
-const validColumns = (columns = {}) => {
-  const { RESUME_COLUMN_SECTIONS, RESUME_COLUMN_PLACES } = require("../../models/ResumeSettings");
-  return Object.entries(columns).filter(([id, place]) => RESUME_COLUMN_SECTIONS.includes(id) && RESUME_COLUMN_PLACES.includes(place));
-};
-
-// Details left off entries, after hiding and showing some ("education:<id>:grade")
-const FIELD_KEY = /^(?:[a-z]+:[0-9a-f]{24}:[a-z]+|(?:contact|page):[a-z]+)$/;
-function changedFields(current, changes) {
-  const fields = new Set(current);
-  for (const key of changes.hideFields || []) if (FIELD_KEY.test(key)) fields.add(key);
-  for (const key of changes.showFields || []) fields.delete(key);
-  return [...fields].slice(0, 300);
-}
-// Resume-only wording after a change. rewrite: { replace: { from, to }, summary,
-// line, contact: { phone: "..." }, titles: { experience: "..." }, clear: true }
-const REWRITE_CONTACT = ["name", "phone", "email", "location", "linkedin", "github", "portfolio"];
-const cleanText = (value, max) => (typeof value === "string" && value.trim() ? value.trim().slice(0, max) : "");
-function changedRewrites(current = {}, rewrite = {}) {
-  if (rewrite.clear) return undefined;
-  const next = { ...current };
-  const from = cleanText(rewrite.replace?.from, 1000);
-  const to = cleanText(rewrite.replace?.to, 1000);
-  if (from && to) next.replace = [...(current.replace || []).filter((item) => item.from.toLowerCase() !== from.toLowerCase()), { from, to }].slice(-100);
-  for (const key of ["summary", "line"]) if (cleanText(rewrite[key], 1500)) next[key] = cleanText(rewrite[key], 1500);
-  const contact = Object.entries(rewrite.contact || {}).filter(([id, value]) => REWRITE_CONTACT.includes(id) && cleanText(value, 200));
-  if (contact.length) next.contact = { ...(current.contact || {}), ...Object.fromEntries(contact.map(([id, value]) => [id, cleanText(value, 200)])) };
-  const titles = Object.entries(rewrite.titles || {}).filter(([id, value]) => require("../../models/ResumeSettings").RESUME_COLUMN_SECTIONS.includes(id) && cleanText(value, 60));
-  if (titles.length) next.titles = { ...(current.titles || {}), ...Object.fromEntries(titles.map(([id, value]) => [id, cleanText(value, 60)])) };
-  return next;
-}
-
-const validOrder = (order) => Array.isArray(order) && order.length > 0 && order.every((id) => require("../../models/ResumeSettings").RESUME_COLUMN_SECTIONS.includes(id));
-// Sizes that are numbers within sense; anything else is dropped
-const TWEAK_LIMITS = { sideShift: [-40, 40], margin: [-100, 200], gutter: [-100, 200], text: [-100, 200], spacing: [-100, 200] };
-const validTweaks = (tweaks) => Object.fromEntries(Object.entries(tweaks || {})
-  .filter(([key, value]) => TWEAK_LIMITS[key] && Number.isFinite(value) && value >= TWEAK_LIMITS[key][0] && value <= TWEAK_LIMITS[key][1]));
-const validSkillStyle = (style) => require("../../models/ResumeSettings").RESUME_SKILL_STYLES.includes(style);
-
-// changes: { limits: { projects: 3 | null (all) | "default" }, show: [...], hide: [...], allSkills, columns: { education: "right" }, hideFields / showFields: [...], skillStyle }
-// designId: change only that resume design (its own overrides), which also
-// takes hideEntries / showEntries (["projects:<id>"]), accent ("#1d4ed8" or
-// "" for the design's own) and reset (drop all of that design's changes)
+// See changedResumeSettings for the changes it takes
 async function updateResumeSettings(userId, changes = {}, designId = "") {
   const ResumeSettings = require("../../models/ResumeSettings");
-  const { RESUME_LIMIT_DEFAULTS, RESUME_EXTRAS } = ResumeSettings;
   const doc = (await ResumeSettings.findOne({ userId })) || new ResumeSettings({ userId });
-
-  if (designId) {
-    if (!DESIGN_ID.test(designId)) throw new Error("Unknown resume design");
-    const current = changes.reset ? {} : overrideView(doc.designs?.get(designId)?.toObject?.() || doc.designs?.get(designId) || {});
-    const next = { ...current, limits: { ...(current.limits || {}) } };
-    for (const [id, count] of Object.entries(changes.limits || {})) {
-      if (!(id in RESUME_LIMIT_DEFAULTS)) continue;
-      if (count === null) next.limits[id] = 0;
-      else if (count === "default") delete next.limits[id];
-      else if (Number.isInteger(count) && count >= 1 && count <= 50) next.limits[id] = count;
-    }
-    if (changes.show?.length || changes.hide?.length) {
-      const extras = new Set(current.extras || doc.extras);
-      for (const id of changes.show || []) if (RESUME_EXTRAS.includes(id)) extras.add(id);
-      for (const id of changes.hide || []) extras.delete(id);
-      next.extras = [...extras];
-    }
-    if (typeof changes.allSkills === "boolean") next.allSkills = changes.allSkills;
-    const columns = validColumns(changes.columns);
-    if (columns.length) next.columns = { ...(current.columns || {}), ...Object.fromEntries(columns) };
-    if (changes.hideFields?.length || changes.showFields?.length) next.hiddenFields = changedFields(current.hiddenFields || doc.hiddenFields || [], changes);
-    if (validSkillStyle(changes.skillStyle)) next.skillStyle = changes.skillStyle;
-    if (Object.keys(validTweaks(changes.tweaks)).length) next.tweaks = { ...(current.tweaks || {}), ...validTweaks(changes.tweaks) };
-    if (validOrder(changes.order)) next.order = changes.order;
-    if (changes.rewrite) {
-      const rewrites = changedRewrites(current.rewrites, changes.rewrite);
-      if (rewrites) next.rewrites = rewrites;
-      else delete next.rewrites;
-    }
-    const hidden = new Set(current.hiddenEntries || []);
-    for (const key of changes.hideEntries || []) if (ENTRY_KEY.test(key)) hidden.add(key);
-    for (const key of changes.showEntries || []) hidden.delete(key);
-    next.hiddenEntries = [...hidden].slice(0, 200);
-    if (typeof changes.accent === "string" && /^(#[0-9a-fA-F]{6})?$/.test(changes.accent)) next.accent = changes.accent;
-    if (!Object.keys(next.limits).length) delete next.limits;
-    doc.designs.set(designId, next);
-    doc.markModified("designs");
-    await doc.save();
-    return resumeSettingsView(doc.toObject());
-  }
-
-  for (const [id, count] of Object.entries(changes.limits || {})) {
-    if (!(id in RESUME_LIMIT_DEFAULTS)) continue;
-    if (count === null) doc.limits[id] = 0;
-    else if (count === "default") doc.limits[id] = RESUME_LIMIT_DEFAULTS[id];
-    else if (Number.isInteger(count) && count >= 1 && count <= 50) doc.limits[id] = count;
-  }
-  const extras = new Set(doc.extras);
-  for (const id of changes.show || []) if (RESUME_EXTRAS.includes(id)) extras.add(id);
-  for (const id of changes.hide || []) extras.delete(id);
-  doc.extras = [...extras];
-  if (typeof changes.allSkills === "boolean") doc.allSkills = changes.allSkills;
-  // Every resume means every resume: a design's own choice for that section gives way
-  for (const [id, place] of validColumns(changes.columns)) {
-    doc.columns.set(id, place);
-    for (const override of doc.designs.values()) override.columns?.delete(id);
-    doc.markModified("designs");
-  }
-  if (changes.hideFields?.length || changes.showFields?.length) {
-    doc.hiddenFields = changedFields(doc.hiddenFields || [], changes);
-    for (const override of doc.designs.values()) if (override.hiddenFields) override.hiddenFields = changedFields(override.hiddenFields, changes);
-    doc.markModified("designs");
-  }
-  if (changes.rewrite) {
-    doc.rewrites = changedRewrites(doc.rewrites, changes.rewrite);
-    doc.markModified("rewrites");
-    if (changes.rewrite.clear) {
-      for (const override of doc.designs.values()) override.rewrites = undefined;
-      doc.markModified("designs");
-    }
-  }
-  if (validOrder(changes.order)) {
-    doc.order = changes.order;
-    for (const override of doc.designs.values()) override.order = undefined;
-    doc.markModified("designs");
-  }
-  if (validSkillStyle(changes.skillStyle)) {
-    doc.skillStyle = changes.skillStyle;
-    for (const override of doc.designs.values()) override.skillStyle = undefined;
-    doc.markModified("designs");
-  }
-  const tweaks = validTweaks(changes.tweaks);
-  if (Object.keys(tweaks).length) {
-    doc.tweaks = { ...(doc.tweaks || {}), ...tweaks };
-    doc.markModified("tweaks");
-    for (const override of doc.designs.values()) {
-      if (!override.tweaks) continue;
-      override.tweaks = Object.fromEntries(Object.entries(override.tweaks).filter(([key]) => !(key in tweaks)));
-    }
-    doc.markModified("designs");
-  }
-  doc.markModified("limits");
+  const next = changedResumeSettings(resumeSettingsView(doc.toObject()), changes, designId);
+  const { limits, extras, allSkills, columns, hiddenFields, skillStyle, tweaks, order, rewrites, designs } = next;
+  doc.set({ limits, extras, allSkills, columns, hiddenFields, skillStyle, order, designs });
+  doc.tweaks = Object.keys(tweaks).length ? tweaks : undefined;
+  doc.rewrites = Object.keys(rewrites).length ? rewrites : undefined;
+  for (const path of ["limits", "columns", "tweaks", "rewrites", "designs"]) doc.markModified(path);
   await doc.save();
   return resumeSettingsView(doc.toObject());
 }
