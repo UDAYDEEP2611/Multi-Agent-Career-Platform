@@ -1,6 +1,6 @@
 const User = require("../models/User");
 const { gatherResumeData } = require("../services/resume/resumeData");
-const { parseOptions, parseRevision, pickSource, generateCv, reviseCv, isRequirement } = require("../services/resume/cvMaker");
+const { parseOptions, parseRevision, pickSource, generateCv, reviseCv, rescoreMatch } = require("../services/resume/cvMaker");
 const { refitSummary } = require("../services/resume/summaryFit");
 const { readResume, parseResumeText } = require("../services/resume/resumeParser");
 const { atsFileCheck } = require("../services/resume/atsFileCheck");
@@ -12,8 +12,6 @@ const mongoose = require("mongoose");
 const { compareResume } = require("../services/match/resumeCompare");
 const { jobInfoOf } = require("../services/match/jobInfo");
 const { ollamaStatus, createOllamaLlm } = require("../services/resume/ollama");
-const { evaluateJobMatch } = require("../services/match/jobMatchAgent");
-const { CATEGORY_IDS } = require("../services/match/matchModel");
 
 // One resume at a time per user: the local model handles one request at a time
 const running = new Set();
@@ -406,28 +404,11 @@ async function suggestedRewrites(match, details) {
 }
 
 // POST /api/resume/match  { resume, requirements, weights? }
-// Scores an edited resume against the requirements found when it was built,
-// so a new score reflects real changes. No AI; the same input always gives
-// the same result.
+// Scores an edited resume against the requirements found when it was built
 exports.recalculateMatch = async (req, res) => {
   try {
-    const { resume, requirements, weights } = req.body || {};
-
-    if (!resume || !Array.isArray(resume.experience) || !Array.isArray(resume.projects) ||
-        !Array.isArray(resume.education) || !resume.skills || !Array.isArray(resume.skills.technical)) {
-      return res.status(400).json({ success: false, message: "Send the resume as it was built" });
-    }
-    if (!Array.isArray(requirements) || requirements.length > 60 || !requirements.every(isRequirement)) {
-      return res.status(400).json({ success: false, message: "Send the requirements from the earlier match" });
-    }
-
-    const cleanWeights = {};
-    for (const id of CATEGORY_IDS) {
-      const value = Number(weights?.[id]);
-      if (Number.isFinite(value) && value >= 0 && value <= 100) cleanWeights[id] = value;
-    }
-
-    const match = await evaluateJobMatch({ resume, requirements, weights: cleanWeights });
+    const { match, error } = await rescoreMatch(req.body || {});
+    if (error) return res.status(400).json({ success: false, message: error });
     return res.json({ success: true, match });
   } catch (error) {
     console.error("Recalculate match error:", error);

@@ -52,7 +52,7 @@ const parseBody = (data) => {
 // server's own code in the browser. Loaded on first use: it's large.
 const AGENT_AREAS = ["chat", "resume-chat", "resume-settings", "drafts", "custom-designs", "agent-changes"];
 // CV Maker's calls that aren't streamed
-const CV_MAKER_PATHS = ["/api/resume/sources", "/api/resume/summary-fit"];
+const CV_MAKER_PATHS = ["/api/resume/sources", "/api/resume/summary-fit", "/api/resume/match"];
 // Written out so normal builds leave the agents out altogether
 const loadAgents = () => (import.meta.env.VITE_STATIC_SITE === "true" ? import("./agents/agentReplies") : null);
 

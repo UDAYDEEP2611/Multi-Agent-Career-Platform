@@ -178,4 +178,24 @@ async function reviseCv({ source, options, revision, llm, signal, send }) {
   send("result", { ...result, match, aiUsed: true, model: llm.model });
 }
 
-module.exports = { parseOptions, parseRevision, pickSource, generateCv, reviseCv, isRequirement, INSTRUCTIONS_MAX };
+// Scores an edited resume against the requirements found when it was built,
+// so a new score reflects real changes. No AI; the same input always gives
+// the same result. body: { resume, requirements, weights? } → { match } or { error }
+async function rescoreMatch(body = {}) {
+  const { resume, requirements, weights } = body;
+  if (!resume || !Array.isArray(resume.experience) || !Array.isArray(resume.projects) ||
+      !Array.isArray(resume.education) || !resume.skills || !Array.isArray(resume.skills.technical)) {
+    return { error: "Send the resume as it was built" };
+  }
+  if (!Array.isArray(requirements) || requirements.length > 60 || !requirements.every(isRequirement)) {
+    return { error: "Send the requirements from the earlier match" };
+  }
+  const cleanWeights = {};
+  for (const id of CATEGORY_IDS) {
+    const value = Number(weights?.[id]);
+    if (Number.isFinite(value) && value >= 0 && value <= 100) cleanWeights[id] = value;
+  }
+  return { match: await evaluateJobMatch({ resume, requirements, weights: cleanWeights }) };
+}
+
+module.exports = { parseOptions, parseRevision, pickSource, generateCv, reviseCv, rescoreMatch, isRequirement, INSTRUCTIONS_MAX };

@@ -1,4 +1,4 @@
-import { generateCv, parseOptions, parseRevision, pickSource, reviseCv } from "../../../../server/services/resume/cvMaker";
+import { generateCv, parseOptions, parseRevision, pickSource, rescoreMatch, reviseCv } from "../../../../server/services/resume/cvMaker";
 import { refitSummary } from "../../../../server/services/resume/summaryFit";
 import { gather } from "../demoStore";
 import { openAccount } from "./current";
@@ -19,7 +19,8 @@ async function aiStatus() {
     : { available: false, model: "", message: "The AI isn't available right now, so the resume is built from your portfolio as written." };
 }
 
-// GET /api/resume/sources, POST /api/resume/summary-fit: { status, body } or null
+// GET /api/resume/sources, POST /api/resume/summary-fit and /match:
+// { status, body } or null
 export async function cvMakerReply(store, account, method, path, body) {
   openAccount(account, store);
   if (method === "get" && path === "/api/resume/sources") return { status: 200, body: { success: true, sources: gather(store, "resume"), ai: await aiStatus() } };
@@ -32,6 +33,10 @@ export async function cvMakerReply(store, account, method, path, body) {
     if (!(await aiStatus()).available) return { status: 503, body: { success: false, message: "The AI isn't available right now." } };
     const result = await refitSummary({ llm: createOllamaLlm(), resume, summary: summary.trim(), targetWords: words, feedback: typeof feedback === "string" ? feedback.slice(0, 300) : "" });
     return result.error ? { status: 422, body: { success: false, message: result.error } } : { status: 200, body: { success: true, summary: result.summary } };
+  }
+  if (method === "post" && path === "/api/resume/match") {
+    const { match, error } = await rescoreMatch(body);
+    return error ? { status: 400, body: { success: false, message: error } } : { status: 200, body: { success: true, match } };
   }
   return null;
 }
