@@ -5,6 +5,7 @@ const { refitSummary } = require("../services/resume/summaryFit");
 const { readResume, parseResumeText } = require("../services/resume/resumeParser");
 const { atsFileCheck } = require("../services/resume/atsFileCheck");
 const { recommendationsFor } = require("../services/match/recommendations");
+const { rewritesFor } = require("../services/match/rewrites");
 const ResumeMatchLog = require("../models/ResumeMatchLog");
 const { LOG_LIFETIME_SECONDS } = require("../models/ResumeMatchLog");
 const mongoose = require("mongoose");
@@ -388,7 +389,8 @@ exports.compareResume = async (req, res) => {
     const ats = atsFileCheck({ text, meta, parsed, type: req.file.detectedType, keywordScore: match.keywords.score });
 
     const recommendations = recommendationsFor(match, ats);
-    const result = { resume, found, match, ats, recommendations, notes, aiUsed: ai.available };
+    const rewrites = await suggestedRewrites(match, { resume, jobDescription, jobTitle, company });
+    const result = { resume, found, match, ats, recommendations, rewrites, notes, aiUsed: ai.available };
 
     // Saved to the log book (deleted automatically after 72 hours)
     let logId = null;
@@ -531,8 +533,9 @@ exports.confirmMatchLog = async (req, res) => {
     if (answered) match.resumeOnly = { overall: resumeOnly.overall, fit: resumeOnly.fit, classification: resumeOnly.classification };
     const ats = log.result.ats;
     const recommendations = recommendationsFor(match, ats);
+    const rewrites = await suggestedRewrites(match, details);
     const notes = [...match.notes, ...(answered ? [`Includes your answers to the confirmation questions (self-reported). On the resume alone the match is ${resumeOnly.overall}%; confirmed skills still need to be written into the resume for employers to see them.`] : [])];
-    const result = { ...log.result, match, recommendations, notes };
+    const result = { ...log.result, match, recommendations, rewrites, notes };
 
     // The Log Book keeps the resume-only score
     log.set({ result, confirmations, overall: resumeOnly.overall });
@@ -545,6 +548,17 @@ exports.confirmMatchLog = async (req, res) => {
     return res.status(500).json({ success: false, message: "Unable to update the comparison" });
   }
 };
+
+// Bullet rewrites and the score they'd give (services/match/rewrites.js).
+// Extra: a failure here never fails the comparison
+async function suggestedRewrites(match, details) {
+  try {
+    return await rewritesFor(match, details);
+  } catch (error) {
+    console.error("Rewrite suggestions error:", error);
+    return { suggestions: [], before: null, after: null };
+  }
+}
 
 const isRequirement = (item) =>
   item && typeof item === "object" && typeof item.text === "string" &&

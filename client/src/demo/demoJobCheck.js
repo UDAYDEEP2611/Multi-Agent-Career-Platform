@@ -5,11 +5,13 @@ import jobInfoModule from "../../../server/services/match/jobInfo.js";
 import parserModule from "../../../server/services/resume/resumeParser.js";
 import fileCheckModule from "../../../server/services/resume/atsFileCheck.js";
 import recommendationsModule from "../../../server/services/match/recommendations.js";
+import rewritesModule from "../../../server/services/match/rewrites.js";
 
 const { compareResume } = compareModule;
 const { parseResumeText } = parserModule;
 const { atsFileCheck } = fileCheckModule;
 const { recommendationsFor } = recommendationsModule;
+const { rewritesFor } = rewritesModule;
 
 export const { jobInfoOf } = jobInfoModule;
 
@@ -51,6 +53,7 @@ export async function runCheck({ text, jobDescription, company = "", jobTitle = 
     match,
     ats,
     recommendations: recommendationsFor(match, ats),
+    rewrites: await rewritesFor(match, details).catch(() => ({ suggestions: [], before: null, after: null })),
     notes: [...match.notes, DEMO_NOTE],
     aiUsed: false,
     resumeOnlyOverall: resumeOnly.overall

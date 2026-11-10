@@ -66,6 +66,7 @@ Upload a resume as a PDF, DOCX, RTF, or TXT file and paste a job description. Jo
 - Shows the evidence behind each score
 - Tells apart skills that are only listed from skills shown in real work
 - Runs a separate ATS check
+- Suggests rewrites of your own bullets that name what the job asks for where your work already shows it, with the match and keyword scores before and after. It never adds a skill the resume doesn't support
 - Saves each result to a Log Book for 72 hours
 
 ### Portfolio assistant
@@ -78,7 +79,7 @@ A chat assistant is available throughout the dashboard:
 | **Design** | "Use Playfair Display for headings" |
 | **Q&A** | "Which projects used LangGraph?" |
 
-The data entry agent asks for any required details that are missing, then holds the entry for you to confirm. The Q&A agent answers from your own portfolio and lists its sources.
+The data entry agent asks for any required details that are missing, then holds the entry for you to confirm. The Q&A agent answers from your own portfolio and lists its sources. When a request could mean more than one entry, the agents ask which one. Every change the agents make can be undone from the chat, one message at a time.
 
 ### Accounts and administration
 

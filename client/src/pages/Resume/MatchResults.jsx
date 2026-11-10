@@ -544,6 +544,71 @@ const RECOMMENDATION_TYPES = {
 const PRIORITIES = { 1: "Parsing errors", 2: "Required capabilities", 3: "Responsibility alignment", 4: "Preferred capabilities", 5: "Keyword consistency" };
 
 // What doesn't match and what to change, by expected impact
+// A rewrite's new text with what it adds marked
+function marked(before, after) {
+  let start = 0;
+  while (start < before.length && before[start] === after[start]) start += 1;
+  let end = 0;
+  while (end < before.length - start && before[before.length - 1 - end] === after[after.length - 1 - end]) end += 1;
+  return <>{after.slice(0, start)}<mark>{after.slice(start, after.length - end)}</mark>{after.slice(after.length - end)}</>;
+}
+
+// Bullets from the resume, rewritten to name what the job asks for where the
+// work already shows it, and the score with every rewrite in place
+function Rewrites({ rewrites }) {
+  const [copied, setCopied] = useState(-1);
+  if (!rewrites?.suggestions?.length) return null;
+  const { suggestions, before, after } = rewrites;
+  const copy = (text, index) => navigator.clipboard?.writeText(text).then(() => setCopied(index)).catch(() => {});
+  const gain = (key) => (before?.[key] != null && after?.[key] != null ? after[key] - before[key] : null);
+
+  return (
+    <Card className="shadow-sm mb-4">
+      <Card.Body>
+        <div className="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-2">
+          <div>
+            <Card.Title as="h5" className="mb-1">Suggested rewrites</Card.Title>
+            <div className="small text-muted">Your own bullets, naming what the job asks for where your work already shows it. Nothing new is invented; check each one is true before you use it.</div>
+          </div>
+          {before && after && (
+            <div className="d-flex gap-3 text-center small" aria-label="Score before and after the rewrites">
+              <div>
+                <div className="text-muted">Match</div>
+                <div className="fw-semibold">{before.match}% <i className="bi bi-arrow-right" aria-hidden="true" /> <span className={gain("match") > 0 ? "text-success" : ""}>{after.match}%</span></div>
+              </div>
+              {before.keywords != null && (
+                <div>
+                  <div className="text-muted">Keywords</div>
+                  <div className="fw-semibold">{before.keywords}% <i className="bi bi-arrow-right" aria-hidden="true" /> <span className={gain("keywords") > 0 ? "text-success" : ""}>{after.keywords}%</span></div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+        <ListGroup variant="flush" className="small">
+          {suggestions.map((rewrite, index) => (
+            <ListGroup.Item key={rewrite.before} className="px-0">
+              <div className="d-flex flex-wrap align-items-center gap-1 mb-1">
+                {rewrite.changes.map((change) => <Badge key={change.term} bg="primary-subtle" text="primary" className="fw-normal">{change.term}</Badge>)}
+                {rewrite.check && <Badge bg="warning-subtle" text="dark" className="fw-normal"><i className="bi bi-exclamation-circle me-1" aria-hidden="true" />Only if true</Badge>}
+                {rewrite.where && <span className="text-muted ms-1">{rewrite.where}</span>}
+              </div>
+              <div className="text-muted text-decoration-line-through">{rewrite.before}</div>
+              <div className="mt-1">{marked(rewrite.before, rewrite.after)}</div>
+              <div className="d-flex flex-wrap justify-content-between align-items-end gap-2 mt-1">
+                <ul className="text-muted mb-0 ps-3">{rewrite.why.map((line) => <li key={line}>{line}</li>)}</ul>
+                <Button size="sm" variant="outline-secondary" onClick={() => copy(rewrite.after, index)}>
+                  <i className={`bi ${copied === index ? "bi-check2" : "bi-clipboard"} me-1`} aria-hidden="true" />{copied === index ? "Copied" : "Copy"}
+                </Button>
+              </div>
+            </ListGroup.Item>
+          ))}
+        </ListGroup>
+      </Card.Body>
+    </Card>
+  );
+}
+
 function Recommendations({ recommendations, missing }) {
   const [priority, setPriority] = useState(0);
   const present = [...new Set(recommendations.map((item) => item.priority))];
@@ -831,6 +896,7 @@ export default function MatchResults({ result, logId = null, onUpdate = () => {}
         </Tab>
       </Tabs>
 
+      <Rewrites rewrites={result.rewrites} />
       <Recommendations recommendations={result.recommendations} missing={missingItems(result)} />
     </>
   );
