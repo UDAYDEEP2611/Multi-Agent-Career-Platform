@@ -238,6 +238,9 @@ const CONTACT_WORDS = [["phone", /^(?:phone|mobile|cell|contact)(?: number)?$/i]
 const CHANGE_VERB = "change|changing|rename|replace|update|edit|correct|fix|make|set|rewrite|reword|switch";
 const AS_NEW = "to say|to read|to|with|into|as";
 
+// How new wording should come out, rather than the wording itself
+const HOW_TO_WRITE = /^(?:sound|be|look|seem|feel|read (?:more|less|better)|come across|appear|focus|highlight|emphasi[sz]e|show(?:case)?|mention|target|match|fit|reflect|suit|more|less|better|stronger|shorter|longer)\b/i;
+
 // "change X to Y", "X change it to Y", "X should read Y", "rewrite my summary".
 // Reads the user's own words, so the new text stays exactly as typed.
 function readRewrite(message) {
@@ -245,6 +248,8 @@ function readRewrite(message) {
   if (RESTORE_WORDING.test(text)) return { clear: true };
 
   const summaryTo = text.match(new RegExp(`\\b(?:${CHANGE_VERB})\\s+(?:my |the )?(?:professional )?summary\\s+(?:${AS_NEW})[:\\s]+(.+)$`, "i"));
+  // "rewrite my summary to sound more senior" asks for writing, not those words
+  if (summaryTo && HOW_TO_WRITE.test(summaryTo[1])) return { generate: "summary" };
   if (summaryTo) return { summary: untilResume(summaryTo[1]) };
   const lineTo = text.match(new RegExp(`\\b(?:${CHANGE_VERB})\\s+(?:my |the )?(?:headline|tagline|head ?tag|target roles?|line under my name)\\s+(?:${AS_NEW})[:\\s]+(.+)$`, "i"));
   if (lineTo) return { line: untilResume(lineTo[1]) };

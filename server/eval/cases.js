@@ -94,6 +94,10 @@ module.exports = [
   resume("details", ["no gpa", "bring back gpa"], { settings: { hiddenFields: EMPTY } }),
 
   // ---- One resume: wording ---------------------------------------------------
+  // Asking for writing is never taken as the new wording
+  resume("wording", "rewrite my summary to sound more senior", { settings: { rewrites: { summary: undefined } } }),
+  resume("wording", "change my summary to focus on leadership", { settings: { rewrites: { summary: undefined } } }),
+  resume("wording", "change my summary to: AI engineer building agent platforms.", { settings: { rewrites: { summary: /AI engineer building agent platforms/ } } }),
   resume("wording", "rename Projects to Things I built", { settings: { rewrites: { titles: { projects: "Things I built" } } } }),
   resume("wording", "call experience Work History", { settings: { rewrites: { titles: { experience: "Work History" } } } }),
   resume("wording", "change AWS to Amazon Web Services", { settings: { rewrites: { replace: [{ from: /AWS/, to: "Amazon Web Services" }] } } }),

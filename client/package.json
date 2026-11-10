@@ -8,7 +8,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "build:pages": "VITE_STATIC_SITE=true vite build --base=/Multi-Agent-Career-Platform/ && cp dist/index.html dist/404.html",
+    "build:pages": "VITE_STATIC_SITE=true VITE_AI_PROXY_URL=https://uuv-ai-proxy.uuv-ai-proxy.workers.dev vite build --base=/Multi-Agent-Career-Platform/ && cp dist/index.html dist/404.html",
     "deploy": "npm run build:pages && gh-pages -d dist --nojekyll"
   },
   "dependencies": {

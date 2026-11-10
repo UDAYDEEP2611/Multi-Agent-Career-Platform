@@ -294,7 +294,7 @@ There are two ways to put this online.
 
 1. Create a free [Cloudflare](https://dash.cloudflare.com/sign-up) account.
 2. From `ai-proxy/`, run `npm install`, then `npx wrangler login`, then `npm run deploy`. Deploying rebuilds the prompt list and runs the tests first. Note the `https://uuv-ai-proxy.<your-subdomain>.workers.dev` address it prints.
-3. Put that address in `client/.env.production` as `VITE_AI_PROXY_URL=https://...`, then publish the demo again with `npm run deploy` from `client/`.
+3. Put that address in `VITE_AI_PROXY_URL` in the `build:pages` script in `client/package.json`, then publish the demo again with `npm run deploy` from `client/`. The live demo uses `https://uuv-ai-proxy.uuv-ai-proxy.workers.dev`.
 
 Workers AI's free allowance is 10,000 neurons a day. When it runs out, the agents use their rules until the next day. Change the model with `MODEL` in `ai-proxy/wrangler.toml`.
 
