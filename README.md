@@ -13,12 +13,18 @@
 
 UltraUnityVerse keeps your whole career in one record, then turns it into portfolio websites and resumes. A team of AI agents helps you add details, change designs, customize resumes in plain English, and compare a resume with a job description.
 
+<p align="center">
+  <a href="https://udaydeep2611.github.io/Multi-Agent-Career-Platform/"><strong>▶ Try the live demo</strong></a>
+  · no sign-up, nothing to install
+</p>
+
 ![UltraUnityVerse home page](docs/images/home.png)
 
 > Every screenshot uses a fictional demo profile, "Alex Morgan". All names, companies, and contact details are made up.
 
 ## Contents
 
+- [Live demo](#live-demo)
 - [Features](#features)
 - [Screenshots](#screenshots)
 - [What you can ask the resume chat](#what-you-can-ask-the-resume-chat)
@@ -33,6 +39,28 @@ UltraUnityVerse keeps your whole career in one record, then turns it into portfo
 - [Project status](#project-status)
 - [Author](#author)
 - [License](#license)
+
+## Live demo
+
+**[udaydeep2611.github.io/Multi-Agent-Career-Platform](https://udaydeep2611.github.io/Multi-Agent-Career-Platform/)**
+
+Choose **Try the demo** and pick an account. Each one is a made-up person with a full career record:
+
+| Account | Who they are |
+|---|---|
+| Thessaly Varnhouse | AI Engineer |
+| Corvin Ashdale | Software Engineer |
+| Lila Moore | Fashion Architect |
+| Amberson Gabby | Admin: sees the admin console only |
+
+What to try:
+
+- Open the **Assistant** (bottom right) and tap a suggestion, or type "add Kubernetes to my skills" or "make a dark blue Aurora design called Midnight".
+- Open any resume design, choose **Customize**, and try "hide the internship", "move education to the right column", or "rewrite my summary to sound more senior".
+- Open **JobPilot**, pick a sample job or paste your own, and see the match, the evidence, and suggested rewrites.
+- Edit anything. Changes stay in your browser until you choose **Reset demo**, and every agent change has an **Undo** button.
+
+The demo runs without a server. Its data comes from JSON, and the agents run in your browser, with Mistral Small 3.1 through a small Cloudflare Worker. File uploads, CV Maker and email need the full app.
 
 ## Features
 
@@ -147,7 +175,9 @@ Each designed resume has its own chat. Changes apply to that resume unless you s
 | Ask questions | "what's on this resume?", "what did I hide?", "which projects use LangGraph?" |
 | Start over | "reset this resume" |
 
-If the language model is running, you can also ask for new wording with requests like "rewrite my summary".
+With a language model (Ollama in the full app, Workers AI in the demo), you can also ask for new wording, like "rewrite my summary to sound more senior". Without one, the chat still does everything in the table.
+
+When a request could mean more than one entry, like "hide the engineer job" with two engineering jobs, the chat asks which one instead of guessing. Every change it makes has an **Undo** button.
 
 The chat explains what it can't do, such as changing fonts, adding a photo, forcing a page count, translating a resume, or sending it for you.
 
@@ -178,6 +208,20 @@ flowchart LR
 - **Answers from your data:** hybrid RAG and GraphRAG search the user's own portfolio.
 - **Fallbacks:** when Ollama isn't running, rule-based and trained-model features keep working. Search falls back to keywords, and designs are planned in-process if the A2A agent is unavailable.
 - **Checks on AI text:** rewritten resume text is rejected if it adds numbers or names that aren't in the user's portfolio.
+- **Undo:** the MCP tools that change things record what each change replaced, so a chat answer's changes can be undone together.
+- **Evaluation:** `server/eval/` plays 109 real chat requests through the agents and checks what each one did. The test suite fails if fewer pass than the saved baseline, so changes to rules or prompts are measured.
+
+### How the demo runs without a server
+
+```mermaid
+flowchart LR
+    B[Browser] --> A[Same LangGraph agents and MCP server]
+    A --> J[("Demo data: JSON in the browser")]
+    A -- model calls --> W[Cloudflare Worker]
+    W --> M[Workers AI: Mistral Small 3.1]
+```
+
+The GitHub Pages build bundles the server's own agents, MCP server and trained models. The few server files that use MongoDB, the file system or A2A are swapped for browser versions that use the demo data (see `client/vite.config.js`). The Worker (`ai-proxy/`) runs only the agents' own prompts, so it can't be used as a free general-purpose model. If it's unavailable, the agents use their rules.
 
 ## Tech stack
 
@@ -187,9 +231,10 @@ flowchart LR
 | Server | Node.js, Express 5, Mongoose |
 | Database | MongoDB |
 | AI agents | LangGraph, LangChain, MCP, A2A |
-| Language models | Ollama (`mistral` and `nomic-embed-text` by default) |
+| Language models | Ollama (`mistral` and `nomic-embed-text` by default); Workers AI (Mistral Small 3.1) for the demo |
 | Machine learning | Python, scikit-learn, NLTK |
-| Testing | Node.js test runner, Supertest, mongodb-memory-server |
+| Testing | Node.js test runner, Supertest, mongodb-memory-server, an agent evaluation set |
+| Hosting | GitHub Pages (demo), Cloudflare Workers (demo's model), Render and MongoDB Atlas (optional, full app) |
 
 ## Run it locally
 
@@ -242,7 +287,7 @@ npm install
 npm run dev
 ```
 
-Open <http://localhost:5173>, then sign up. Passwords must be at least 12 characters. The client currently expects the API at `http://localhost:5050`, so keep `PORT=5050`.
+Open <http://localhost:5173>, then sign up. Passwords must be at least 12 characters. The client calls the API at `http://localhost:5050`; to use another address, set `VITE_API_URL` when you start or build the client.
 
 ### 4. Optional: turn on the language models
 
@@ -283,6 +328,8 @@ Run these from `server/`:
 | `npm run agent:reviewer` | Runs the ATS Reviewer agent by itself |
 | `npm run train:models` | Rebuilds the datasets and retrains the chat models (needs Python with scikit-learn, SciPy, and NLTK) |
 | `npm run eval` | Scores the agents on the evaluation set in `eval/cases.js`: real chat messages and what each must do. Add `-- --llm` to score them with Ollama, or `-- --update` to save a new baseline. `npm test` fails if fewer cases pass than the baseline |
+
+From `client/`, `npm run deploy` builds the demo and publishes it to GitHub Pages. From `ai-proxy/`, `npm test` checks the Worker and `npm run deploy` publishes it to Cloudflare.
 
 ## Host it online
 
@@ -341,10 +388,14 @@ docs/images/   README screenshots
 - Uploaded files are only served through endpoints that require login.
 - Sensitive routes, such as password reset, are rate limited.
 - Secrets stay in `server/.env`, which isn't committed to the repo.
+- The demo's edits stay in the visitor's own browser; nothing is sent to a server except the agents' model calls to the Worker.
+- The Worker accepts only the agents' own prompts, only from the demo's site, with per-visitor and total rate limits.
 
 ## Project status
 
-The public demo is live at [udaydeep2611.github.io/Multi-Agent-Career-Platform](https://udaydeep2611.github.io/Multi-Agent-Career-Platform/). The full app runs locally and is ready to host; see [Host it online](#host-it-online).
+- **Live demo:** [udaydeep2611.github.io/Multi-Agent-Career-Platform](https://udaydeep2611.github.io/Multi-Agent-Career-Platform/), with real AI through Workers AI.
+- **Full app:** runs locally and is ready to host on Render and MongoDB Atlas; see [Host it online](#host-it-online).
+- **Tests:** 397 server tests pass, and the agents pass all 109 cases of the evaluation set.
 
 ## Author
 
