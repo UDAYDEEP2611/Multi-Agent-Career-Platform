@@ -65,6 +65,8 @@ function sectionForNoun(word) {
 }
 const ALL = new RegExp(`\\b(?:show|include|display)\\s+(?:all|every|all of)\\s+(?:my\\s+|the\\s+)?${SECTION_NOUN}\\b|\\b(?:no|remove the|without a)\\s+limit\\s+(?:on|for)\\s+(?:my\\s+|the\\s+)?${SECTION_NOUN}\\b`, "gi");
 
+const LATEST_ONLY = new RegExp(`\\b(?:only|just)\\s+(?:show\\s+)?(?:my|the)\\s+(?:latest|most recent|newest|current|last)\\s+${SECTION_NOUN}\\b`, "gi");
+
 // { projects: 2, experience: 1 }; null removes a limit ("show all projects")
 function limitsIn(text) {
   const limits = {};
@@ -76,6 +78,11 @@ function limitsIn(text) {
   for (const match of text.matchAll(ALL)) {
     const id = sectionsIn(match[1] || match[2])[0];
     if (id) limits[id] = null;
+  }
+  // "only my latest school": entries are newest first, so that's one
+  for (const match of text.matchAll(LATEST_ONLY)) {
+    const id = sectionForNoun(match[1]);
+    if (id) limits[id] = 1;
   }
   return limits;
 }
@@ -144,6 +151,9 @@ function ruleChanges(request) {
   // "rename projects to Things I built"
   const rename = text.match(/\brename\s+(?:the\s+)?(\w+)(?:\s+section)?\s+to\s+["“']?(.+?)["”']?$/i);
   if (rename && sectionsIn(rename[1]).length) changes.titles = { [sectionsIn(rename[1])[0]]: clean(rename[2]).slice(0, 40) };
+  // "rename Forest to Pine": not a section, so the design itself
+  const renamed = text.match(/\brename\s+(?:the\s+|my\s+)?["“']?(.+?)["”']?(?:\s+design)?\s+to\s+["“']?([\w][\w &'.-]{1,39}?)["”']?[.!]?$/i);
+  if (renamed && !sectionsIn(renamed[1]).length && !/^it$/i.test(renamed[1])) changes.name = clean(renamed[2]);
 
   const tagline = text.match(/\b(?:tagline|summary line|hero (?:text|summary|line)|subtitle)\s*(?:to|:|as|=)\s*["“']?(.+?)["”']?$/i);
   if (tagline) changes.heroSummary = clean(tagline[1]).slice(0, 400);
@@ -236,6 +246,9 @@ const isEmpty = (changes) => !Object.keys(changes).length;
 async function planDesign({ request, custom = [], currentId = "", llm = null, signal }) {
   const changes = ruleChanges(request);
   let plan = { action: ruleAction(request, custom, currentId), baseId: designFromText(request), changes };
+  // A design named in the request is the one to change: "use round corners on Forest"
+  const named = custom.find((design) => new RegExp(`(?<![\\w])${design.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?![\\w])`, "i").test(request));
+  if (named && ["update", "delete"].includes(plan.action)) plan.targetId = named.id;
   let by = "rules";
 
   // Wording the rules didn't understand goes to the model

@@ -13,7 +13,8 @@
     "rename:user-dbs": "node scripts/renameUserDatabases.js",
     "make-admin": "node scripts/makeAdmin.js",
     "mcp": "node mcp/stdio.js",
-    "agent:reviewer": "node a2a/startAtsReviewer.js"
+    "agent:reviewer": "node a2a/startAtsReviewer.js",
+    "eval": "node eval/runEval.js"
   },
   "keywords": [],
   "author": "",

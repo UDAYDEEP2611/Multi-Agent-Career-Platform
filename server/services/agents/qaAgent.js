@@ -67,7 +67,8 @@ async function respond({ question, found }, config) {
   // No model: show what was found
   const lines = [
     ...found.graph.facts.slice(0, 8).map((fact) => `• ${fact}`),
-    ...found.results.slice(0, 3).map((item, index) => `[${index + 1}] ${item.title}: ${item.text.split("\n").slice(1, 3).join(" ").slice(0, 160)}`)
+    // Past the dates line, so the snippet says what was done
+    ...found.results.slice(0, 3).map((item, index) => `[${index + 1}] ${item.title}: ${item.text.split("\n").slice(1).filter(Boolean).join(" ").slice(0, 220)}`)
   ];
   return { answer: `Here's what your portfolio says:\n${lines.join("\n")}`, sources, links, steps: ["No language model running; listed the matches"] };
 }

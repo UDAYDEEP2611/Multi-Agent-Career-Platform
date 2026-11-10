@@ -848,21 +848,37 @@ async function understand({ text: message }, config) {
 // How an entry is named on a resume ("projects:<id>"), nested projects included
 const keyOf = (entry) => `${isProject(entry) ? "projects" : entry.section}:${entry.id}`;
 
+// What people call an entry besides its name: "internship" for an intern
+// role, "MS" or "masters" for a Master of Science, "bachelors" for a B.Tech
+const ALIASES = [
+  [/\bintern\b/, ["internship"]],
+  [/\bmaster of science\b|\bm\.?\s?sc?\b/, ["ms", "msc", "masters", "master"]],
+  [/\bmaster\b|\bm\.?\s?tech\b|\bmba\b|\bm\.?\s?eng\b/, ["masters", "master", "graduate"]],
+  [/\bbachelor|\bb\.?\s?tech\b|\bb\.?\s?sc?\b|\bb\.?\s?e\b|\bb\.?\s?a\b/, ["bachelors", "bachelor", "undergrad", "undergraduate", "btech"]],
+  [/\bph\.?\s?d\b|\bdoctor/, ["phd", "doctorate"]]
+];
+const aliasesOf = (label) => ALIASES.filter(([pattern]) => pattern.test(String(label).toLowerCase())).flatMap(([, names]) => names);
+
 // How well an entry's name matches what the user wrote (0 to 1)
 function nameScore(label, phrase) {
   const words = (value) => new Set(String(value).toLowerCase().replace(/[^a-z0-9+#]+/g, " ").split(" ").filter((word) => word.length > 1 && !["the", "my", "project", "job", "at", "of", "in", "into", "and"].includes(word)));
   const asked = words(phrase);
   if (!asked.size) return 0;
-  const have = words(label);
+  const have = new Set([...words(label), ...aliasesOf(label)]);
   // "Masters" still finds "Master of Science"
   return [...asked].filter((word) => have.has(word) || have.has(word.replace(/s$/, ""))).length / asked.size;
 }
 
-// Looks up each phrase: by name, then by meaning, and a whole section on one resume
+// "all projects", "both jobs", "the PayPal and Oracle jobs": more than one is meant
+const meansMany = (phrase) => /\b(?:all|every|both|each|any|everything)\b/i.test(phrase) ||
+  /\b(?:projects|jobs|roles|positions|schools|degrees|certifications|certificates|certs|internships|entries|ones)\b/i.test(phrase);
+
+// Looks up each phrase: by name, then by meaning, and a whole section on one
+// resume. A phrase about one thing that fits several is asked about, not guessed
 async function resolvePhrases(plan, entries, config, steps) {
   const { tools, designId } = config.configurable;
   const phrases = [...(plan.hideEntries || []).map((phrase) => ["hide", phrase]), ...(plan.showEntries || []).map((phrase) => ["show", phrase])];
-  const targets = { hide: [], show: [], missing: [] };
+  const targets = { hide: [], show: [], missing: [], unsure: [] };
 
   for (const [action, phrase] of phrases) {
     const section = Object.entries(SECTION_WORDS).find(([, pattern]) => pattern.test(phrase))?.[0];
@@ -890,12 +906,15 @@ async function resolvePhrases(plan, entries, config, steps) {
           return DOC_SECTION[kind] && id ? `${DOC_SECTION[kind]}:${id}` : null;
         }).filter(Boolean));
         const matches = entries.filter((entry) => ids.has(keyOf(entry)) && (!section || inSection(entry, section)));
-        // A plural ask ("projects that use LangGraph") takes every match; otherwise the best one
-        found = /\b(all|every|projects|jobs|certifications|schools)\b/i.test(phrase) ? matches : matches.slice(0, 1);
+        // A plural ask ("projects that use LangGraph") takes every match
+        found = matches;
         if (found.length) steps.push(`Found "${phrase}" with ${search.mode} search${search.graph?.facts?.length ? ` and ${search.graph.facts.length} GraphRAG facts` : ""}`);
       }
     }
-    if (found.length) targets[action].push(...found);
+    if (found.length > 1 && !meansMany(phrase) && !plan.anySection) {
+      targets.unsure.push({ action, phrase, options: found });
+      steps.push(`"${phrase}" fits ${found.length} entries, so I asked which one`);
+    } else if (found.length) targets[action].push(...found);
     else targets.missing.push(phrase);
   }
   return targets;
@@ -1188,8 +1207,15 @@ function reply({ text, plan, targets, result }, config) {
         : "";
   const fc = targets.fieldChange;
   const noDetailNote = fc?.noDetail?.length ? ` ${namesOf(fc.noDetail.map((label) => ({ label })))} ${fc.noDetail.length > 1 ? "don't" : "doesn't"} show ${listOfWords(fc.fields.map((id) => FIELDS[id].name))} on a resume, so nothing changed there.` : "";
-  const missing = `${noDetailNote}${targets.missing.length ? ` I couldn't find ${targets.missing.map((phrase) => `"${phrase}"`).join(", ")} in your portfolio.` : ""}${moveNote}`;
+  // More than one entry fits: ask which, naming them
+  const unsure = (targets.unsure || []).map(({ action, phrase, options }) => {
+    const names = options.slice(0, 5).map((entry) => entry.label);
+    const listed = names.length > 1 ? `${names.slice(0, -1).join(", ")} or ${names[names.length - 1]}` : names[0];
+    return ` Which did you mean by "${phrase}": ${listed}${options.length > 5 ? ` (or ${options.length - 5} more)` : ""}? Say its name, like "${action} ${names[0]}", or "${action} all of them".`;
+  }).join("");
+  const missing = `${noDetailNote}${targets.missing.length ? ` I couldn't find ${targets.missing.map((phrase) => `"${phrase}"`).join(", ")} in your portfolio.` : ""}${unsure}${moveNote}`;
   if (!done.length) {
+    if (unsure && !targets.missing.length) return { reply: `${unsure.trim()} Nothing changed yet.` };
     const cantDo = cantDoReply(text);
     if (cantDo) return { reply: cantDo };
     if (moveNote && !targets.missing.length) return { reply: moveNote.trim() };

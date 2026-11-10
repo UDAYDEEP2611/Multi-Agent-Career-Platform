@@ -152,7 +152,7 @@ function graphOf(source) {
     for (const project of job.projects || []) link(role, "INCLUDED_PROJECT", node("project", project.title));
   }
   for (const school of source.educations || []) {
-    const study = node("education", `${school.degree} at ${school.institution}`, { section: "education", recordId: school.id, institution: school.institution, degree: school.degree, when: range(school) });
+    const study = node("education", `${school.degree} at ${school.institution}`, { section: "education", recordId: school.id, institution: school.institution, degree: school.degree, fieldOfStudy: school.fieldOfStudy || "", when: range(school) });
     link(me, "STUDIED", study);
     link(study, "AT", node("school", school.institution));
     if (school.degree) link(study, "DEGREE", node("degree", school.degree));
@@ -184,18 +184,33 @@ function graphFacts({ nodes, edges }, question, limit = 30) {
   const seeds = [...nodes.values()].filter((item) => item.type !== "person" && norm(item.label).length > 1 && text.includes(` ${norm(item.label)} `));
   if (!seeds.length) return { seeds: [], facts: [] };
 
-  const near = new Set(seeds.map((item) => item.id));
+  // How many hops each node is from what the question names
+  const hops = new Map(seeds.map((item) => [item.id, 0]));
   for (let hop = 0; hop < 2; hop += 1) {
+    const reached = [...hops.keys()];
     for (const edge of edges) {
-      if (near.has(edge.from) && nodes.get(edge.from).type !== "person") near.add(edge.to);
-      if (near.has(edge.to)) near.add(edge.from);
+      if (reached.includes(edge.from) && nodes.get(edge.from).type !== "person" && !hops.has(edge.to)) hops.set(edge.to, hop + 1);
+      if (reached.includes(edge.to) && !hops.has(edge.from)) hops.set(edge.from, hop + 1);
     }
   }
+  // Facts about the named things first: "PayPal" lists the PayPal job's
+  // facts before another job that shares a skill with it
   const facts = edges
-    .filter((edge) => near.has(edge.from) && near.has(edge.to))
-    .map((edge) => `${nodes.get(edge.from).label} —${edge.rel}→ ${nodes.get(edge.to).label}`);
+    .filter((edge) => hops.has(edge.from) && hops.has(edge.to))
+    .map((edge) => ({ fact: `${nodes.get(edge.from).label} —${edge.rel}→ ${nodes.get(edge.to).label}`, near: Math.min(hops.get(edge.from), hops.get(edge.to)), far: Math.max(hops.get(edge.from), hops.get(edge.to)) }))
+    .sort((a, b) => (a.near - b.near) || (a.far - b.far))
+    .map((item) => item.fact);
   return { seeds: seeds.map((item) => item.label), facts: [...new Set(facts)].slice(0, limit) };
 }
+
+// A degree's level, however it's written: "MS", "M.Sc.", "Master of Science" -> "master"
+const DEGREE_LEVELS = [
+  ["doctorate", /^(?:ph\.?\s?d|doctor|d\.?\s?phil)/],
+  ["master", /^(?:m\.?\s?s\.?c?\b|m\.?\s?tech|m\.?\s?eng|m\.?\s?a\b|mba|master)/],
+  ["bachelor", /^(?:b\.?\s?s\.?c?\b|b\.?\s?tech|b\.?\s?e\b|b\.?\s?a\b|bachelor)/],
+  ["associate", /^(?:a\.?\s?s\b|a\.?\s?a\b|associate)/]
+];
+const degreeLevel = (degree) => DEGREE_LEVELS.find(([, pattern]) => pattern.test(String(degree || "").trim().toLowerCase()))?.[0] || "";
 
 // An existing record that looks like the same entry, or null
 function findExisting({ nodes }, section, data) {
@@ -207,9 +222,12 @@ function findExisting({ nodes }, section, data) {
   // "M.S." and "MS" are the same degree
   const flat = (text) => norm(text).replace(/[^a-z0-9+#]/g, "");
   const same = (a, b) => a && b && (flat(a) === flat(b) || flat(a).includes(flat(b)) || flat(b).includes(flat(a)));
+  // So are "MS" and "Master of Science", unless they're in different fields
+  const sameDegree = (item) => !data.degree || same(item.degree, data.degree) ||
+    (degreeLevel(item.degree) && degreeLevel(item.degree) === degreeLevel(data.degree) && (!item.fieldOfStudy || !data.fieldOfStudy || same(item.fieldOfStudy, data.fieldOfStudy)));
   for (const item of nodes.values()) {
     if (item.section !== section) continue;
-    if (section === "education" && same(item.institution, data.institution) && (!data.degree || same(item.degree, data.degree))) return item;
+    if (section === "education" && same(item.institution, data.institution) && sameDegree(item)) return item;
     if (section === "experience" && same(item.organization, data.organization) && (!data.jobTitle || same(item.title, data.jobTitle))) return item;
     const key = data.title || data.name;
     if (!["education", "experience"].includes(section) && key && same(item.label, key)) return item;

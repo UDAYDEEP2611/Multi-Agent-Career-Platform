@@ -177,10 +177,21 @@ function ruleExtract(sectionId, text) {
     }
     if (sectionId === "projects" && present) data.ongoing = true;
   }
+  if (sectionId === "achievements") {
+    // "I won the Hackathon Grand Prize at HackTX in 2022"
+    const won = text.match(/\b(?:won|received|earned|got|was awarded|was given)\s+(?:the\s+|an?\s+)?([A-Z][\w &.:'-]{1,100}?)(?=\s+(?:at|from|by|in|for|award(?:ed)?)\b|[,.]|$)/);
+    if (!data.title && won) data.title = won[1].trim();
+    const issuer = text.match(new RegExp(`\\b(?:at|from|by)\\s+${PLACE}`));
+    if (issuer) data.issuer = issuer[1].trim();
+    if (dates[0]) Object.assign(data, { year: dates[0].year, ...(dates[0].month ? { month: dates[0].month } : {}) });
+    delete data.startYear; delete data.startMonth; delete data.endYear; delete data.endMonth;
+  }
   if (sectionId === "certifications") {
     const name = text.match(/\b(?:certified|certification|certificate)\s+(?:in|as|for)?\s*(?:an?\s+|the\s+)?([A-Z][\w &.:+-]{1,100}?)(?=\s+(?:from|by|in \d)|[,.]|$)/);
     const quoted = text.match(/["“']([^"”']{2,120})["”']/);
-    if (quoted || name) data.name = (quoted || name)[1].trim();
+    // The name before the word: "I got the AWS Machine Learning Specialty certification"
+    const before = text.match(/\b(?:got|earned|completed|passed|received|hold|achieved|cleared|finished)\s+(?:the\s+|an?\s+|my\s+)?([A-Z][\w &.:+-]{1,100}?)\s+(?:certification|certificate)\b/);
+    if (quoted || name || before) data.name = (quoted || name || before)[1].trim();
     const issuer = text.match(new RegExp(`\\b(?:from|by)\\s+${PLACE}`));
     if (issuer) data.issuingOrganization = issuer[1].trim();
     if (dates[0]) Object.assign(data, { issueYear: dates[0].year, ...(dates[0].month ? { issueMonth: dates[0].month } : {}) });
@@ -229,7 +240,9 @@ function ruleExtract(sectionId, text) {
   }
   if (sectionId === "interests") {
     const interest = text.match(/\b(?:interested in|hobb(?:y|ies)(?: is| are|:)?|enjoy|love)\s+([A-Za-z][\w &-]{1,50}?)(?=[,.]|$)/i);
-    if (interest) data.name = interest[1].trim();
+    // "add rock climbing to my interests"
+    const added = text.match(/\badd\s+(?:the\s+)?([A-Za-z][\w &-]{1,50}?)\s+(?:to|in|into|as)\s+(?:my\s+)?(?:interests?|hobb(?:y|ies))\b/i);
+    if (interest || added) data.name = (added || interest)[1].trim();
   }
   return data;
 }

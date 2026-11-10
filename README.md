@@ -281,6 +281,7 @@ Run these from `server/`:
 | `npm run mcp` | Starts the MCP server over stdio; set `PORTFOLIO_USER` to your username or email |
 | `npm run agent:reviewer` | Runs the ATS Reviewer agent by itself |
 | `npm run train:models` | Rebuilds the datasets and retrains the chat models (needs Python with scikit-learn, SciPy, and NLTK) |
+| `npm run eval` | Scores the agents on the evaluation set in `eval/cases.js`: real chat messages and what each must do. Add `-- --llm` to score them with Ollama, or `-- --update` to save a new baseline. `npm test` fails if fewer cases pass than the baseline |
 
 ## Host it online
 
