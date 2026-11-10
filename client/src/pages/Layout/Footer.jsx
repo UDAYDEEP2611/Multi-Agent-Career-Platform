@@ -16,18 +16,10 @@ const TOOL_LINKS = [
 ];
 
 const COMPANY_LINKS = [
-  ["Home", "/", "bi-house"],
   ["About", "/about", "bi-info-circle"],
   ["Services", "/services", "bi-grid-1x2"],
-  ["Contact Us", "/contact", "bi-headset"]
-];
-
-const ACCOUNT_LINKS = [
-  ["Sign in", "/login", "bi-box-arrow-in-right"],
-  ["Create an account", "/signup", "bi-person-plus"],
-  ["Forgot password", "/forgot-password", "bi-question-circle"],
-  ["Reset password", "/dashboard/change-password", "bi-key"],
-  ["Activity Log", "/dashboard/activity", "bi-shield-lock"]
+  ["Contact Us", "/contact", "bi-headset"],
+  ["Source code", CONTACT.githubUrl, "bi-github"]
 ];
 
 const SERVICE_LINKS = SERVICES.map((service) => [service.title, `/services#${service.id}`, service.icon]);
@@ -37,16 +29,23 @@ function LinkColumn({ title, links }) {
     <nav aria-label={title}>
       <h2 className="uuv-footer-heading"><span aria-hidden="true">//</span>{title}</h2>
       <ul className="uuv-footer-list">
-        {links.map(([label, to, icon]) => (
-          <li key={label}>
-            <Link to={to} className="uuv-footer-link">
+        {links.map(([label, to, icon]) => {
+          const content = (
+            <>
               <span className="uuv-footer-link-icon" aria-hidden="true">
                 {typeof icon === "string" ? <i className={`bi ${icon}`}></i> : icon}
               </span>
               {label}
-            </Link>
-          </li>
-        ))}
+            </>
+          );
+          return (
+            <li key={label}>
+              {to.startsWith("http")
+                ? <a href={to} target="_blank" rel="noreferrer" className="uuv-footer-link">{content}</a>
+                : <Link to={to} className="uuv-footer-link">{content}</Link>}
+            </li>
+          );
+        })}
       </ul>
     </nav>
   );
@@ -188,7 +187,6 @@ export default function Footer() {
           <LinkColumn title="Services" links={SERVICE_LINKS} />
           <LinkColumn title="Tools" links={TOOL_LINKS} />
           <LinkColumn title="Company" links={COMPANY_LINKS} />
-          <LinkColumn title="Account" links={ACCOUNT_LINKS} />
           {STATIC_SITE && !DEMO_FORMS ? <TryIt /> : <Subscribe />}
         </div>
 
