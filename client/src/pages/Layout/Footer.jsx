@@ -111,6 +111,25 @@ function Subscribe() {
   );
 }
 
+// In the GitHub Pages demo, where there's no server to subscribe to
+function TryIt() {
+  return (
+    <div>
+      <h2 className="uuv-footer-heading"><span aria-hidden="true">//</span>Try it</h2>
+      <p className="uuv-footer-subscribe-title">See it in action.</p>
+      <p className="uuv-footer-subscribe-text">Open a demo account and try the AI agents, resume designs and JobPilot. No sign-up needed.</p>
+      <div className="uuv-footer-try">
+        <Link to="/login" className="btn uuv-signup-btn btn-sm px-3">
+          <i className="bi bi-play-fill me-1" aria-hidden="true"></i>Try the demo
+        </Link>
+        <a href={CONTACT.githubUrl} target="_blank" rel="noreferrer" className="uuv-footer-try-link">
+          <i className="bi bi-github me-1" aria-hidden="true"></i>View the code
+        </a>
+      </div>
+    </div>
+  );
+}
+
 export default function Footer() {
   const year = new Date().getFullYear();
 
@@ -139,6 +158,18 @@ export default function Footer() {
 
           <dl className="uuv-footer-reach">
             <div>
+              <dt><i className="bi bi-geo-alt-fill" aria-hidden="true"></i>Location</dt>
+              <dd>
+                <a href={CONTACT.mapUrl} target="_blank" rel="noreferrer">
+                  {CONTACT.addressLines[0]}<br />{CONTACT.addressLines[1]}
+                </a>
+              </dd>
+            </div>
+            <div>
+              <dt><i className="bi bi-telephone-fill" aria-hidden="true"></i>Call us</dt>
+              <dd><a href={CONTACT.phoneUrl}>{CONTACT.phone}</a></dd>
+            </div>
+            <div>
               <dt><i className="bi bi-envelope-fill" aria-hidden="true"></i>Email us</dt>
               <dd><a href={CONTACT.emailUrl}>{CONTACT.email}</a></dd>
             </div>
@@ -158,12 +189,14 @@ export default function Footer() {
           <LinkColumn title="Tools" links={TOOL_LINKS} />
           <LinkColumn title="Company" links={COMPANY_LINKS} />
           <LinkColumn title="Account" links={ACCOUNT_LINKS} />
-          {!STATIC_SITE && <Subscribe />}
+          {STATIC_SITE ? <TryIt /> : <Subscribe />}
         </div>
 
         <div className="uuv-footer-bottom">
           <p>© {year} UltraUnityVerse. All rights reserved.</p>
           <div className="uuv-footer-social">
+            <a href={CONTACT.mapUrl} target="_blank" rel="noreferrer" aria-label="Find us on the map"><i className="bi bi-geo-alt-fill" aria-hidden="true"></i></a>
+            <a href={CONTACT.phoneUrl} aria-label="Call us"><i className="bi bi-telephone-fill" aria-hidden="true"></i></a>
             <a href={CONTACT.emailUrl} aria-label="Email us"><i className="bi bi-envelope-fill" aria-hidden="true"></i></a>
             <a href={CONTACT.githubUrl} target="_blank" rel="noreferrer" aria-label="UltraUnityVerse on GitHub"><i className="bi bi-github" aria-hidden="true"></i></a>
           </div>

@@ -188,6 +188,24 @@
   line-height: 1.5;
 }
 
+.uuv-footer-try {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+}
+
+.uuv-footer-try-link {
+  color: #d6dcea;
+  text-decoration: none;
+}
+
+.uuv-footer-try-link:hover {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .uuv-footer-subscribe {
   position: relative;
   display: flex;
