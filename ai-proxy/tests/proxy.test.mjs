@@ -9,15 +9,22 @@ const require = createRequire(new URL("../../server/package.json", import.meta.u
 const { prompts } = require("./services/agents/supervisor");
 const SITE = "https://udaydeep2611.github.io";
 
+let envStore = new Map();
 function envWith({ reply = '{"agent": "qa"}', allowVisitor = true } = {}) {
   const calls = [];
+  envStore = new Map();
   return {
     calls,
     ALLOWED_ORIGINS: `${SITE}, http://localhost:4311`,
     MODEL: "@cf/mistralai/mistral-small-3.1-24b-instruct",
     AI: { run: async (model, input) => { calls.push({ model, input }); return { response: reply }; } },
     VISITOR_LIMIT: { limit: async () => ({ success: allowVisitor }) },
-    TOTAL_LIMIT: { limit: async () => ({ success: true }) }
+    TOTAL_LIMIT: { limit: async () => ({ success: true }) },
+    FORM_LIMIT: { limit: async () => ({ success: allowVisitor }) },
+    SUBMISSIONS: {
+      get: async (key) => envStore.get(key) ?? null,
+      put: async (key, value) => envStore.set(key, value)
+    }
   };
 }
 
@@ -41,7 +48,7 @@ test("refuses other prompts, other sites, too much and too often", async () => {
   assert.equal(response.status, 400);
   response = await invoke(envWith(), { system: prompts.ROUTE_PROMPT, payload: {} }, "https://evil.example");
   assert.equal(response.status, 403);
-  response = await invoke(envWith(), { system: prompts.ROUTE_PROMPT, payload: { message: "x".repeat(13000) } });
+  response = await invoke(envWith(), { system: prompts.ROUTE_PROMPT, payload: { message: "x".repeat(25000) } });
   assert.equal(response.status, 413);
   response = await invoke(envWith({ allowVisitor: false }), { system: prompts.ROUTE_PROMPT, payload: {} });
   assert.equal(response.status, 429);
@@ -58,4 +65,35 @@ test("answers the browser's preflight and status checks", async () => {
   assert.equal(response.status, 204);
   response = await worker.fetch(new Request("https://proxy.example/status", { headers: { Origin: SITE } }), env);
   assert.deepEqual(await response.json(), { available: true, model: "mistral-small-3.1-24b-instruct" });
+});
+
+const post = (env, path, body, origin = SITE) => worker.fetch(new Request(`https://proxy.example${path}`, {
+  method: "POST",
+  headers: { Origin: origin, "Content-Type": "application/json" },
+  body: JSON.stringify(body)
+}), env);
+
+test("the contact form and sign-ups are kept as JSON, checked like the server does", async () => {
+  const env = envWith();
+  let response = await post(env, "/contact", { name: "Ada Lovelace", email: "ada@example.com", message: "I'd like to know more about JobPilot." });
+  assert.equal(response.status, 201);
+  const [key, value] = [...envStore][0];
+  assert.match(key, /^contact:\d{4}-/);
+  assert.deepEqual({ ...JSON.parse(value), at: undefined }, { type: "contact", name: "Ada Lovelace", email: "ada@example.com", phone: "", message: "I'd like to know more about JobPilot.", at: undefined });
+
+  response = await post(env, "/contact", { name: "Ada", email: "not-an-email", message: "Hello there, a question" });
+  assert.equal(response.status, 400);
+  assert.match((await response.json()).message, /valid email/);
+  // Bots fill the hidden field: same reply, nothing kept
+  response = await post(env, "/contact", { name: "Bot", email: "bot@example.com", message: "Buy things now please", website: "spam.example" });
+  assert.equal(response.status, 201);
+  assert.equal(envStore.size, 1);
+
+  await post(env, "/subscribe", { email: "Ada@Example.com" });
+  await post(env, "/subscribe", { email: "ada@example.com" });
+  assert.equal([...envStore.keys()].filter((name) => name.startsWith("subscriber:")).length, 1, "signing up twice keeps one");
+  assert.equal(JSON.parse(envStore.get("subscriber:ada@example.com")).email, "ada@example.com");
+
+  assert.equal((await post(env, "/subscribe", { email: "x@example.com" }, "https://evil.example")).status, 403);
+  assert.equal((await post(envWith({ allowVisitor: false }), "/contact", { name: "A", email: "a@example.com", message: "Hello hello hello" })).status, 429);
 });

@@ -8,3 +8,7 @@ export const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:5050";
 
 // A file from client/public, wherever the site is hosted
 export const publicUrl = (file) => `${import.meta.env.BASE_URL}${file}`;
+
+// The demo's Contact Us form and newsletter sign-up go to the AI proxy
+// (ai-proxy/), which keeps them as JSON, when the build names one
+export const DEMO_FORMS = STATIC_SITE && Boolean(import.meta.env.VITE_AI_PROXY_URL);

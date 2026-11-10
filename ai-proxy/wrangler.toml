@@ -12,18 +12,33 @@ binding = "AI"
 ALLOWED_ORIGINS = "https://udaydeep2611.github.io"
 MODEL = "@cf/mistralai/mistral-small-3.1-24b-instruct"
 
-# Per visitor: 12 calls a minute (one chat message makes 1-3 calls)
+# Per visitor: 40 calls a minute (a chat message makes 1-3 calls; building a
+# resume with CV Maker makes 15-30)
 [[ratelimits]]
 name = "VISITOR_LIMIT"
 namespace_id = "2611"
   [ratelimits.simple]
-  limit = 12
+  limit = 40
   period = 60
 
-# Everyone together: 120 calls a minute
+# Everyone together: 200 calls a minute
 [[ratelimits]]
 name = "TOTAL_LIMIT"
 namespace_id = "2612"
   [ratelimits.simple]
-  limit = 120
+  limit = 200
+  period = 60
+
+# Contact Us messages and newsletter sign-ups from the demo, kept as JSON.
+# Download them with `npm run submissions` (writes submissions.json).
+[[kv_namespaces]]
+binding = "SUBMISSIONS"
+id = "fe6b627ad19b4aeda0b21ae65b9c5b4b"
+
+# Forms: 5 a minute per visitor
+[[ratelimits]]
+name = "FORM_LIMIT"
+namespace_id = "2613"
+  [ratelimits.simple]
+  limit = 5
   period = 60

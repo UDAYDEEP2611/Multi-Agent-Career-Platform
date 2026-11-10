@@ -51,17 +51,34 @@ const parseBody = (data) => {
 // The agents (chat, resume chat, buffer zone, custom designs) run the
 // server's own code in the browser. Loaded on first use: it's large.
 const AGENT_AREAS = ["chat", "resume-chat", "resume-settings", "drafts", "custom-designs", "agent-changes"];
+// CV Maker's calls that aren't streamed
+const CV_MAKER_PATHS = ["/api/resume/sources", "/api/resume/summary-fit"];
+// Written out so normal builds leave the agents out altogether
+const loadAgents = () => (import.meta.env.VITE_STATIC_SITE === "true" ? import("./agents/agentReplies") : null);
+
 async function agentReply(store, account, method, path, search, data) {
-  if (!AGENT_AREAS.includes(path.split("/")[2])) return null;
-  // Written out so normal builds leave the agents out altogether
-  const agents = import.meta.env.VITE_STATIC_SITE === "true" ? await import("./agents/agentReplies") : null;
+  const cvMaker = CV_MAKER_PATHS.includes(path);
+  if (!cvMaker && !AGENT_AREAS.includes(path.split("/")[2])) return null;
+  const agents = await loadAgents();
   if (!agents) return null;
   try {
+    if (cvMaker) return await agents.cvMakerReply(store, account, method, path, parseBody(data));
     return await agents.agentReply(store, account, method, path, search, parseBody(data));
   } catch (error) {
     console.error("Demo agent error:", error);
     return { status: 500, body: { success: false, message: "The agents couldn't answer that. Please try again." } };
   }
+}
+
+// The forms are kept as JSON by the AI proxy (ai-proxy/src/forms.js)
+const PROXY = (import.meta.env.VITE_AI_PROXY_URL || "").replace(/\/$/, "");
+const FORM_PATHS = { "/api/contact": "/contact", "/api/contact/subscribe": "/subscribe" };
+async function sendForm(path, body, refuse) {
+  if (!PROXY) refuse(403, NEEDS_SERVER);
+  const response = await fetch(`${PROXY}${path}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }).catch(() => null);
+  const data = await response?.json().catch(() => ({}));
+  if (!response?.ok) refuse(response?.status || 503, data?.message || "We couldn't send that. Please try again.");
+  return [response.status, data];
 }
 
 // Stands in for the network on every API client
@@ -75,6 +92,9 @@ export async function demoAdapter(config) {
   const refuse = (status, message) => {
     throw new AxiosError(message, "ERR_BAD_REQUEST", config, null, reply(status, { success: false, message }));
   };
+
+  // The Contact Us form and the newsletter sign-up work without an account
+  if (method === "post" && FORM_PATHS[path]) return reply(...(await sendForm(FORM_PATHS[path], parseBody(config.data), refuse)));
 
   const account = demoAccount();
   if (!account) refuse(401, "Choose a demo account first.");
@@ -123,9 +143,16 @@ export async function demoAdapter(config) {
   return reply(200, written);
 }
 
-// The streaming calls (AI writing) use fetch rather than an API client
-export const demoFetch = async () =>
-  new Response(JSON.stringify({ success: false, message: NEEDS_SERVER }), {
-    status: 403,
-    headers: { "Content-Type": "application/json" }
-  });
+const refusal = (status, message) => new Response(JSON.stringify({ success: false, message }), { status, headers: { "Content-Type": "application/json" } });
+
+// The streaming calls (CV Maker building and revising) use fetch rather than
+// an API client. They run CV Maker's own steps in the browser.
+export async function demoFetch(input, init = {}) {
+  const path = new URL(String(input?.url ?? input)).pathname.replace(/\/+$/, "");
+  if (!["/api/resume/generate", "/api/resume/revise"].includes(path)) return refusal(403, NEEDS_SERVER);
+  const account = demoAccount();
+  if (!account) return refusal(401, "Choose a demo account first.");
+  const agents = await loadAgents();
+  if (!agents) return refusal(403, NEEDS_SERVER);
+  return agents.cvMakerStream(await storeFor(account), account, path, parseBody(init.body), init.signal);
+}

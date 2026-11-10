@@ -195,4 +195,4 @@ async function weaveKeywords({ llm, resume, source, keywords, maxLength, progres
   return { resume: next, woven, unplaced: keywords.filter((keyword) => !done.has(keyword)), notes, calls };
 }
 
-module.exports = { weaveKeywords, weaveRejection };
+module.exports = { weaveKeywords, weaveRejection, prompts: { MATCH_PROMPT, WEAVE_PROMPT } };

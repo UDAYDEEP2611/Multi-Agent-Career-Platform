@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { sendContactMessage } from "../../api/contactApi";
-import { STATIC_SITE } from "../../staticSite";
+import { DEMO_FORMS, STATIC_SITE } from "../../staticSite";
 import { CONTACT } from "./contactInfo";
 import "./contact.css";
 
@@ -82,7 +82,7 @@ export default function Contact() {
                 Send another message
               </button>
             </div>
-          ) : STATIC_SITE ? (
+          ) : STATIC_SITE && !DEMO_FORMS ? (
             <div className="uuv-contact-sent">
               <span className="uuv-contact-sent-icon"><i className="bi bi-chat-heart" aria-hidden="true" /></span>
               <h2>Get in touch</h2>

@@ -100,4 +100,4 @@ async function evaluateJobMatch({ resume, jobDescription, requirements = null, w
   return { ...state.result, notes: state.notes };
 }
 
-module.exports = { evaluateJobMatch, jobMatchGraph };
+module.exports = { evaluateJobMatch, jobMatchGraph, prompts: { REQUIREMENTS_PROMPT } };

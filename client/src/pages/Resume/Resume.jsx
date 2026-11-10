@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Alert, Badge, Button, Card, Col, Form, Row, Spinner } from "react-bootstrap";
 import { fitSummary, generateResume, getResumeSources, recalculateMatch, reviseResume } from "../../api/resumeApi";
+import { STATIC_SITE } from "../../staticSite";
 import { fitRequest, fitScore, fitsLines, measureSummary } from "./summaryLines";
 import JobMatchCard from "./JobMatchCard";
 import ResumeSelector from "./ResumeSelector";
@@ -665,7 +666,7 @@ export default function Resume() {
                         onChange={(e) => setUseAi(e.target.checked)}
                       />
                       <Badge bg={ai.available ? "success" : "secondary"} className="ms-auto fw-normal">
-                        {ai.available ? `Ollama · ${ai.model}` : "AI offline"}
+                        {ai.available ? `${STATIC_SITE ? "Workers AI" : "Ollama"} · ${ai.model}` : "AI offline"}
                       </Badge>
                     </div>
                     <div className="small text-muted mt-2">

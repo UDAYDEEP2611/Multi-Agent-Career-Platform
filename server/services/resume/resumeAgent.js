@@ -1430,4 +1430,4 @@ async function buildResume({ source, options, llm, onProgress, signal }) {
   };
 }
 
-module.exports = { buildResume, resumeGraph, reviseResume, GENERIC_PHRASES, withoutEmployers, wordCount, ATS_RULES };
+module.exports = { buildResume, resumeGraph, reviseResume, GENERIC_PHRASES, withoutEmployers, wordCount, ATS_RULES, prompts: { SUMMARY_PROMPT, BULLETS_PROMPT, PROOFREAD_PROMPT, KEYWORDS_PROMPT, PLAN_PROMPT } };

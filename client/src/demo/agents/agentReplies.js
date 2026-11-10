@@ -10,6 +10,8 @@ import { newId } from "../demoStore";
 import { openAccount } from "./current";
 import * as workspace from "./workspace";
 
+export { cvMakerReply, cvMakerStream } from "./cvMakerReplies";
+
 // The server's agent endpoints, in the browser: the same LangGraph agents
 // and MCP tools, on the demo data. The language model is the AI proxy when
 // the build has one (see shims/ollama.js); otherwise the agents use their

@@ -9,5 +9,5 @@ if (STATIC_SITE) {
 
   const realFetch = window.fetch.bind(window);
   window.fetch = (input, init) =>
-    String(input?.url ?? input).startsWith(`${API_URL}/api/`) ? demoFetch() : realFetch(input, init);
+    String(input?.url ?? input).startsWith(`${API_URL}/api/`) ? demoFetch(input, init) : realFetch(input, init);
 }

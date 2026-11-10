@@ -5,7 +5,7 @@ import { CONTACT } from "../Contact/contactInfo";
 import { SERVICES } from "../Info/servicesData";
 import { CvMakerIcon, JobPilotIcon } from "./FeatureIcons";
 import "./footer.css";
-import { publicUrl, STATIC_SITE } from "../../staticSite";
+import { DEMO_FORMS, publicUrl, STATIC_SITE } from "../../staticSite";
 
 const TOOL_LINKS = [
   ["My Portfolios", "/dashboard/portfolios", "bi-easel"],
@@ -111,7 +111,7 @@ function Subscribe() {
   );
 }
 
-// In the GitHub Pages demo, where there's no server to subscribe to
+// In a GitHub Pages build with nowhere to keep sign-ups
 function TryIt() {
   return (
     <div>
@@ -189,7 +189,7 @@ export default function Footer() {
           <LinkColumn title="Tools" links={TOOL_LINKS} />
           <LinkColumn title="Company" links={COMPANY_LINKS} />
           <LinkColumn title="Account" links={ACCOUNT_LINKS} />
-          {STATIC_SITE ? <TryIt /> : <Subscribe />}
+          {STATIC_SITE && !DEMO_FORMS ? <TryIt /> : <Subscribe />}
         </div>
 
         <div className="uuv-footer-bottom">

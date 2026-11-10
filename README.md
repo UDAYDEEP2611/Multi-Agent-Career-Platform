@@ -58,9 +58,10 @@ What to try:
 - Open the **Assistant** (bottom right) and tap a suggestion, or type "add Kubernetes to my skills" or "make a dark blue Aurora design called Midnight".
 - Open any resume design, choose **Customize**, and try "hide the internship", "move education to the right column", or "rewrite my summary to sound more senior".
 - Open **JobPilot**, pick a sample job or paste your own, and see the match, the evidence, and suggested rewrites.
+- Open **CV Maker**, choose what to include, and build a resume, with or without AI. Save it as a PDF.
 - Edit anything. Changes stay in your browser until you choose **Reset demo**, and every agent change has an **Undo** button.
 
-The demo runs without a server. Its data comes from JSON, and the agents run in your browser, with Mistral Small 3.1 through a small Cloudflare Worker. File uploads, CV Maker and email need the full app.
+The demo runs without a server. Its data comes from JSON, and the agents and CV Maker run in your browser, with Mistral Small 3.1 through a small Cloudflare Worker. The Contact Us form and newsletter sign-up are kept as JSON by that Worker. File uploads and password emails need the full app.
 
 ## Features
 
@@ -335,9 +336,13 @@ From `client/`, `npm run deploy` builds the demo and publishes it to GitHub Page
 
 There are two ways to put this online.
 
-**A public demo on GitHub Pages.** This shows the public pages and a demo with four made-up accounts: Thessaly Varnhouse (AI engineer), Corvin Ashdale (software engineer), Lila Moore (fashion architect) and the admin Amberson Gabby. The demo reads `client/src/demo/demoData.json` and needs no server. Visitors can edit the data, and their changes stay in their own browser until they reset the demo. JobPilot runs the server's rule-based matching in the browser on the demo person's resume, with sample results in the Log Book. The assistant (data entry, design and Q&A agents) and each resume's chat run in the browser too: the same LangGraph agents, MCP server and trained models, with the server's database files swapped for versions that use the demo data (see `client/vite.config.js` and `client/src/demo/agents/`). Without a language model the agents use their rules and trained models, as the full app does without Ollama; the AI proxy below adds one. AI writing, CV Maker and uploads need the full app. Normal builds leave all of this out. Publish it from `client/` with `npm run deploy`.
+**A public demo on GitHub Pages.** This shows the public pages and a demo with four made-up accounts: Thessaly Varnhouse (AI engineer), Corvin Ashdale (software engineer), Lila Moore (fashion architect) and the admin Amberson Gabby. The demo reads `client/src/demo/demoData.json` and needs no server. Visitors can edit the data, and their changes stay in their own browser until they reset the demo. JobPilot runs the server's rule-based matching in the browser on the demo person's resume, with sample results in the Log Book. The assistant (data entry, design and Q&A agents) and each resume's chat run in the browser too: the same LangGraph agents, MCP server and trained models, with the server's database files swapped for versions that use the demo data (see `client/vite.config.js` and `client/src/demo/agents/`). Without a language model the agents use their rules and trained models, as the full app does without Ollama; the AI proxy below adds one. CV Maker runs in the browser too (`server/services/resume/cvMaker.js`, the same steps the server streams). Uploads need the full app. Normal builds leave all of this out. Publish it from `client/` with `npm run deploy`.
 
-**A language model for the demo (optional).** `ai-proxy/` is a Cloudflare Worker that runs the demo agents' model calls on Workers AI (Mistral Small 3.1 by default). It runs only the agents' own prompts, listed by hash in `ai-proxy/src/allowedPrompts.json`, so it can't be used as a general-purpose free model. It accepts calls only from the sites in `ALLOWED_ORIGINS`, limits each visitor to 12 calls a minute and everyone together to 120, and caps request size. If it's down, over its limits or answers badly, the agents fall back to their rules. To set it up:
+**A language model for the demo (optional).** `ai-proxy/` is a Cloudflare Worker that runs the demo agents' model calls on Workers AI (Mistral Small 3.1 by default). It runs only the agents' own prompts, listed by hash in `ai-proxy/src/allowedPrompts.json`, so it can't be used as a general-purpose free model. It accepts calls only from the sites in `ALLOWED_ORIGINS`, limits each visitor to 40 calls a minute and everyone together to 200, and caps request size. If it's down, over its limits or answers badly, the agents fall back to their rules.
+
+The Worker also keeps the demo's Contact Us messages and newsletter sign-ups as JSON in Workers KV (free), with the same checks as the server and a limit of 5 a minute per visitor. Download them from `ai-proxy/` with `npm run submissions`, which writes `submissions.json` (not committed, because it holds people's details).
+
+To set it up:
 
 1. Create a free [Cloudflare](https://dash.cloudflare.com/sign-up) account.
 2. From `ai-proxy/`, run `npm install`, then `npx wrangler login`, then `npm run deploy`. Deploying rebuilds the prompt list and runs the tests first. Note the `https://uuv-ai-proxy.<your-subdomain>.workers.dev` address it prints.

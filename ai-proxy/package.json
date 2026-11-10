@@ -6,7 +6,8 @@
     "prompts": "node scripts/allowedPrompts.mjs",
     "dev": "npm run prompts && wrangler dev",
     "deploy": "npm run prompts && npm test && wrangler deploy",
-    "test": "node --test tests/*.test.mjs"
+    "test": "node --test tests/*.test.mjs",
+    "submissions": "node scripts/submissions.mjs"
   },
   "devDependencies": {
     "wrangler": "^4.36.0"

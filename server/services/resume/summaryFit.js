@@ -57,4 +57,4 @@ async function refitSummary({ llm, resume, summary, targetWords, feedback, signa
   return problem ? { error: `The rephrased summary ${problem}.` } : { summary: draft };
 }
 
-module.exports = { refitSummary, fitRejection };
+module.exports = { refitSummary, fitRejection, prompts: { FIT_PROMPT } };
