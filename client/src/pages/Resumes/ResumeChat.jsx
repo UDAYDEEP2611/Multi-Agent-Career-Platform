@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Offcanvas } from "react-bootstrap";
 
-import { AGENT_EVENTS, announce, getResumeChatStatus, sendResumeChat } from "../../api/agentApi";
+import { AGENT_EVENTS, announce, getResumeChatStatus, getResumeSettings, sendResumeChat, undoAgentChange } from "../../api/agentApi";
 import { STATIC_SITE } from "../../staticSite";
 import "./resumeChat.css";
 
@@ -89,7 +89,7 @@ export default function ResumeChat({ show, onHide, design, data, hiddenEntries =
     try {
       const { data: result } = await sendResumeChat(design.id, clean, design.layout, design.sideWidth);
       if (result.ai) setAi(result.ai);
-      setMessages((current) => [...current, { role: "assistant", text: result.reply, steps: result.steps, changed: result.changed, readAs: result.readAs }]);
+      setMessages((current) => [...current, { role: "assistant", text: result.reply, steps: result.steps, changed: result.changed, readAs: result.readAs, changeId: result.changeId || "" }]);
       onSettings(result.settings);
       // Entries switched on or off reload the portfolio data
       if (result.changed) announce(AGENT_EVENTS.portfolio);
@@ -101,6 +101,25 @@ export default function ResumeChat({ show, onHide, design, data, hiddenEntries =
       input.current?.focus();
     }
   };
+
+  // The changes one answer made, put back; only the latest can be undone
+  const undo = async (changeId) => {
+    if (sending) return;
+    setError("");
+    setSending(true);
+    try {
+      const { data: result } = await undoAgentChange(changeId);
+      const { data } = await getResumeSettings();
+      onSettings(data.settings);
+      announce(AGENT_EVENTS.portfolio);
+      setMessages((current) => [...current.map((message) => (message.changeId === changeId ? { ...message, undone: true } : message)), { role: "assistant", text: result.message }]);
+    } catch (err) {
+      setError(err.response?.data?.message || "Couldn't undo that.");
+    } finally {
+      setSending(false);
+    }
+  };
+  const latestChange = [...messages].reverse().find((message) => message.changeId && !message.undone)?.changeId;
 
   const hidden = hiddenEntries.map((key) => ({ key, label: labelOf(key, data) })).filter((entry) => entry.label);
 
@@ -145,6 +164,12 @@ export default function ResumeChat({ show, onHide, design, data, hiddenEntries =
               {message.changed && <i className="bi bi-check-circle-fill rd-chat-done" aria-hidden="true" />}
               {message.text}
             </div>
+            {message.changeId && !message.undone && message.changeId === latestChange && (
+              <button type="button" className="rd-chat-undo" onClick={() => undo(message.changeId)} disabled={sending}>
+                <i className="bi bi-arrow-counterclockwise" aria-hidden="true" /> Undo
+              </button>
+            )}
+            {message.undone && <span className="rd-chat-undone"><i className="bi bi-arrow-counterclockwise" aria-hidden="true" /> Undone</span>}
             {message.steps?.length > 0 && (
               <details className="rd-chat-steps">
                 <summary>How the agent did it</summary>

@@ -17,7 +17,11 @@ const messageSchema = new mongoose.Schema(
     // Sources the answer used: [{ label, detail }]
     sources: { type: [{ label: String, detail: String, _id: false }], default: [] },
     // What the agent did, step by step, for the "How I did it" view
-    steps: { type: [String], default: [] }
+    steps: { type: [String], default: [] },
+    // The agents' changes this answer made (models/AgentChange.js), and
+    // whether they were undone
+    changeId: { type: String, maxlength: 64, default: "" },
+    undone: { type: Boolean, default: false }
   },
   { timestamps: true }
 );

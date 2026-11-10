@@ -2,6 +2,7 @@ const catalog = require("../scripts/skillCatalogData");
 const { knowledgeFor, graphFacts, findExisting } = require("../services/agents/portfolioKnowledge");
 const { schemaSummary, specOf, coerceAll } = require("../services/agents/sectionSpecs");
 const { sanitizePlan } = require("../services/agents/designPlanner");
+const { designById } = require("../services/agents/designCatalog");
 const { resumeSettingsView, changedResumeSettings } = require("../services/agents/resumeSettingsRules");
 const { findSimilar } = require("../utils/skillSimilarity");
 
@@ -141,7 +142,7 @@ function memoryTools() {
       const checked = sanitizePlan(plan, state.designs, plan.targetId || "");
       record("apply_design_plan", checked);
       if (checked.action === "create") {
-        const design = { id: hex(8000 + state.designs.length), name: checked.changes.name || `My ${checked.baseId}`, baseId: checked.baseId, ...checked.changes };
+        const design = { id: hex(8000 + state.designs.length), name: checked.changes.name || `My ${checked.baseId}`, baseId: checked.baseId, baseName: designById(checked.baseId)?.name || checked.baseId, ...checked.changes };
         state.designs.push(design);
         return { action: "create", design, notes: checked.notes };
       }

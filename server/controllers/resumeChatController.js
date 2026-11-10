@@ -48,6 +48,8 @@ exports.sendMessage = async (req, res) => {
     return res.json({
       success: true,
       ...result,
+      // Set when this answer changed something that can be undone
+      changeId: tools.changes.count ? tools.changes.batchId : "",
       settings: await getResumeSettings(userId),
       ai: { available: ai.available, model: ai.model || "" }
     });

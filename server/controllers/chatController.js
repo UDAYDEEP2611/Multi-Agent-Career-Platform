@@ -38,6 +38,8 @@ const messageView = (message) => ({
   links: message.links || [],
   sources: message.sources || [],
   steps: message.steps || [],
+  changeId: message.changeId || "",
+  undone: Boolean(message.undone),
   createdAt: message.createdAt
 });
 
@@ -109,7 +111,8 @@ exports.sendMessage = async (req, res) => {
       choices: result.choices.slice(0, 10),
       links: result.links.slice(0, 4),
       sources: result.sources.slice(0, 6),
-      steps: result.steps.slice(0, 20)
+      steps: result.steps.slice(0, 20),
+      changeId: tools.changes.count ? tools.changes.batchId : ""
     });
     thread.messages.splice(0, Math.max(0, thread.messages.length - MAX_MESSAGES));
     thread.pending = result.pending || null;

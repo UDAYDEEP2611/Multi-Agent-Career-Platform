@@ -25,6 +25,8 @@ async function connectForUser(user) {
     async tools() {
       return (await client.listTools()).tools.map((tool) => tool.name);
     },
+    // { batchId, count }: what this connection changed, for undo
+    changes: server.changes,
     close: () => client.close()
   };
 }

@@ -57,8 +57,11 @@ const COLORS = {
 const designById = (id) => DESIGNS.find((design) => design.id === id) || null;
 
 // "the code editor one" -> "ide"
+// The new name isn't the design to start from: "an Aurora design called Midnight" is Aurora
+const NAMED = /\b(?:call(?:ed)? it|name(?:d)? it|rename(?: [\w ]+?)? to|named|called|titled)\s+["“']?[\w &'.-]{1,39}?["”']?(?=[,.!]|\s+and\b|\s+with\b|$)/g;
+
 function designFromText(text) {
-  const lower = String(text || "").toLowerCase();
+  const lower = String(text || "").toLowerCase().replace(NAMED, " ");
   return [...DESIGNS].sort((a, b) => b.name.length - a.name.length)
     .find((design) => new RegExp(`\\b${design.name.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`).test(lower) ||
       new RegExp(`\\b${design.id}\\b`).test(lower))?.id || null;

@@ -50,7 +50,7 @@ const parseBody = (data) => {
 
 // The agents (chat, resume chat, buffer zone, custom designs) run the
 // server's own code in the browser. Loaded on first use: it's large.
-const AGENT_AREAS = ["chat", "resume-chat", "resume-settings", "drafts", "custom-designs"];
+const AGENT_AREAS = ["chat", "resume-chat", "resume-settings", "drafts", "custom-designs", "agent-changes"];
 async function agentReply(store, account, method, path, search, data) {
   if (!AGENT_AREAS.includes(path.split("/")[2])) return null;
   // Written out so normal builds leave the agents out altogether

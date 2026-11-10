@@ -35,6 +35,10 @@ const { evaluateJobMatch } = require("../services/match/jobMatchAgent");
 //   set_entry_visibility switches an entry on or off for the portfolio or resumes
 //   list_custom_designs  the user's custom portfolio designs
 //   apply_design_plan    creates, changes or deletes a custom design
+//   undo_last_change     puts back what the agents' latest change replaced
+//
+// The changes these tools make are recorded with what they replaced (one
+// batch per server, so per chat message), so they can be undone.
 
 const json = (value) => ({
   content: [{ type: "text", text: JSON.stringify(value, null, 2) }],
@@ -60,9 +64,12 @@ async function atsReview(resume, keywords) {
 }
 
 // user: { id, username, email } to add the portfolio tools; run(fn) runs
-// fn with that user's database selected
+// fn with that user's database selected. server.changes is { batchId, count }:
+// the changes made through this server, for undoing them.
 function createPortfolioMcpServer({ user = null, run = (fn) => fn() } = {}) {
   const server = new McpServer({ name: "ultraunityverse-portfolio", version: "1.0.0" });
+  const changes = { batchId: require("node:crypto").randomUUID(), count: 0 };
+  server.changes = changes;
 
   server.registerTool(
     "find_job_keywords",
@@ -163,6 +170,15 @@ function createPortfolioMcpServer({ user = null, run = (fn) => fn() } = {}) {
     return knowledgeFor(user.id, source);
   };
   const record = z.record(z.string(), z.any());
+  // Keeps what a change replaced; a failed record never fails the change
+  const remember = async (kind, before) => {
+    try {
+      await run(() => workspace().recordChange(user.id, changes.batchId, kind, before));
+      changes.count += 1;
+    } catch (error) {
+      console.error("Couldn't record a change for undo:", error.message);
+    }
+  };
 
   server.registerTool(
     "search_portfolio",
@@ -290,7 +306,12 @@ function createPortfolioMcpServer({ user = null, run = (fn) => fn() } = {}) {
         reset: z.boolean().optional()
       }
     },
-    async ({ designId = "", ...changes }) => json(await run(() => workspace().updateResumeSettings(user.id, changes, designId)))
+    async ({ designId = "", ...asked }) => {
+      const before = await run(() => workspace().getResumeSettings(user.id));
+      const after = await run(() => workspace().updateResumeSettings(user.id, asked, designId));
+      if (JSON.stringify(before) !== JSON.stringify(after)) await remember("resume_settings", before);
+      return json(after);
+    }
   );
 
   server.registerTool(
@@ -332,9 +353,13 @@ function createPortfolioMcpServer({ user = null, run = (fn) => fn() } = {}) {
       }
     },
     async ({ section, id, ...flags }) => {
-      const { setEntryVisibility } = require("../services/portfolio/entryVisibility");
+      const { setEntryVisibility, listEntries } = require("../services/portfolio/entryVisibility");
+      const before = (await run(() => listEntries(user.id, section))).find((item) => item.id === id);
       const entry = await run(() => setEntryVisibility(user.id, section, id, flags));
       if (!entry) return { isError: true, content: [{ type: "text", text: "Entry not found" }] };
+      if (before && (before.showInPortfolio !== entry.showInPortfolio || before.showInResume !== entry.showInResume)) {
+        await remember("visibility", { section, id, showInPortfolio: before.showInPortfolio, showInResume: before.showInResume });
+      }
       return json({ entry });
     }
   );
@@ -360,8 +385,26 @@ function createPortfolioMcpServer({ user = null, run = (fn) => fn() } = {}) {
       const { sanitizePlan } = require("../services/agents/designPlanner");
       const custom = await run(() => workspace().listCustomDesigns(user.id));
       const checked = sanitizePlan(plan, custom, plan.targetId || "");
+      const before = custom.find((design) => design.id === checked.targetId);
       const result = await run(() => workspace().applyDesignPlan(user.id, checked));
+      if (result.action === "create" && result.design) await remember("design", { created: result.design.id });
+      else if (["update", "delete"].includes(result.action) && before) await remember("design", before);
       return json({ ...result, notes: checked.notes });
+    }
+  );
+
+  server.registerTool(
+    "undo_last_change",
+    {
+      title: "Undo the last change",
+      description: "Puts back what the agents' latest change replaced: resume settings, Show in portfolio / Show in resume switches, and custom designs. One chat message's changes are undone together.",
+      inputSchema: {}
+    },
+    async () => {
+      const batchId = await run(() => workspace().latestChangeBatch(user.id));
+      if (!batchId) return json({ undone: 0, message: "There's nothing to undo." });
+      const result = await run(() => workspace().undoChanges(user.id, batchId));
+      return json({ undone: result.undone || 0, message: result.message });
     }
   );
 

@@ -154,6 +154,11 @@ module.exports = [
   assistant("design", ["Make a Slate called Forest", "rename Forest to Pine"], { design: { name: "Pine" } }),
   assistant("design", ["Make a Slate called Forest", "use rounded corners on Forest"], { design: { name: "Forest", corners: /round/ } }),
   assistant("design", "Use Playfair Display for headings", { design: { headingFont: /Playfair/ } }),
+  // The assistant's own suggestions must work when tapped
+  assistant("suggested", "Make a dark blue Aurora design called Midnight", { design: { name: "Midnight", baseId: "aurora", accent: /^#/ } }),
+  assistant("suggested", "Add Terraform to my skills", { draft: { section: "skills", data: { name: "Terraform" } } }),
+  assistant("suggested", "Which projects used Python?", { agent: "qa", nothing: true }),
+  assistant("suggested", "What did I do at Oracle?", { agent: "qa", mentions: ["Oracle"] }),
 
   // ---- Assistant: questions ----------------------------------------------------
   assistant("qa", "Which projects used LangGraph?", { agent: "qa", nothing: true, mentions: ["UltraUnityVerse"] }),

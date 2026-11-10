@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
-import { AGENT_EVENTS, announce, clearChat, getChat, sendChatFeedback, sendChatMessage } from "../../api/agentApi";
+import { AGENT_EVENTS, announce, clearChat, getChat, sendChatFeedback, sendChatMessage, undoAgentChange } from "../../api/agentApi";
+import { getPortfolioShowcase } from "../../api/portfolioApi";
 import { STATIC_SITE } from "../../staticSite";
 import "./chat.css";
 
@@ -29,12 +30,31 @@ const STARTERS = [
   "What are my key skills?"
 ];
 
+// Skills to suggest adding: the first one the person doesn't have yet
+const NEW_SKILLS = ["Kubernetes", "Terraform", "GraphQL", "Figma", "Tableau", "Rust"];
+
+// Suggestions from the person's own portfolio, one for each agent, so
+// each works when tapped. The fixed ones when there's nothing to go on.
+function startersFor(portfolio) {
+  const job = portfolio?.experiences?.[0];
+  const skills = portfolio?.skills || [];
+  if (!job && !skills.length) return STARTERS;
+  const has = new Set(skills.map((skill) => skill.name.toLowerCase()));
+  const newSkill = NEW_SKILLS.find((name) => !has.has(name.toLowerCase()));
+  return [
+    newSkill && `Add ${newSkill} to my skills`,
+    skills[0] && `Which projects used ${skills[0].name}?`,
+    job && `What did I do at ${job.organization}?`,
+    "Make a dark blue Aurora design called Midnight"
+  ].filter(Boolean);
+}
+
 const SECTION_LABELS = {
   education: "Education", experience: "Experience", projects: "Projects", certifications: "Certifications",
   achievements: "Achievements", volunteering: "Volunteering", publications: "Publications", patents: "Patents", interests: "Interests"
 };
 
-function Message({ message, onChoice, onCorrect, busy }) {
+function Message({ message, onChoice, onCorrect, onUndo, canUndo, busy }) {
   const mine = message.role === "user";
   const [correcting, setCorrecting] = useState(false);
   const choicesRef = useRef(null);
@@ -72,8 +92,14 @@ function Message({ message, onChoice, onCorrect, busy }) {
         </p>
       )}
 
-      {!mine && (message.steps?.length > 0 || message.agent) && (
+      {!mine && (message.steps?.length > 0 || message.agent || message.undone) && (
         <div className="uuv-chat-meta">
+          {canUndo && (
+            <button type="button" className="uuv-chat-undo" onClick={() => onUndo(message.changeId)} disabled={busy}>
+              <i className="bi bi-arrow-counterclockwise" aria-hidden="true" /> Undo
+            </button>
+          )}
+          {message.undone && <span className="uuv-chat-undone"><i className="bi bi-arrow-counterclockwise" aria-hidden="true" /> Undone</span>}
           {message.steps?.length > 0 && (
             <details className="uuv-chat-steps">
               <summary>How I did it</summary>
@@ -122,6 +148,7 @@ export default function ChatWidget({ raised = false }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [loaded, setLoaded] = useState(false);
+  const [starters, setStarters] = useState(STARTERS);
   const listRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -136,6 +163,11 @@ export default function ChatWidget({ raised = false }) {
       })
       .catch(() => setError("Couldn't load the chat."))
       .finally(() => setLoaded(true));
+  }, [open, loaded]);
+
+  useEffect(() => {
+    if (!open || loaded) return;
+    getPortfolioShowcase().then(({ data }) => setStarters(startersFor(data.portfolio))).catch(() => {});
   }, [open, loaded]);
 
   useEffect(() => {
@@ -191,6 +223,26 @@ export default function ChatWidget({ raised = false }) {
     }
   }
 
+  // The changes one answer made, put back; only the latest can be undone
+  async function undo(changeId) {
+    if (busy) return;
+    setError("");
+    setBusy(true);
+    try {
+      await undoAgentChange(changeId);
+      setMessages((current) => current.map((message) => (message.changeId === changeId ? { ...message, undone: true } : message)));
+      announce(AGENT_EVENTS.designs, {});
+      announce(AGENT_EVENTS.portfolio);
+    } catch (err) {
+      setError(err.response?.data?.message || "Couldn't undo that.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  // Only the latest change can be undone
+  const latestChange = [...messages].reverse().find((message) => message.changeId && !message.undone)?.changeId;
+
   async function reset() {
     setError("");
     try {
@@ -237,12 +289,12 @@ export default function ChatWidget({ raised = false }) {
                   then put it in the buffer for you to confirm), changing a portfolio design, or answering questions about
                   your portfolio. If I pick wrong, tap "Not what I meant?" and I'll learn from it.
                 </p>
-                {STARTERS.map((starter) => (
+                {starters.map((starter) => (
                   <button key={starter} type="button" className="uuv-chat-starter" onClick={() => send(starter)}>{starter}</button>
                 ))}
               </div>
             )}
-            {messages.map((message) => <Message key={message.id} message={message} onChoice={send} onCorrect={correct} busy={busy} />)}
+            {messages.map((message) => <Message key={message.id} message={message} onChoice={send} onCorrect={correct} onUndo={undo} canUndo={Boolean(message.changeId) && !message.undone && message.changeId === latestChange} busy={busy} />)}
             {busy && (
               <div className="uuv-chat-msg">
                 <div className="uuv-chat-bubble uuv-chat-typing" aria-label="Agents are working"><span /><span /><span /></div>
@@ -256,6 +308,14 @@ export default function ChatWidget({ raised = false }) {
             </p>
           )}
           {error && <p className="uuv-chat-error" role="alert">{error}</p>}
+
+          {messages.length > 0 && !pending && (
+            <div className="uuv-chat-chips" aria-label="Suggestions">
+              {starters.map((starter) => (
+                <button key={starter} type="button" disabled={busy} onClick={() => send(starter)}>{starter}</button>
+              ))}
+            </div>
+          )}
 
           <form
             className="uuv-chat-form"

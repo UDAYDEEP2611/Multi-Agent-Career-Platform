@@ -34,7 +34,7 @@ const modelSummary = (model) => ({
 
 const thread = (store) => (store.chatThread ||= { messages: [], pending: null });
 const pendingView = (pending) => (pending ? { section: pending.section, asked: pending.asked } : null);
-const messageView = (message) => ({ choices: [], links: [], sources: [], steps: [], ...message });
+const messageView = (message) => ({ choices: [], links: [], sources: [], steps: [], changeId: "", undone: false, ...message });
 
 const toolsFor = (account, store) => connectForUser({ id: account, username: store["/api/auth/me"]?.user?.username || account, email: store["/api/auth/me"]?.user?.email || "" });
 
@@ -62,6 +62,8 @@ async function chatMessage(store, account, body) {
         links: result.links.slice(0, 4),
         sources: result.sources.slice(0, 6),
         steps: result.steps.slice(0, 20),
+        changeId: tools.changes.count ? tools.changes.batchId : "",
+        undone: false,
         createdAt: now
       }
     ];
@@ -152,7 +154,7 @@ async function resumeChat(store, account, designId, body) {
       llm: ai.available ? createOllamaLlm() : null,
       tools
     });
-    return ok({ ...result, settings: await workspace.getResumeSettings(), ai: { available: ai.available, model: ai.model } });
+    return ok({ ...result, changeId: tools.changes.count ? tools.changes.batchId : "", settings: await workspace.getResumeSettings(), ai: { available: ai.available, model: ai.model } });
   } finally {
     await tools.close().catch(() => {});
   }
@@ -232,6 +234,15 @@ export async function agentReply(store, account, method, path, search, body) {
       return { status: result.status, body: { success: result.status < 400, ...result } };
     }
     if (method === "delete" && id) return (await workspace.discardDraft(account, id)) ? ok({}) : fail(404, "That entry isn't in the buffer");
+  }
+
+  if (area === "agent-changes" && method === "post" && id === "undo") {
+    const changeId = typeof body?.changeId === "string" ? body.changeId : "";
+    if (!changeId) return fail(400, "Say which change to undo");
+    const result = await workspace.undoChanges(account, changeId);
+    if (result.status !== 200) return fail(result.status, result.message);
+    for (const message of thread(store).messages) if (message.changeId === changeId) message.undone = true;
+    return ok({ undone: result.undone, message: result.message });
   }
 
   if (area === "custom-designs") {

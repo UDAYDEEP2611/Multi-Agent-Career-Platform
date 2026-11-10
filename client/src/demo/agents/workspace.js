@@ -5,6 +5,7 @@ import { coerceAll, specOf } from "../../../../server/services/agents/sectionSpe
 import { findSimilar } from "../../../../server/utils/skillSimilarity";
 import { newId, writeEntry, writeRecord } from "../demoStore";
 import { currentStore } from "./current";
+import { setEntryVisibility } from "./shims/entryVisibility";
 
 // The server's workspace.js (the buffer zone, resume settings and custom
 // designs), kept in the demo data instead of MongoDB. The same functions and
@@ -259,4 +260,44 @@ export async function applyDesignPlan(userId, plan) {
 
 export async function deleteCustomDesign(userId, id) {
   return (await applyDesignPlan(userId, { action: "delete", targetId: id })).action === "delete";
+}
+
+// ---- Undo --------------------------------------------------------------------
+// As the server keeps them: each agent change with what it replaced, the
+// latest MAX_CHANGES, one chat message's changes sharing a batchId
+
+const MAX_CHANGES = 100;
+const changes = () => (currentStore().agentChanges ||= []);
+
+export async function recordChange(userId, batchId, kind, before) {
+  changes().push({ batchId, kind, before: JSON.parse(JSON.stringify(before)) });
+  currentStore().agentChanges = changes().slice(-MAX_CHANGES);
+}
+
+export async function latestChangeBatch() {
+  return changes().at(-1)?.batchId || null;
+}
+
+export async function undoChanges(userId, batchId) {
+  if (!batchId || (await latestChangeBatch()) !== batchId) {
+    return { status: 409, message: "Only the latest change can be undone, and this one already was or isn't the latest." };
+  }
+  const batch = changes().filter((change) => change.batchId === batchId).reverse();
+  for (const { kind, before } of batch) {
+    if (kind === "resume_settings") settingsReply().settings = resumeSettingsView(before);
+    else if (kind === "visibility") await setEntryVisibility(userId, before.section, before.id, { showInPortfolio: before.showInPortfolio, showInResume: before.showInResume });
+    else if (kind === "design") {
+      const list = designs();
+      const at = list.findIndex((item) => item.id === (before.created || before.id));
+      if (before.created) {
+        if (at >= 0) list.splice(at, 1);
+      } else {
+        const restored = { ...before, updatedAt: new Date().toISOString() };
+        if (at >= 0) list[at] = restored;
+        else list.push(restored);
+      }
+    }
+  }
+  currentStore().agentChanges = changes().filter((change) => change.batchId !== batchId);
+  return { status: 200, undone: batch.length, message: `Undid ${batch.length === 1 ? "that change" : `those ${batch.length} changes`}.` };
 }

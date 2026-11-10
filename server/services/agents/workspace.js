@@ -189,7 +189,11 @@ async function getResumeSettings(userId) {
 async function updateResumeSettings(userId, changes = {}, designId = "") {
   const ResumeSettings = require("../../models/ResumeSettings");
   const doc = (await ResumeSettings.findOne({ userId })) || new ResumeSettings({ userId });
-  const next = changedResumeSettings(resumeSettingsView(doc.toObject()), changes, designId);
+  return saveResumeSettings(doc, changedResumeSettings(resumeSettingsView(doc.toObject()), changes, designId));
+}
+
+// Stores settings as resumeSettingsView gives them
+async function saveResumeSettings(doc, next) {
   const { limits, extras, allSkills, columns, hiddenFields, skillStyle, tweaks, order, rewrites, designs } = next;
   doc.set({ limits, extras, allSkills, columns, hiddenFields, skillStyle, order, designs });
   doc.tweaks = Object.keys(tweaks).length ? tweaks : undefined;
@@ -283,6 +287,52 @@ async function deleteCustomDesign(userId, id) {
   return Boolean(await CustomDesign.findOneAndDelete({ _id: id, userId }));
 }
 
+// ---- Undo --------------------------------------------------------------------
+// Each change the agents make through MCP is kept with what it replaced, for
+// the latest MAX_CHANGES. One chat message's changes share a batchId.
+
+const MAX_CHANGES = 100;
+const DESIGN_FIELDS = ["name", "baseId", "accent", "font", "headingFont", "corners", "mode", "hidden", "order", "titles", "limits", "heroSummary"];
+
+async function recordChange(userId, batchId, kind, before) {
+  const AgentChange = require("../../models/AgentChange");
+  await AgentChange.create({ userId, batchId, kind, before });
+  const stale = await AgentChange.find({ userId }, { _id: 1 }).sort({ createdAt: -1, _id: -1 }).skip(MAX_CHANGES).lean();
+  if (stale.length) await AgentChange.deleteMany({ _id: { $in: stale.map((item) => item._id) } });
+}
+
+// The batch an undo would revert: the latest
+async function latestChangeBatch(userId) {
+  const AgentChange = require("../../models/AgentChange");
+  return (await AgentChange.findOne({ userId }).sort({ createdAt: -1, _id: -1 }).lean())?.batchId || null;
+}
+
+// Puts back what one batch changed, newest change first. Only the latest
+// batch can be undone, so a later change is never overwritten.
+// { status, undone, message }
+async function undoChanges(userId, batchId) {
+  const AgentChange = require("../../models/AgentChange");
+  const { setEntryVisibility } = require("../portfolio/entryVisibility");
+  if (!batchId || (await latestChangeBatch(userId)) !== batchId) {
+    return { status: 409, message: "Only the latest change can be undone, and this one already was or isn't the latest." };
+  }
+  const changes = await AgentChange.find({ userId, batchId }).sort({ createdAt: -1, _id: -1 }).lean();
+  for (const { kind, before } of changes) {
+    if (kind === "resume_settings") {
+      const ResumeSettings = require("../../models/ResumeSettings");
+      // Stored, empty parts were dropped ({} tweaks): the view fills them back in
+      await saveResumeSettings((await ResumeSettings.findOne({ userId })) || new ResumeSettings({ userId }), resumeSettingsView(before));
+    } else if (kind === "visibility") {
+      await setEntryVisibility(userId, before.section, before.id, { showInPortfolio: before.showInPortfolio, showInResume: before.showInResume });
+    } else if (kind === "design") {
+      if (before.created) await CustomDesign.deleteOne({ _id: before.created, userId });
+      else await CustomDesign.replaceOne({ _id: before.id, userId }, { userId, ...Object.fromEntries(DESIGN_FIELDS.map((key) => [key, before[key]])) }, { upsert: true });
+    }
+  }
+  await AgentChange.deleteMany({ userId, batchId });
+  return { status: 200, undone: changes.length, message: `Undid ${changes.length === 1 ? "that change" : `those ${changes.length} changes`}.` };
+}
+
 module.exports = {
   effectiveResumeSettings,
   getResumeSettings,
@@ -290,5 +340,6 @@ module.exports = {
   checkSkill,
   getSectionRecord,
   addDraft, listDrafts, updateDraft, discardDraft, confirmDraft,
-  listCustomDesigns, getCustomDesign, applyDesignPlan, deleteCustomDesign
+  listCustomDesigns, getCustomDesign, applyDesignPlan, deleteCustomDesign,
+  recordChange, latestChangeBatch, undoChanges
 };

@@ -154,6 +154,29 @@
 .rd-chat-typing span:nth-child(2) { animation-delay: 0.15s; }
 .rd-chat-typing span:nth-child(3) { animation-delay: 0.3s; }
 
+/* ---- Undo ---- */
+
+.rd-chat-undo {
+  margin-top: 5px;
+  padding: 1px 9px;
+  border: 1px solid var(--bs-border-color);
+  border-radius: 999px;
+  background: var(--bs-body-bg);
+  color: var(--bs-body-color);
+  font-size: 0.78rem;
+}
+
+.rd-chat-undo:hover:not(:disabled) {
+  border-color: var(--bs-primary);
+  color: var(--bs-primary);
+}
+
+.rd-chat-undone {
+  margin-top: 5px;
+  color: var(--bs-secondary-color);
+  font-size: 0.78rem;
+}
+
 /* ---- How the agent did it ---- */
 
 .rd-chat-steps {

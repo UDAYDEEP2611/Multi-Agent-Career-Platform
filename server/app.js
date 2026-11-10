@@ -41,6 +41,7 @@ const customDesignRoutes = require("./routes/customDesignRoutes");
 const resumeSettingsRoutes = require("./routes/resumeSettingsRoutes");
 const visibilityRoutes = require("./routes/visibilityRoutes");
 const resumeChatRoutes = require("./routes/resumeChatRoutes");
+const agentChangeRoutes = require("./routes/agentChangeRoutes");
 const accountRoutes = require("./routes/accountRoutes");
 const resumeRoutes = require("./routes/resumeRoutes");
 const contactRoutes = require("./routes/contactRoutes");
@@ -216,6 +217,7 @@ function createApp(options = {}) {
   app.use("/api/resume-settings", resumeSettingsRoutes);
   app.use("/api/visibility", visibilityRoutes);
   app.use("/api/resume-chat", resumeChatRoutes);
+  app.use("/api/agent-changes", agentChangeRoutes);
   app.use("/api/account", accountRoutes);
   app.use("/api/resume", resumeRoutes);
   app.use("/api/contact", contactRoutes);

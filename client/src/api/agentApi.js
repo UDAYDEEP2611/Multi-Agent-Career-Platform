@@ -37,6 +37,11 @@ export const getCustomDesigns = () => api.get("/custom-designs");
 export const getCustomDesign = (id) => api.get(`/custom-designs/${id}`);
 export const deleteCustomDesign = (id) => api.delete(`/custom-designs/${id}`);
 
+// ---- Undo ------------------------------------------------------------------
+
+// Undoes the changes one chat answer made (its changeId), if they're the latest
+export const undoAgentChange = (changeId) => api.post("/agent-changes/undo", { changeId });
+
 // ---- Telling the open pages what the agents changed ------------------------
 
 export const AGENT_EVENTS = {

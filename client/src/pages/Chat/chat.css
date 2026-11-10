@@ -350,6 +350,34 @@
   color: #dc2626;
 }
 
+/* Suggestions once the chat has started: one scrolling row */
+.uuv-chat-chips {
+  display: flex;
+  gap: 6px;
+  padding: 8px 10px 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.uuv-chat-chips::-webkit-scrollbar {
+  display: none;
+}
+
+.uuv-chat-chips button {
+  flex: none;
+  padding: 4px 10px;
+  border: 1px solid var(--chat-line);
+  border-radius: 999px;
+  background: var(--chat-soft);
+  color: var(--chat-ink);
+  font-size: 0.76rem;
+  white-space: nowrap;
+}
+
+.uuv-chat-chips button:hover:not(:disabled) {
+  border-color: var(--chat-accent);
+}
+
 .uuv-chat-form {
   display: flex;
   align-items: flex-end;
@@ -507,6 +535,25 @@
 
 .uuv-chat-meta .uuv-chat-steps {
   margin: 0;
+}
+
+.uuv-chat-undo {
+  padding: 1px 8px;
+  border: 1px solid var(--chat-line);
+  border-radius: 999px;
+  background: var(--chat-soft);
+  color: var(--chat-ink);
+  font-size: 0.72rem;
+}
+
+.uuv-chat-undo:hover:not(:disabled) {
+  border-color: var(--chat-accent);
+  color: var(--chat-accent);
+}
+
+.uuv-chat-undone {
+  color: var(--chat-muted);
+  font-size: 0.72rem;
 }
 
 .uuv-chat-wrong {

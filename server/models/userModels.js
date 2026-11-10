@@ -8,6 +8,7 @@ require("./CustomDesign");
 require("./ChatThread");
 require("./IntentEvent");
 require("./ResumeSettings");
+require("./AgentChange");
 require("./Experience");
 require("./Education");
 require("./Project");
